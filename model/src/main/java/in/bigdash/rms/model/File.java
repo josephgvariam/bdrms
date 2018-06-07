@@ -78,7 +78,7 @@ public class File {
     @Column(name = "CREATED_DATE")
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Calendar createdDate;
 
 
@@ -90,7 +90,7 @@ public class File {
     @Column(name = "MODIFIED_DATE")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Calendar modifiedDate;
 
 
