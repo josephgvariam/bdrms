@@ -136,8 +136,8 @@ public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
 
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
-        model.addAttribute("createdDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        model.addAttribute("modifiedDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        model.addAttribute("createdDate_date_format", "yyyy-MM-dd HH:mm:ss");
+        model.addAttribute("modifiedDate_date_format", "yyyy-MM-dd HH:mm:ss");
     }
 
 
