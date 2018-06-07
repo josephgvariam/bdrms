@@ -41,7 +41,7 @@ public class StorageType {
 
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "bd_client_storage_types", joinColumns = { @JoinColumn(name = "client_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "storage_type_id", referencedColumnName = "id") })
+    @JoinTable(name = "bd_client_storage_types", joinColumns = { @JoinColumn(name = "storage_type_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "client_id", referencedColumnName = "id") })
     private Set<Client> clients = new HashSet<Client>();
 
 

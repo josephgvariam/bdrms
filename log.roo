@@ -60,7 +60,7 @@ field string --fieldName phone --column PHONE --notNull
 field string --fieldName email --column EMAIL --notNull
 field string --fieldName employeeNumber --column EMPLOYEE_NUMBER
 field boolean --fieldName locked --column LOCKED --notNull
-field set --fieldName roles --type ~.Role --cardinality MANY_TO_MANY --joinTable bd_user_role --joinColumns user_id --referencedColumns id --inverseJoinColumns role_id --inverseReferencedColumns id
+field set --fieldName roles --type ~.Role --cardinality MANY_TO_MANY --joinTable bd_user_role --joinColumns role_id --referencedColumns id --inverseJoinColumns user_id --inverseReferencedColumns id
 field set --fieldName requestsCreated --type ~.request.Request --mappedBy userCreated --joinColumnName USER_CREATED_ID
 field set --fieldName requestsAssigned --type ~.request.Request --mappedBy userAssigned --joinColumnName USER_ASSIGNED_ID
 focus --class ~.Client
@@ -68,7 +68,7 @@ field string --fieldName name --column NAME --notNull
 field string --fieldName department --column department --notNull
 field string --fieldName address --column ADDRESS --notNull
 field set --fieldName users --type ~.User --mappedBy client --joinColumnName CLIENT_ID
-field set --fieldName storageTypes --type ~.StorageType --cardinality MANY_TO_MANY --joinTable bd_client_storage_types --joinColumns client_id --referencedColumns id --inverseJoinColumns storage_type_id --inverseReferencedColumns id
+field set --fieldName storageTypes --type ~.StorageType --cardinality MANY_TO_MANY --joinTable bd_client_storage_types --joinColumns storage_type_id --referencedColumns id --inverseJoinColumns client_id --inverseReferencedColumns id
 focus --class ~.inventory.InventoryItem
 field string --fieldName ref1 --column REF1 --notNull
 field string --fieldName ref2 --column REF2
