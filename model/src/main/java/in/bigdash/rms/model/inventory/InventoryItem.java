@@ -8,6 +8,7 @@ import java.util.Set;
 
 import io.springlets.format.EntityFormat;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.Objects;
 
@@ -61,6 +62,7 @@ public class InventoryItem {
     private InventoryItemStatus status;
 
 
+    @NotAudited
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "bd_request_inventory_item", joinColumns = { @JoinColumn(name = "inventory_item_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "request_id", referencedColumnName = "id") })
     private Set<Request> requests = new HashSet<Request>();

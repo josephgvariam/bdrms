@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.util.Assert;
 
 
@@ -52,7 +53,7 @@ public class Shelf {
     @Enumerated(EnumType.STRING)
     private ShelfStatus status;
 
-
+    @NotAudited
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "shelf")
     private Set<Box> boxes = new HashSet<Box>();
 

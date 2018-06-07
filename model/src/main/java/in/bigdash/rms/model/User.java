@@ -21,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -87,15 +88,16 @@ public class User {
     @Column(name = "LOCKED")
     private Boolean locked;
 
-
+    @NotAudited
     @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "users")
     private Set<Role> roles = new HashSet<Role>();
 
-
+    @NotAudited
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "userCreated")
     private Set<Request> requestsCreated = new HashSet<Request>();
 
 
+    @NotAudited
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "userAssigned")
     private Set<Request> requestsAssigned = new HashSet<Request>();
 

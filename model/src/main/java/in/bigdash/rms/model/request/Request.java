@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.Calendar;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -76,7 +77,7 @@ public class Request {
     @Column(name = "NOTES")
     private String notes;
 
-
+    @NotAudited
     @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "requests")
     private Set<InventoryItem> inventoryItems = new HashSet<InventoryItem>();
 
