@@ -1,7 +1,7 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.DestructionRequestService;
 import in.bigdash.rms.model.request.DestructionRequest;
-import in.bigdash.rms.repository.DestructionRequestRepository;
+import in.bigdash.rms.repository.request.DestructionRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

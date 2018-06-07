@@ -1,7 +1,7 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.PermoutRequestService;
 import in.bigdash.rms.model.request.PermoutRequest;
-import in.bigdash.rms.repository.PermoutRequestRepository;
+import in.bigdash.rms.repository.request.PermoutRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

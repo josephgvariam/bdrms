@@ -2,7 +2,7 @@ package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.FacilityService;
 import in.bigdash.rms.model.Facility;
 import in.bigdash.rms.model.Shelf;
-import in.bigdash.rms.repository.FacilityRepository;
+import in.bigdash.rms.repository.facility.FacilityRepository;
 import in.bigdash.rms.service.api.ShelfService;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;

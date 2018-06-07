@@ -2,7 +2,7 @@ package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.DocumentService;
 import in.bigdash.rms.model.Document;
 import in.bigdash.rms.model.File;
-import in.bigdash.rms.repository.DocumentRepository;
+import in.bigdash.rms.repository.document.DocumentRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

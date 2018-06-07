@@ -4,7 +4,7 @@ import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.model.User;
 import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.model.request.Request;
-import in.bigdash.rms.repository.RequestRepository;
+import in.bigdash.rms.repository.request.RequestRepository;
 import in.bigdash.rms.service.api.InventoryItemService;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;

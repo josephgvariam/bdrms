@@ -3,7 +3,7 @@ import in.bigdash.rms.service.api.ShelfService;
 import in.bigdash.rms.model.Box;
 import in.bigdash.rms.model.Facility;
 import in.bigdash.rms.model.Shelf;
-import in.bigdash.rms.repository.ShelfRepository;
+import in.bigdash.rms.repository.shelf.ShelfRepository;
 import in.bigdash.rms.service.api.BoxService;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;

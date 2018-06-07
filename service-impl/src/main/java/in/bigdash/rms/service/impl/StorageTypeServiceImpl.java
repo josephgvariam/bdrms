@@ -3,7 +3,7 @@ import in.bigdash.rms.service.api.StorageTypeService;
 import in.bigdash.rms.model.Client;
 import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.model.request.Request;
-import in.bigdash.rms.repository.StorageTypeRepository;
+import in.bigdash.rms.repository.storagetype.StorageTypeRepository;
 import in.bigdash.rms.service.api.RequestService;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;

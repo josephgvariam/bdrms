@@ -3,7 +3,7 @@ import in.bigdash.rms.service.api.ClientService;
 import in.bigdash.rms.model.Client;
 import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.model.User;
-import in.bigdash.rms.repository.ClientRepository;
+import in.bigdash.rms.repository.client.ClientRepository;
 import in.bigdash.rms.service.api.StorageTypeService;
 import in.bigdash.rms.service.api.UserService;
 import io.springlets.data.domain.GlobalSearch;

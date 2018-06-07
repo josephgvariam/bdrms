@@ -1,7 +1,7 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.InsertionRequestService;
 import in.bigdash.rms.model.request.InsertionRequest;
-import in.bigdash.rms.repository.InsertionRequestRepository;
+import in.bigdash.rms.repository.request.InsertionRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

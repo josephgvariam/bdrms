@@ -2,7 +2,7 @@ package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.FileInventoryItemService;
 import in.bigdash.rms.model.File;
 import in.bigdash.rms.model.inventory.FileInventoryItem;
-import in.bigdash.rms.repository.FileInventoryItemRepository;
+import in.bigdash.rms.repository.inventory.FileInventoryItemRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

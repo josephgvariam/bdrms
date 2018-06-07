@@ -4,7 +4,7 @@ import in.bigdash.rms.model.Client;
 import in.bigdash.rms.model.Role;
 import in.bigdash.rms.model.User;
 import in.bigdash.rms.model.request.Request;
-import in.bigdash.rms.repository.UserRepository;
+import in.bigdash.rms.repository.user.UserRepository;
 import in.bigdash.rms.service.api.RequestService;
 import in.bigdash.rms.service.api.RoleService;
 import io.springlets.data.domain.GlobalSearch;

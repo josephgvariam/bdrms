@@ -2,7 +2,7 @@ package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.RoleService;
 import in.bigdash.rms.model.Role;
 import in.bigdash.rms.model.User;
-import in.bigdash.rms.repository.RoleRepository;
+import in.bigdash.rms.repository.role.RoleRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

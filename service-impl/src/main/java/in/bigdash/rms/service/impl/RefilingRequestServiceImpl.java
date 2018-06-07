@@ -1,7 +1,7 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.RefilingRequestService;
 import in.bigdash.rms.model.request.RefilingRequest;
-import in.bigdash.rms.repository.RefilingRequestRepository;
+import in.bigdash.rms.repository.request.RefilingRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

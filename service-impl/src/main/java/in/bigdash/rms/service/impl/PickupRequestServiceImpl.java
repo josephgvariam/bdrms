@@ -1,7 +1,7 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.PickupRequestService;
 import in.bigdash.rms.model.request.PickupRequest;
-import in.bigdash.rms.repository.PickupRequestRepository;
+import in.bigdash.rms.repository.request.PickupRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

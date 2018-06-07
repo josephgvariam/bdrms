@@ -1,7 +1,7 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.TransferRequestService;
 import in.bigdash.rms.model.request.TransferRequest;
-import in.bigdash.rms.repository.TransferRequestRepository;
+import in.bigdash.rms.repository.request.TransferRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
 import java.util.List;

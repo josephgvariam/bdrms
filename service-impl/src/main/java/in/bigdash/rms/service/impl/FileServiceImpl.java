@@ -3,7 +3,7 @@ import in.bigdash.rms.service.api.FileService;
 import in.bigdash.rms.model.Box;
 import in.bigdash.rms.model.Document;
 import in.bigdash.rms.model.File;
-import in.bigdash.rms.repository.FileRepository;
+import in.bigdash.rms.repository.file.FileRepository;
 import in.bigdash.rms.service.api.DocumentService;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.validation.MessageI18n;
