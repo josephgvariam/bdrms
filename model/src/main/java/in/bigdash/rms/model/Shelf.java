@@ -19,12 +19,15 @@ import javax.persistence.ManyToOne;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
 import org.springframework.util.Assert;
 
 
 @Entity
 @Table(name = "BD_SHELF")
 @EntityFormat("#{barcode}")
+@Audited
 public class Shelf {
 
 

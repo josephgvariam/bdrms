@@ -19,6 +19,8 @@ import io.springlets.format.EntityFormat;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
 import org.springframework.util.Assert;
 
 

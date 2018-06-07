@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import io.springlets.format.EntityFormat;
+import org.hibernate.envers.Audited;
+
 import java.util.Objects;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -29,6 +31,7 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @EntityFormat("#{id}")
+@Audited
 public class InventoryItem {
 
 

@@ -22,6 +22,8 @@ import javax.persistence.ManyToMany;
 import java.util.Calendar;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -44,6 +46,7 @@ import org.springframework.util.Assert;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @EntityFormat("#{id}")
+@Audited
 public class Request {
 
 
