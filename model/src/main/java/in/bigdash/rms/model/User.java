@@ -343,7 +343,7 @@ public class User {
 
 
     public String toString() {
-        return "User {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", username='" + username + '\'' + ", password='" + password + '\'' + ", name='" + name + '\'' + ", phone='" + phone + '\'' + ", email='" + email + '\'' + ", employeeNumber='" + employeeNumber + '\'' + ", locked='" + locked + '\'' + ", createdDate='" + createdDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(createdDate.getTime()) + '\'' + ", createdBy='" + createdBy + '\'' + ", modifiedDate='" + modifiedDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(modifiedDate.getTime()) + '\'' + ", modifiedBy='" + modifiedBy + '\'' + "}" + super.toString();
+        return "User {" + "id='" + id + '\'' + ", username='" + username + '\'' + "}";
     }
 
 

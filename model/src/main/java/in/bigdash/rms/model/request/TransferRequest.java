@@ -19,7 +19,4 @@ public class TransferRequest extends Request {
     public static final String ITERABLE_TO_REMOVE_CANT_BE_NULL_MESSAGE = "The given Iterable of items to add can't be null!";
 
 
-    public String toString() {
-        return "TransferRequest {" + "}" + super.toString();
-    }
 }

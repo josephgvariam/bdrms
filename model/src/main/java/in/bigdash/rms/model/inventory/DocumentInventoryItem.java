@@ -36,7 +36,4 @@ public class DocumentInventoryItem extends InventoryItem {
     }
 
 
-    public String toString() {
-        return "DocumentInventoryItem {" + "}" + super.toString();
-    }
 }

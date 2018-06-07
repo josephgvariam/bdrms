@@ -154,7 +154,7 @@ public class Shelf {
 
 
     public String toString() {
-        return "Shelf {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", barcode='" + barcode + '\'' + "}" + super.toString();
+        return "Shelf {" + "id='" + id + '\'' + ", barcode='" + barcode + '\'' + "}";
     }
 
 

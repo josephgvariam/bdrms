@@ -194,6 +194,6 @@ public class InventoryItem {
 
 
     public String toString() {
-        return "InventoryItem {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", ref1='" + ref1 + '\'' + ", ref2='" + ref2 + '\'' + ", ref3='" + ref3 + '\'' + ", ref4='" + ref4 + '\'' + ", ref5='" + ref5 + '\'' + "}" + super.toString();
+        return "InventoryItem {" + "id='" + id + '\'' + ", type='" + type + '\'' + ", ref1='" + ref1  + '\'' + "}";
     }
 }

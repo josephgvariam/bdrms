@@ -265,7 +265,7 @@ public class Request {
 
 
     public String toString() {
-        return "Request {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", notes='" + notes + '\'' + ", createdDate='" + createdDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(createdDate.getTime()) + '\'' + ", createdBy='" + createdBy + '\'' + ", modifiedDate='" + modifiedDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(modifiedDate.getTime()) + '\'' + ", modifiedBy='" + modifiedBy + '\'' + "}" + super.toString();
+        return "Request {" + "id='" + id + '\'' + ", type='" + type + '\'' + "}";
     }
 
 

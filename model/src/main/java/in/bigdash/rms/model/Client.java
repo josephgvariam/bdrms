@@ -245,7 +245,7 @@ public class Client {
 
 
     public String toString() {
-        return "Client {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", name='" + name + '\'' + ", department='" + department + '\'' + ", address='" + address + '\'' + ", createdDate='" + createdDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(createdDate.getTime()) + '\'' + ", createdBy='" + createdBy + '\'' + ", modifiedDate='" + modifiedDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(modifiedDate.getTime()) + '\'' + ", modifiedBy='" + modifiedBy + '\'' + "}" + super.toString();
+        return "Client {" + "id='" + id + '\'' + ", name='" + name + '\'' + "}";
     }
 
 

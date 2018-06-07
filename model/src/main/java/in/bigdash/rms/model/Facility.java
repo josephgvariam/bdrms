@@ -214,7 +214,7 @@ public class Facility {
 
 
     public String toString() {
-        return "Facility {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", name='" + name + '\'' + ", address='" + address + '\'' + ", createdDate='" + createdDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(createdDate.getTime()) + '\'' + ", createdBy='" + createdBy + '\'' + ", modifiedDate='" + modifiedDate == null ? null : java.text.DateFormat.getDateTimeInstance().format(modifiedDate.getTime()) + '\'' + ", modifiedBy='" + modifiedBy + '\'' + "}" + super.toString();
+        return "Facility {" + "id='" + id + '\'' + ", name='" + name + '\'' + "}";
     }
 
 

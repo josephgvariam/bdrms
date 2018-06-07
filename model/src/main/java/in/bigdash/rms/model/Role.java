@@ -129,6 +129,6 @@ public class Role {
 
 
     public String toString() {
-        return "Role {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", name='" + name + '\'' + ", description='" + description + '\'' + "}" + super.toString();
+        return "Role {" + "id='" + id + '\'' + ", name='" + name + '\'' + "}";
     }
 }

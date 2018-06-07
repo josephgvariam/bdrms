@@ -150,7 +150,7 @@ public class StorageType {
 
 
     public String toString() {
-        return "StorageType {" + "id='" + id + '\'' + ", version='" + version + '\'' + ", name='" + name + '\'' + ", description='" + description + '\'' + "}" + super.toString();
+        return "StorageType {" + "id='" + id + '\'' + ", name='" + name + '\'' + "}";
     }
 
 

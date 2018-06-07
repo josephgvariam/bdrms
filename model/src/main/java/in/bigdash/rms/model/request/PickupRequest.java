@@ -71,8 +71,4 @@ public class PickupRequest extends Request {
         return this;
     }
 
-
-    public String toString() {
-        return "PickupRequest {" + "documentType='" + documentType + '\'' + ", pickupDateTime='" + pickupDateTime == null ? null : java.text.DateFormat.getDateTimeInstance().format(pickupDateTime.getTime()) + '\'' + ", numberFiles='" + numberFiles + '\'' + "}" + super.toString();
-    }
 }
