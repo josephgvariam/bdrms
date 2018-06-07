@@ -40,7 +40,7 @@ public class User {
 
 
     @Id
-    @SequenceGenerator(name = "userGen", sequenceName = "BD_USER_ID_SEQ")
+    @SequenceGenerator(name = "userGen", sequenceName = "BD_USER_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userGen")
     @Column(name = "ID")
     private Long id;

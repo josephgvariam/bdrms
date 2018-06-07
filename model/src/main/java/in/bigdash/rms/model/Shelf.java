@@ -29,7 +29,7 @@ public class Shelf {
 
 
     @Id
-    @SequenceGenerator(name = "shelfGen", sequenceName = "BD_SHELF_ID_SEQ")
+    @SequenceGenerator(name = "shelfGen", sequenceName = "BD_SHELF_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shelfGen")
     @Column(name = "ID")
     private Long id;

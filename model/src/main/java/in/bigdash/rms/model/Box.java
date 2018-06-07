@@ -40,7 +40,7 @@ public class Box {
 
 
     @Id
-    @SequenceGenerator(name = "boxGen", sequenceName = "BD_BOX_ID_SEQ")
+    @SequenceGenerator(name = "boxGen", sequenceName = "BD_BOX_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "boxGen")
     @Column(name = "ID")
     private Long id;

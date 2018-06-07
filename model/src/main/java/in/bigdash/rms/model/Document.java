@@ -36,7 +36,7 @@ public class Document {
 
 
     @Id
-    @SequenceGenerator(name = "documentGen", sequenceName = "BD_DOCUMENT_ID_SEQ")
+    @SequenceGenerator(name = "documentGen", sequenceName = "BD_DOCUMENT_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "documentGen")
     @Column(name = "ID")
     private Long id;

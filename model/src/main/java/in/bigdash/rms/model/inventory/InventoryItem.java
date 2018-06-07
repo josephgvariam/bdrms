@@ -33,7 +33,7 @@ public class InventoryItem {
 
 
     @Id
-    @SequenceGenerator(name = "inventoryItemGen", sequenceName = "BD_INVENTORY_ITEM_ID_SEQ")
+    @SequenceGenerator(name = "inventoryItemGen", sequenceName = "BD_INVENTORY_ITEM_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inventoryItemGen")
     @Column(name = "ID")
     private Long id;

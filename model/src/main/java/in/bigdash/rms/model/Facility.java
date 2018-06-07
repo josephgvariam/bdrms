@@ -36,7 +36,7 @@ public class Facility {
 
 
     @Id
-    @SequenceGenerator(name = "facilityGen", sequenceName = "BD_FACILITY_ID_SEQ")
+    @SequenceGenerator(name = "facilityGen", sequenceName = "BD_FACILITY_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "facilityGen")
     @Column(name = "ID")
     private Long id;

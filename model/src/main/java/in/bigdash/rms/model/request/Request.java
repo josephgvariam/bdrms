@@ -48,7 +48,7 @@ public class Request {
 
 
     @Id
-    @SequenceGenerator(name = "requestGen", sequenceName = "BD_REQUEST_ID_SEQ")
+    @SequenceGenerator(name = "requestGen", sequenceName = "BD_REQUEST_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestGen")
     @Column(name = "ID")
     private Long id;

@@ -40,7 +40,7 @@ public class File {
 
 
     @Id
-    @SequenceGenerator(name = "fileGen", sequenceName = "BD_FILE_ID_SEQ")
+    @SequenceGenerator(name = "fileGen", sequenceName = "BD_FILE_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fileGen")
     @Column(name = "ID")
     private Long id;
