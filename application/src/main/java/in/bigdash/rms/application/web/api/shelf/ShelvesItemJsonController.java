@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = ShelvesItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Shelf.class, type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/shelves/{shelf}", name = "ShelvesItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShelvesItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ShelfService shelfService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param shelfService
-     */
+
     @Autowired
     public ShelvesItemJsonController(ShelfService shelfService) {
         this.shelfService = shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ShelfService
-     */
+
     public ShelfService getShelfService() {
         return shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelfService
-     */
+
     public void setShelfService(ShelfService shelfService) {
         this.shelfService = shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return Shelf
-     */
+
     @ModelAttribute
     public Shelf getShelf(@PathVariable("shelf") Long id) {
         Shelf shelf = shelfService.findOne(id);
@@ -83,35 +58,18 @@ public class ShelvesItemJsonController {
         return shelf;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelf
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Shelf shelf) {
         return ResponseEntity.ok(shelf);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelf
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(Shelf shelf) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(ShelvesItemJsonController.class).show(shelf)).buildAndExpand(shelf.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedShelf
-     * @param shelf
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Shelf storedShelf, @Valid @RequestBody Shelf shelf, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class ShelvesItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelf
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Shelf shelf) {
         getShelfService().delete(shelf);

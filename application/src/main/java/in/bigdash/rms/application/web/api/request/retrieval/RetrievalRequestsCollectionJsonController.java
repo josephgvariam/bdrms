@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = RetrievalRequestsCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = RetrievalRequest.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/retrievalrequests", name = "RetrievalRequestsCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RetrievalRequestsCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private RetrievalRequestService retrievalRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param retrievalRequestService
-     */
+
     @Autowired
     public RetrievalRequestsCollectionJsonController(RetrievalRequestService retrievalRequestService) {
         this.retrievalRequestService = retrievalRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return RetrievalRequestService
-     */
+
     public RetrievalRequestService getRetrievalRequestService() {
         return retrievalRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequestService
-     */
+
     public void setRetrievalRequestService(RetrievalRequestService retrievalRequestService) {
         this.retrievalRequestService = retrievalRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<RetrievalRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<RetrievalRequest> retrievalRequests = getRetrievalRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(retrievalRequests);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(RetrievalRequestsCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody RetrievalRequest retrievalRequest, BindingResult result) {
         if (retrievalRequest.getId() != null || retrievalRequest.getVersion() != null) {
@@ -113,13 +77,7 @@ public class RetrievalRequestsCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<RetrievalRequest> retrievalRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class RetrievalRequestsCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<RetrievalRequest> retrievalRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class RetrievalRequestsCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getRetrievalRequestService().delete(ids);

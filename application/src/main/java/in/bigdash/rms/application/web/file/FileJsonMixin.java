@@ -9,62 +9,35 @@ import in.bigdash.rms.model.Box;
 import in.bigdash.rms.model.Document;
 import java.util.Set;
 
-/**
- * = FileJsonMixin
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJsonMixin(entity = File.class)
 @JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
 public abstract class FileJsonMixin {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     @JsonIgnore
     private Set<Document> documents;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     @JsonDeserialize(using = BoxDeserializer.class)
     private Box box;
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return Set
-     */
+
     public Set<Document> getDocuments() {
         return documents;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documents
-     */
+
     public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return Box
-     */
+
     public Box getBox() {
         return box;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param box
-     */
+
     public void setBox(Box box) {
         this.box = box;
     }

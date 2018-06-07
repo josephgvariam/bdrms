@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = FilesItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = File.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/files/{file}", name = "FilesItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FilesItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private FileService fileService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param fileService
-     */
+
     @Autowired
     public FilesItemJsonController(FileService fileService) {
         this.fileService = fileService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return FileService
-     */
+
     public FileService getFileService() {
         return fileService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param fileService
-     */
+
     public void setFileService(FileService fileService) {
         this.fileService = fileService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return File
-     */
+
     @ModelAttribute
     public File getFile(@PathVariable("file") Long id) {
         File file = fileService.findOne(id);
@@ -83,35 +58,18 @@ public class FilesItemJsonController {
         return file;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param file
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute File file) {
         return ResponseEntity.ok(file);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param file
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(File file) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(FilesItemJsonController.class).show(file)).buildAndExpand(file.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedFile
-     * @param file
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute File storedFile, @Valid @RequestBody File file, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class FilesItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param file
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute File file) {
         getFileService().delete(file);

@@ -36,55 +36,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = FacilitiesItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Facility.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/facilities/{facility}", name = "FacilitiesItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class FacilitiesItemThymeleafController implements ConcurrencyManager<Facility> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<Facility> concurrencyTemplate = new ConcurrencyTemplate<Facility>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<FacilitiesItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private FacilityService facilityService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<FacilitiesCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param facilityService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public FacilitiesItemThymeleafController(FacilityService facilityService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setFacilityService(facilityService);
@@ -93,86 +67,47 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
         setCollectionLink(linkBuilder.of(FacilitiesCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return FacilityService
-     */
+
     public FacilityService getFacilityService() {
         return facilityService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facilityService
-     */
+
     public void setFacilityService(FacilityService facilityService) {
         this.facilityService = facilityService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<FacilitiesItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<FacilitiesItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<FacilitiesCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<FacilitiesCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return Facility
-     */
+
     @ModelAttribute
     public Facility getFacility(@PathVariable("facility") Long id, Locale locale, HttpMethod method) {
         Facility facility = null;
@@ -188,97 +123,54 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
         return facility;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facility
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Facility facility, Model model) {
         model.addAttribute("facility", facility);
         return new ModelAndView("facilities/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facility
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute Facility facility, Model model) {
         model.addAttribute("facility", facility);
         return new ModelAndView("facilities/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
         model.addAttribute("createdDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         model.addAttribute("modifiedDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<Facility> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "facility";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "facilities/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(Facility record) {
         Long versionValue = getFacilityService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(Facility entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -293,11 +185,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("facility")
     public void initFacilityBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -306,13 +194,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facility
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Facility facility, Model model) {
         populateForm(model);
@@ -320,16 +202,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
         return new ModelAndView("facilities/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facility
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Facility facility, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -351,12 +224,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facility
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Facility facility) {

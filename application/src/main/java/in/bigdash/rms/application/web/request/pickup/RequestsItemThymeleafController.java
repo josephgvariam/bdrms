@@ -38,55 +38,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = RequestsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Request.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/requests/{request}", name = "RequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RequestsItemThymeleafController implements ConcurrencyManager<Request> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<Request> concurrencyTemplate = new ConcurrencyTemplate<Request>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<RequestsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private RequestService requestService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<RequestsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param requestService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public RequestsItemThymeleafController(RequestService requestService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setRequestService(requestService);
@@ -95,86 +69,47 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         setCollectionLink(linkBuilder.of(RequestsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return RequestService
-     */
+
     public RequestService getRequestService() {
         return requestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param requestService
-     */
+
     public void setRequestService(RequestService requestService) {
         this.requestService = requestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<RequestsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<RequestsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<RequestsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<RequestsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return Request
-     */
+
     @ModelAttribute
     public Request getRequest(@PathVariable("request") Long id, Locale locale, HttpMethod method) {
         Request request = null;
@@ -190,98 +125,55 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         return request;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Request request, Model model) {
         model.addAttribute("request", request);
         return new ModelAndView("requests/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute Request request, Model model) {
         model.addAttribute("request", request);
         return new ModelAndView("requests/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
         model.addAttribute("createdDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         model.addAttribute("modifiedDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
         model.addAttribute("status", Arrays.asList(RequestStatus.values()));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<Request> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "request";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "requests/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(Request record) {
         Long versionValue = getRequestService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(Request entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -296,11 +188,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("request")
     public void initRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -309,13 +197,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Request request, Model model) {
         populateForm(model);
@@ -323,16 +205,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         return new ModelAndView("requests/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Request request, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -354,12 +227,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Request request) {

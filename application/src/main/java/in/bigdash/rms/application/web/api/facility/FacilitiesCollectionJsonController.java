@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = FacilitiesCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Facility.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/facilities", name = "FacilitiesCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FacilitiesCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private FacilityService facilityService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param facilityService
-     */
+
     @Autowired
     public FacilitiesCollectionJsonController(FacilityService facilityService) {
         this.facilityService = facilityService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return FacilityService
-     */
+
     public FacilityService getFacilityService() {
         return facilityService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facilityService
-     */
+
     public void setFacilityService(FacilityService facilityService) {
         this.facilityService = facilityService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<Facility>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<Facility> facilities = getFacilityService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(facilities);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(FacilitiesCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facility
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Facility facility, BindingResult result) {
         if (facility.getId() != null || facility.getVersion() != null) {
@@ -113,13 +77,7 @@ public class FacilitiesCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facilities
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<Facility> facilities, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class FacilitiesCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facilities
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<Facility> facilities, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class FacilitiesCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getFacilityService().delete(ids);

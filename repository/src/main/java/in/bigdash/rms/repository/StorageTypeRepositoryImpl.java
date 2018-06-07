@@ -14,42 +14,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = StorageTypeRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = StorageTypeRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class StorageTypeRepositoryImpl extends QueryDslRepositorySupportExt<StorageType> implements StorageTypeRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     StorageTypeRepositoryImpl() {
         super(StorageType.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String DESCRIPTION = "description";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NAME = "name";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<StorageType> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QStorageType storageType = QStorageType.storageType;
         JPQLQuery<StorageType> query = from(storageType);
@@ -61,14 +42,7 @@ public class StorageTypeRepositoryImpl extends QueryDslRepositorySupportExt<Stor
         return loadPage(query, pageable, storageType);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<StorageType> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QStorageType storageType = QStorageType.storageType;
         JPQLQuery<StorageType> query = from(storageType);
@@ -82,14 +56,7 @@ public class StorageTypeRepositoryImpl extends QueryDslRepositorySupportExt<Stor
         return loadPage(query, pageable, storageType);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param clients
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<StorageType> findByClientsContains(Client clients, GlobalSearch globalSearch, Pageable pageable) {
         QStorageType storageType = QStorageType.storageType;
         JPQLQuery<StorageType> query = from(storageType);

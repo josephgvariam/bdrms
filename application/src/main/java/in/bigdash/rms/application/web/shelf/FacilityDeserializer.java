@@ -13,85 +13,45 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.springlets.web.NotFoundException;
 import org.springframework.boot.jackson.JsonComponent;
 
-/**
- * = FacilityDeserializer
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooDeserializer(entity = Facility.class)
 @JsonComponent
 public class FacilityDeserializer extends JsonObjectDeserializer<Facility> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private FacilityService facilityService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ConversionService conversionService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param facilityService
-     * @param conversionService
-     */
+
     @Autowired
     public FacilityDeserializer(@Lazy FacilityService facilityService, ConversionService conversionService) {
         this.facilityService = facilityService;
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return FacilityService
-     */
+
     public FacilityService getFacilityService() {
         return facilityService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facilityService
-     */
+
     public void setFacilityService(FacilityService facilityService) {
         this.facilityService = facilityService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConversionService
-     */
+
     public ConversionService getConversionService() {
         return conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param conversionService
-     */
+
     public void setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param jsonParser
-     * @param context
-     * @param codec
-     * @param tree
-     * @return Facility
-     */
+
     public Facility deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);

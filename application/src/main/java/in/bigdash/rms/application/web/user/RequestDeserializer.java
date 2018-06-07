@@ -13,85 +13,45 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.springlets.web.NotFoundException;
 import org.springframework.boot.jackson.JsonComponent;
 
-/**
- * = RequestDeserializer
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooDeserializer(entity = Request.class)
 @JsonComponent
 public class RequestDeserializer extends JsonObjectDeserializer<Request> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private RequestService requestService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ConversionService conversionService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param requestService
-     * @param conversionService
-     */
+
     @Autowired
     public RequestDeserializer(@Lazy RequestService requestService, ConversionService conversionService) {
         this.requestService = requestService;
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return RequestService
-     */
+
     public RequestService getRequestService() {
         return requestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param requestService
-     */
+
     public void setRequestService(RequestService requestService) {
         this.requestService = requestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConversionService
-     */
+
     public ConversionService getConversionService() {
         return conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param conversionService
-     */
+
     public void setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param jsonParser
-     * @param context
-     * @param codec
-     * @param tree
-     * @return Request
-     */
+
     public Request deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);

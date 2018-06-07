@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = BoxInventoryItemsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = BoxInventoryItem.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/boxinventoryitems/{boxInventoryItem}", name = "BoxInventoryItemsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BoxInventoryItemsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private BoxInventoryItemService boxInventoryItemService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param boxInventoryItemService
-     */
+
     @Autowired
     public BoxInventoryItemsItemJsonController(BoxInventoryItemService boxInventoryItemService) {
         this.boxInventoryItemService = boxInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return BoxInventoryItemService
-     */
+
     public BoxInventoryItemService getBoxInventoryItemService() {
         return boxInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItemService
-     */
+
     public void setBoxInventoryItemService(BoxInventoryItemService boxInventoryItemService) {
         this.boxInventoryItemService = boxInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return BoxInventoryItem
-     */
+
     @ModelAttribute
     public BoxInventoryItem getBoxInventoryItem(@PathVariable("boxInventoryItem") Long id) {
         BoxInventoryItem boxInventoryItem = boxInventoryItemService.findOne(id);
@@ -83,35 +58,18 @@ public class BoxInventoryItemsItemJsonController {
         return boxInventoryItem;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute BoxInventoryItem boxInventoryItem) {
         return ResponseEntity.ok(boxInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(BoxInventoryItem boxInventoryItem) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(BoxInventoryItemsItemJsonController.class).show(boxInventoryItem)).buildAndExpand(boxInventoryItem.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedBoxInventoryItem
-     * @param boxInventoryItem
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute BoxInventoryItem storedBoxInventoryItem, @Valid @RequestBody BoxInventoryItem boxInventoryItem, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class BoxInventoryItemsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute BoxInventoryItem boxInventoryItem) {
         getBoxInventoryItemService().delete(boxInventoryItem);

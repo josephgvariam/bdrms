@@ -35,55 +35,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = RefilingRequestsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = RefilingRequest.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/refilingrequests/{refilingRequest}", name = "RefilingRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RefilingRequestsItemThymeleafController implements ConcurrencyManager<RefilingRequest> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<RefilingRequest> concurrencyTemplate = new ConcurrencyTemplate<RefilingRequest>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<RefilingRequestsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private RefilingRequestService refilingRequestService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<RefilingRequestsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param refilingRequestService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public RefilingRequestsItemThymeleafController(RefilingRequestService refilingRequestService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setRefilingRequestService(refilingRequestService);
@@ -92,86 +66,47 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
         setCollectionLink(linkBuilder.of(RefilingRequestsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return RefilingRequestService
-     */
+
     public RefilingRequestService getRefilingRequestService() {
         return refilingRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param refilingRequestService
-     */
+
     public void setRefilingRequestService(RefilingRequestService refilingRequestService) {
         this.refilingRequestService = refilingRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<RefilingRequestsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<RefilingRequestsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<RefilingRequestsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<RefilingRequestsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return RefilingRequest
-     */
+
     @ModelAttribute
     public RefilingRequest getRefilingRequest(@PathVariable("refilingRequest") Long id, Locale locale, HttpMethod method) {
         RefilingRequest refilingRequest = null;
@@ -187,95 +122,52 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
         return refilingRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param refilingRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute RefilingRequest refilingRequest, Model model) {
         model.addAttribute("refilingRequest", refilingRequest);
         return new ModelAndView("refilingrequests/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param refilingRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute RefilingRequest refilingRequest, Model model) {
         model.addAttribute("refilingRequest", refilingRequest);
         return new ModelAndView("refilingrequests/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<RefilingRequest> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "refilingRequest";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "refilingrequests/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(RefilingRequest record) {
         Long versionValue = getRefilingRequestService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(RefilingRequest entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -290,11 +182,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("refilingRequest")
     public void initRefilingRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -303,13 +191,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param refilingRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute RefilingRequest refilingRequest, Model model) {
         populateForm(model);
@@ -317,16 +199,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
         return new ModelAndView("refilingrequests/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param refilingRequest
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute RefilingRequest refilingRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -348,12 +221,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param refilingRequest
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute RefilingRequest refilingRequest) {

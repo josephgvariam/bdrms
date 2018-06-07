@@ -37,55 +37,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = BoxInventoryItemsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = BoxInventoryItem.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/boxinventoryitems/{boxInventoryItem}", name = "BoxInventoryItemsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class BoxInventoryItemsItemThymeleafController implements ConcurrencyManager<BoxInventoryItem> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<BoxInventoryItem> concurrencyTemplate = new ConcurrencyTemplate<BoxInventoryItem>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<BoxInventoryItemsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private BoxInventoryItemService boxInventoryItemService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<BoxInventoryItemsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param boxInventoryItemService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public BoxInventoryItemsItemThymeleafController(BoxInventoryItemService boxInventoryItemService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setBoxInventoryItemService(boxInventoryItemService);
@@ -94,86 +68,47 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
         setCollectionLink(linkBuilder.of(BoxInventoryItemsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return BoxInventoryItemService
-     */
+
     public BoxInventoryItemService getBoxInventoryItemService() {
         return boxInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItemService
-     */
+
     public void setBoxInventoryItemService(BoxInventoryItemService boxInventoryItemService) {
         this.boxInventoryItemService = boxInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<BoxInventoryItemsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<BoxInventoryItemsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<BoxInventoryItemsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<BoxInventoryItemsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return BoxInventoryItem
-     */
+
     @ModelAttribute
     public BoxInventoryItem getBoxInventoryItem(@PathVariable("boxInventoryItem") Long id, Locale locale, HttpMethod method) {
         BoxInventoryItem boxInventoryItem = null;
@@ -189,96 +124,53 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
         return boxInventoryItem;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute BoxInventoryItem boxInventoryItem, Model model) {
         model.addAttribute("boxInventoryItem", boxInventoryItem);
         return new ModelAndView("boxinventoryitems/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute BoxInventoryItem boxInventoryItem, Model model) {
         model.addAttribute("boxInventoryItem", boxInventoryItem);
         return new ModelAndView("boxinventoryitems/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
         model.addAttribute("status", Arrays.asList(InventoryItemStatus.values()));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<BoxInventoryItem> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "boxInventoryItem";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "boxinventoryitems/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(BoxInventoryItem record) {
         Long versionValue = getBoxInventoryItemService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(BoxInventoryItem entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -293,11 +185,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("boxInventoryItem")
     public void initBoxInventoryItemBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -306,13 +194,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute BoxInventoryItem boxInventoryItem, Model model) {
         populateForm(model);
@@ -320,16 +202,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
         return new ModelAndView("boxinventoryitems/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute BoxInventoryItem boxInventoryItem, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -351,12 +224,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxInventoryItem
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute BoxInventoryItem boxInventoryItem) {

@@ -35,55 +35,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = DestructionRequestsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = DestructionRequest.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/destructionrequests/{destructionRequest}", name = "DestructionRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class DestructionRequestsItemThymeleafController implements ConcurrencyManager<DestructionRequest> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private DestructionRequestService destructionRequestService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<DestructionRequest> concurrencyTemplate = new ConcurrencyTemplate<DestructionRequest>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<DestructionRequestsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<DestructionRequestsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param destructionRequestService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public DestructionRequestsItemThymeleafController(DestructionRequestService destructionRequestService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setDestructionRequestService(destructionRequestService);
@@ -92,86 +66,47 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
         setCollectionLink(linkBuilder.of(DestructionRequestsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return DestructionRequestService
-     */
+
     public DestructionRequestService getDestructionRequestService() {
         return destructionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequestService
-     */
+
     public void setDestructionRequestService(DestructionRequestService destructionRequestService) {
         this.destructionRequestService = destructionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<DestructionRequestsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<DestructionRequestsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<DestructionRequestsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<DestructionRequestsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return DestructionRequest
-     */
+
     @ModelAttribute
     public DestructionRequest getDestructionRequest(@PathVariable("destructionRequest") Long id, Locale locale, HttpMethod method) {
         DestructionRequest destructionRequest = null;
@@ -187,95 +122,52 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
         return destructionRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute DestructionRequest destructionRequest, Model model) {
         model.addAttribute("destructionRequest", destructionRequest);
         return new ModelAndView("destructionrequests/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute DestructionRequest destructionRequest, Model model) {
         model.addAttribute("destructionRequest", destructionRequest);
         return new ModelAndView("destructionrequests/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<DestructionRequest> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "destructionRequest";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "destructionrequests/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(DestructionRequest record) {
         Long versionValue = getDestructionRequestService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(DestructionRequest entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -290,11 +182,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("destructionRequest")
     public void initDestructionRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -303,13 +191,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute DestructionRequest destructionRequest, Model model) {
         populateForm(model);
@@ -317,16 +199,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
         return new ModelAndView("destructionrequests/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute DestructionRequest destructionRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -348,12 +221,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute DestructionRequest destructionRequest) {

@@ -35,55 +35,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = TransferRequestsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = TransferRequest.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/transferrequests/{transferRequest}", name = "TransferRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class TransferRequestsItemThymeleafController implements ConcurrencyManager<TransferRequest> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<TransferRequest> concurrencyTemplate = new ConcurrencyTemplate<TransferRequest>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<TransferRequestsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<TransferRequestsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private TransferRequestService transferRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param transferRequestService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public TransferRequestsItemThymeleafController(TransferRequestService transferRequestService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setTransferRequestService(transferRequestService);
@@ -92,86 +66,47 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
         setCollectionLink(linkBuilder.of(TransferRequestsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return TransferRequestService
-     */
+
     public TransferRequestService getTransferRequestService() {
         return transferRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequestService
-     */
+
     public void setTransferRequestService(TransferRequestService transferRequestService) {
         this.transferRequestService = transferRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<TransferRequestsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<TransferRequestsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<TransferRequestsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<TransferRequestsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return TransferRequest
-     */
+
     @ModelAttribute
     public TransferRequest getTransferRequest(@PathVariable("transferRequest") Long id, Locale locale, HttpMethod method) {
         TransferRequest transferRequest = null;
@@ -187,95 +122,52 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
         return transferRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute TransferRequest transferRequest, Model model) {
         model.addAttribute("transferRequest", transferRequest);
         return new ModelAndView("transferrequests/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute TransferRequest transferRequest, Model model) {
         model.addAttribute("transferRequest", transferRequest);
         return new ModelAndView("transferrequests/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<TransferRequest> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "transferRequest";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "transferrequests/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(TransferRequest record) {
         Long versionValue = getTransferRequestService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(TransferRequest entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -290,11 +182,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("transferRequest")
     public void initTransferRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -303,13 +191,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute TransferRequest transferRequest, Model model) {
         populateForm(model);
@@ -317,16 +199,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
         return new ModelAndView("transferrequests/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute TransferRequest transferRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -348,12 +221,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute TransferRequest transferRequest) {

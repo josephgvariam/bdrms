@@ -14,72 +14,38 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = BoxInventoryItemRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = BoxInventoryItemRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class BoxInventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<BoxInventoryItem> implements BoxInventoryItemRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     BoxInventoryItemRepositoryImpl() {
         super(BoxInventoryItem.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_3 = "ref3";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_2 = "ref2";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_1 = "ref1";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_5 = "ref5";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String BOX = "box";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_4 = "ref4";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<BoxInventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QBoxInventoryItem boxInventoryItem = QBoxInventoryItem.boxInventoryItem;
         JPQLQuery<BoxInventoryItem> query = from(boxInventoryItem);
@@ -91,14 +57,7 @@ public class BoxInventoryItemRepositoryImpl extends QueryDslRepositorySupportExt
         return loadPage(query, pageable, boxInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<BoxInventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QBoxInventoryItem boxInventoryItem = QBoxInventoryItem.boxInventoryItem;
         JPQLQuery<BoxInventoryItem> query = from(boxInventoryItem);
@@ -112,14 +71,7 @@ public class BoxInventoryItemRepositoryImpl extends QueryDslRepositorySupportExt
         return loadPage(query, pageable, boxInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param box
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<BoxInventoryItem> findByBox(Box box, GlobalSearch globalSearch, Pageable pageable) {
         QBoxInventoryItem boxInventoryItem = QBoxInventoryItem.boxInventoryItem;
         JPQLQuery<BoxInventoryItem> query = from(boxInventoryItem);

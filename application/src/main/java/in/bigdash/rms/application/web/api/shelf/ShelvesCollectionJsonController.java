@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = ShelvesCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Shelf.class, type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/shelves", name = "ShelvesCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShelvesCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ShelfService shelfService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param shelfService
-     */
+
     @Autowired
     public ShelvesCollectionJsonController(ShelfService shelfService) {
         this.shelfService = shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ShelfService
-     */
+
     public ShelfService getShelfService() {
         return shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelfService
-     */
+
     public void setShelfService(ShelfService shelfService) {
         this.shelfService = shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<Shelf>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<Shelf> shelves = getShelfService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(shelves);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(ShelvesCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelf
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Shelf shelf, BindingResult result) {
         if (shelf.getId() != null || shelf.getVersion() != null) {
@@ -113,13 +77,7 @@ public class ShelvesCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelves
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<Shelf> shelves, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class ShelvesCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelves
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<Shelf> shelves, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class ShelvesCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getShelfService().delete(ids);

@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = TransferRequestsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = TransferRequest.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/transferrequests/{transferRequest}", name = "TransferRequestsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TransferRequestsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private TransferRequestService transferRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param transferRequestService
-     */
+
     @Autowired
     public TransferRequestsItemJsonController(TransferRequestService transferRequestService) {
         this.transferRequestService = transferRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return TransferRequestService
-     */
+
     public TransferRequestService getTransferRequestService() {
         return transferRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequestService
-     */
+
     public void setTransferRequestService(TransferRequestService transferRequestService) {
         this.transferRequestService = transferRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return TransferRequest
-     */
+
     @ModelAttribute
     public TransferRequest getTransferRequest(@PathVariable("transferRequest") Long id) {
         TransferRequest transferRequest = transferRequestService.findOne(id);
@@ -83,35 +58,18 @@ public class TransferRequestsItemJsonController {
         return transferRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute TransferRequest transferRequest) {
         return ResponseEntity.ok(transferRequest);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(TransferRequest transferRequest) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(TransferRequestsItemJsonController.class).show(transferRequest)).buildAndExpand(transferRequest.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedTransferRequest
-     * @param transferRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute TransferRequest storedTransferRequest, @Valid @RequestBody TransferRequest transferRequest, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class TransferRequestsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param transferRequest
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute TransferRequest transferRequest) {
         getTransferRequestService().delete(transferRequest);

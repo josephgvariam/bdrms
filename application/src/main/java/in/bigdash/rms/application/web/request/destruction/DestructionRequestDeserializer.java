@@ -13,85 +13,45 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.springlets.web.NotFoundException;
 import org.springframework.boot.jackson.JsonComponent;
 
-/**
- * = DestructionRequestDeserializer
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooDeserializer(entity = DestructionRequest.class)
 @JsonComponent
 public class DestructionRequestDeserializer extends JsonObjectDeserializer<DestructionRequest> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private DestructionRequestService destructionRequestService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ConversionService conversionService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param destructionRequestService
-     * @param conversionService
-     */
+
     @Autowired
     public DestructionRequestDeserializer(@Lazy DestructionRequestService destructionRequestService, ConversionService conversionService) {
         this.destructionRequestService = destructionRequestService;
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return DestructionRequestService
-     */
+
     public DestructionRequestService getDestructionRequestService() {
         return destructionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequestService
-     */
+
     public void setDestructionRequestService(DestructionRequestService destructionRequestService) {
         this.destructionRequestService = destructionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConversionService
-     */
+
     public ConversionService getConversionService() {
         return conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param conversionService
-     */
+
     public void setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param jsonParser
-     * @param context
-     * @param codec
-     * @param tree
-     * @return DestructionRequest
-     */
+
     public DestructionRequest deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);

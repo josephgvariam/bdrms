@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = DestructionRequestsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = DestructionRequest.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/destructionrequests/{destructionRequest}", name = "DestructionRequestsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DestructionRequestsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private DestructionRequestService destructionRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param destructionRequestService
-     */
+
     @Autowired
     public DestructionRequestsItemJsonController(DestructionRequestService destructionRequestService) {
         this.destructionRequestService = destructionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return DestructionRequestService
-     */
+
     public DestructionRequestService getDestructionRequestService() {
         return destructionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequestService
-     */
+
     public void setDestructionRequestService(DestructionRequestService destructionRequestService) {
         this.destructionRequestService = destructionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return DestructionRequest
-     */
+
     @ModelAttribute
     public DestructionRequest getDestructionRequest(@PathVariable("destructionRequest") Long id) {
         DestructionRequest destructionRequest = destructionRequestService.findOne(id);
@@ -83,35 +58,18 @@ public class DestructionRequestsItemJsonController {
         return destructionRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute DestructionRequest destructionRequest) {
         return ResponseEntity.ok(destructionRequest);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(DestructionRequest destructionRequest) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(DestructionRequestsItemJsonController.class).show(destructionRequest)).buildAndExpand(destructionRequest.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedDestructionRequest
-     * @param destructionRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute DestructionRequest storedDestructionRequest, @Valid @RequestBody DestructionRequest destructionRequest, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class DestructionRequestsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param destructionRequest
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute DestructionRequest destructionRequest) {
         getDestructionRequestService().delete(destructionRequest);

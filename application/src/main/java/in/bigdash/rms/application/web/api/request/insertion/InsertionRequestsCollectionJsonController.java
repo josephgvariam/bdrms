@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = InsertionRequestsCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = InsertionRequest.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/insertionrequests", name = "InsertionRequestsCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class InsertionRequestsCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private InsertionRequestService insertionRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param insertionRequestService
-     */
+
     @Autowired
     public InsertionRequestsCollectionJsonController(InsertionRequestService insertionRequestService) {
         this.insertionRequestService = insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return InsertionRequestService
-     */
+
     public InsertionRequestService getInsertionRequestService() {
         return insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequestService
-     */
+
     public void setInsertionRequestService(InsertionRequestService insertionRequestService) {
         this.insertionRequestService = insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<InsertionRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<InsertionRequest> insertionRequests = getInsertionRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(insertionRequests);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(InsertionRequestsCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody InsertionRequest insertionRequest, BindingResult result) {
         if (insertionRequest.getId() != null || insertionRequest.getVersion() != null) {
@@ -113,13 +77,7 @@ public class InsertionRequestsCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<InsertionRequest> insertionRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class InsertionRequestsCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<InsertionRequest> insertionRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class InsertionRequestsCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getInsertionRequestService().delete(ids);

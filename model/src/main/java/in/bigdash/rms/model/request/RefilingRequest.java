@@ -5,12 +5,7 @@ import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import io.springlets.format.EntityFormat;
 import javax.persistence.Entity;
 
-/**
- * = RefilingRequest
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJavaBean
 @RooToString
 @RooJpaEntity

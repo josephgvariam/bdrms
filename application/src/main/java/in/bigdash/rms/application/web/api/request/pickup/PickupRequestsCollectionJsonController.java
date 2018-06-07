@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = PickupRequestsCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = PickupRequest.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/pickuprequests", name = "PickupRequestsCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PickupRequestsCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private PickupRequestService pickupRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param pickupRequestService
-     */
+
     @Autowired
     public PickupRequestsCollectionJsonController(PickupRequestService pickupRequestService) {
         this.pickupRequestService = pickupRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return PickupRequestService
-     */
+
     public PickupRequestService getPickupRequestService() {
         return pickupRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param pickupRequestService
-     */
+
     public void setPickupRequestService(PickupRequestService pickupRequestService) {
         this.pickupRequestService = pickupRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<PickupRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<PickupRequest> pickupRequests = getPickupRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(pickupRequests);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(PickupRequestsCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param pickupRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody PickupRequest pickupRequest, BindingResult result) {
         if (pickupRequest.getId() != null || pickupRequest.getVersion() != null) {
@@ -113,13 +77,7 @@ public class PickupRequestsCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param pickupRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<PickupRequest> pickupRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class PickupRequestsCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param pickupRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<PickupRequest> pickupRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class PickupRequestsCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getPickupRequestService().delete(ids);

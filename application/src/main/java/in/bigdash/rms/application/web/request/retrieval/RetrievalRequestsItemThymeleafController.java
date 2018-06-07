@@ -35,55 +35,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = RetrievalRequestsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = RetrievalRequest.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/retrievalrequests/{retrievalRequest}", name = "RetrievalRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RetrievalRequestsItemThymeleafController implements ConcurrencyManager<RetrievalRequest> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<RetrievalRequest> concurrencyTemplate = new ConcurrencyTemplate<RetrievalRequest>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<RetrievalRequestsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<RetrievalRequestsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private RetrievalRequestService retrievalRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param retrievalRequestService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public RetrievalRequestsItemThymeleafController(RetrievalRequestService retrievalRequestService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setRetrievalRequestService(retrievalRequestService);
@@ -92,86 +66,47 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
         setCollectionLink(linkBuilder.of(RetrievalRequestsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return RetrievalRequestService
-     */
+
     public RetrievalRequestService getRetrievalRequestService() {
         return retrievalRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequestService
-     */
+
     public void setRetrievalRequestService(RetrievalRequestService retrievalRequestService) {
         this.retrievalRequestService = retrievalRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<RetrievalRequestsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<RetrievalRequestsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<RetrievalRequestsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<RetrievalRequestsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return RetrievalRequest
-     */
+
     @ModelAttribute
     public RetrievalRequest getRetrievalRequest(@PathVariable("retrievalRequest") Long id, Locale locale, HttpMethod method) {
         RetrievalRequest retrievalRequest = null;
@@ -187,95 +122,52 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
         return retrievalRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute RetrievalRequest retrievalRequest, Model model) {
         model.addAttribute("retrievalRequest", retrievalRequest);
         return new ModelAndView("retrievalrequests/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute RetrievalRequest retrievalRequest, Model model) {
         model.addAttribute("retrievalRequest", retrievalRequest);
         return new ModelAndView("retrievalrequests/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<RetrievalRequest> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "retrievalRequest";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "retrievalrequests/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(RetrievalRequest record) {
         Long versionValue = getRetrievalRequestService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(RetrievalRequest entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -290,11 +182,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("retrievalRequest")
     public void initRetrievalRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -303,13 +191,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute RetrievalRequest retrievalRequest, Model model) {
         populateForm(model);
@@ -317,16 +199,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
         return new ModelAndView("retrievalrequests/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequest
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute RetrievalRequest retrievalRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -348,12 +221,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param retrievalRequest
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute RetrievalRequest retrievalRequest) {

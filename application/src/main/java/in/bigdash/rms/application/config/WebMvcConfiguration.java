@@ -22,53 +22,31 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
-/**
- * = WebMvcConfiguration
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooWebMvcConfiguration(defaultLanguage = "en")
 @RooWebMvcThymeleafUIConfiguration
 @Configuration
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     @Autowired
     private ThymeleafProperties thymeleafProperties;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ApplicationContext applicationContext;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     @Autowired
     private TemplateEngine templateEngine;
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return LocalValidatorFactoryBean
-     */
+
     @Primary
     @Bean
     public LocalValidatorFactoryBean validator() {
         return new LocalValidatorFactoryBean();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return LocaleResolver
-     */
+
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
@@ -76,11 +54,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
         return localeResolver;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return LocaleChangeInterceptor
-     */
+
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
@@ -88,58 +62,34 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
         return localeChangeInterceptor;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param registry
-     */
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
         registry.addInterceptor(new TraceeInterceptor());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ThymeleafProperties
-     */
+
     public ThymeleafProperties getThymeleafProperties() {
         return thymeleafProperties;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return TemplateEngine
-     */
+
     public TemplateEngine getTemplateEngine() {
         return templateEngine;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ApplicationContext
-     */
+
     public ApplicationContext getApplicationContext() {
         return applicationContext;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param applicationContext
-     */
+
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ThymeleafViewResolver
-     */
+
     @Bean
     public ThymeleafViewResolver javascriptThymeleafViewResolver() {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
@@ -151,11 +101,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
         return resolver;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return SpringResourceTemplateResolver
-     */
+
     @Bean
     public SpringResourceTemplateResolver javascriptTemplateResolver() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();

@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = FileInventoryItemsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = FileInventoryItem.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/fileinventoryitems/{fileInventoryItem}", name = "FileInventoryItemsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FileInventoryItemsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private FileInventoryItemService fileInventoryItemService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param fileInventoryItemService
-     */
+
     @Autowired
     public FileInventoryItemsItemJsonController(FileInventoryItemService fileInventoryItemService) {
         this.fileInventoryItemService = fileInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return FileInventoryItemService
-     */
+
     public FileInventoryItemService getFileInventoryItemService() {
         return fileInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param fileInventoryItemService
-     */
+
     public void setFileInventoryItemService(FileInventoryItemService fileInventoryItemService) {
         this.fileInventoryItemService = fileInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return FileInventoryItem
-     */
+
     @ModelAttribute
     public FileInventoryItem getFileInventoryItem(@PathVariable("fileInventoryItem") Long id) {
         FileInventoryItem fileInventoryItem = fileInventoryItemService.findOne(id);
@@ -83,35 +58,18 @@ public class FileInventoryItemsItemJsonController {
         return fileInventoryItem;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param fileInventoryItem
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute FileInventoryItem fileInventoryItem) {
         return ResponseEntity.ok(fileInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param fileInventoryItem
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(FileInventoryItem fileInventoryItem) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(FileInventoryItemsItemJsonController.class).show(fileInventoryItem)).buildAndExpand(fileInventoryItem.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedFileInventoryItem
-     * @param fileInventoryItem
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute FileInventoryItem storedFileInventoryItem, @Valid @RequestBody FileInventoryItem fileInventoryItem, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class FileInventoryItemsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param fileInventoryItem
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute FileInventoryItem fileInventoryItem) {
         getFileInventoryItemService().delete(fileInventoryItem);

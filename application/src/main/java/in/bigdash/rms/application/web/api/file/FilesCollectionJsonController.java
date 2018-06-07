@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = FilesCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = File.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/files", name = "FilesCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FilesCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private FileService fileService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param fileService
-     */
+
     @Autowired
     public FilesCollectionJsonController(FileService fileService) {
         this.fileService = fileService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return FileService
-     */
+
     public FileService getFileService() {
         return fileService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param fileService
-     */
+
     public void setFileService(FileService fileService) {
         this.fileService = fileService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<File>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<File> files = getFileService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(files);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(FilesCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param file
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody File file, BindingResult result) {
         if (file.getId() != null || file.getVersion() != null) {
@@ -113,13 +77,7 @@ public class FilesCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param files
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<File> files, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class FilesCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param files
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<File> files, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class FilesCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getFileService().delete(ids);

@@ -13,85 +13,45 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.springlets.web.NotFoundException;
 import org.springframework.boot.jackson.JsonComponent;
 
-/**
- * = ShelfDeserializer
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooDeserializer(entity = Shelf.class)
 @JsonComponent
 public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ShelfService shelfService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ConversionService conversionService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param shelfService
-     * @param conversionService
-     */
+
     @Autowired
     public ShelfDeserializer(@Lazy ShelfService shelfService, ConversionService conversionService) {
         this.shelfService = shelfService;
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ShelfService
-     */
+
     public ShelfService getShelfService() {
         return shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelfService
-     */
+
     public void setShelfService(ShelfService shelfService) {
         this.shelfService = shelfService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConversionService
-     */
+
     public ConversionService getConversionService() {
         return conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param conversionService
-     */
+
     public void setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param jsonParser
-     * @param context
-     * @param codec
-     * @param tree
-     * @return Shelf
-     */
+
     public Shelf deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);

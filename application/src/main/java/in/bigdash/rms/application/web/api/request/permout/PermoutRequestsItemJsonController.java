@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = PermoutRequestsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = PermoutRequest.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/permoutrequests/{permoutRequest}", name = "PermoutRequestsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PermoutRequestsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private PermoutRequestService permoutRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param permoutRequestService
-     */
+
     @Autowired
     public PermoutRequestsItemJsonController(PermoutRequestService permoutRequestService) {
         this.permoutRequestService = permoutRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return PermoutRequestService
-     */
+
     public PermoutRequestService getPermoutRequestService() {
         return permoutRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequestService
-     */
+
     public void setPermoutRequestService(PermoutRequestService permoutRequestService) {
         this.permoutRequestService = permoutRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return PermoutRequest
-     */
+
     @ModelAttribute
     public PermoutRequest getPermoutRequest(@PathVariable("permoutRequest") Long id) {
         PermoutRequest permoutRequest = permoutRequestService.findOne(id);
@@ -83,35 +58,18 @@ public class PermoutRequestsItemJsonController {
         return permoutRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequest
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute PermoutRequest permoutRequest) {
         return ResponseEntity.ok(permoutRequest);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequest
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(PermoutRequest permoutRequest) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(PermoutRequestsItemJsonController.class).show(permoutRequest)).buildAndExpand(permoutRequest.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedPermoutRequest
-     * @param permoutRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute PermoutRequest storedPermoutRequest, @Valid @RequestBody PermoutRequest permoutRequest, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class PermoutRequestsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequest
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute PermoutRequest permoutRequest) {
         getPermoutRequestService().delete(permoutRequest);

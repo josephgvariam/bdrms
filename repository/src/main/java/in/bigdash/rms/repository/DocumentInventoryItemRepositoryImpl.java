@@ -14,72 +14,38 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = DocumentInventoryItemRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = DocumentInventoryItemRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class DocumentInventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<DocumentInventoryItem> implements DocumentInventoryItemRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     DocumentInventoryItemRepositoryImpl() {
         super(DocumentInventoryItem.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_3 = "ref3";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_2 = "ref2";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_1 = "ref1";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String DOCUMENT = "document";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_5 = "ref5";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_4 = "ref4";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<DocumentInventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QDocumentInventoryItem documentInventoryItem = QDocumentInventoryItem.documentInventoryItem;
         JPQLQuery<DocumentInventoryItem> query = from(documentInventoryItem);
@@ -91,14 +57,7 @@ public class DocumentInventoryItemRepositoryImpl extends QueryDslRepositorySuppo
         return loadPage(query, pageable, documentInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<DocumentInventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QDocumentInventoryItem documentInventoryItem = QDocumentInventoryItem.documentInventoryItem;
         JPQLQuery<DocumentInventoryItem> query = from(documentInventoryItem);
@@ -112,14 +71,7 @@ public class DocumentInventoryItemRepositoryImpl extends QueryDslRepositorySuppo
         return loadPage(query, pageable, documentInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param document
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<DocumentInventoryItem> findByDocument(Document document, GlobalSearch globalSearch, Pageable pageable) {
         QDocumentInventoryItem documentInventoryItem = QDocumentInventoryItem.documentInventoryItem;
         JPQLQuery<DocumentInventoryItem> query = from(documentInventoryItem);

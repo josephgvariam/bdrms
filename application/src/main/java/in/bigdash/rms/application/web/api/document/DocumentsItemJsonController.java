@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = DocumentsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Document.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/documents/{document}", name = "DocumentsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DocumentsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private DocumentService documentService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param documentService
-     */
+
     @Autowired
     public DocumentsItemJsonController(DocumentService documentService) {
         this.documentService = documentService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return DocumentService
-     */
+
     public DocumentService getDocumentService() {
         return documentService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentService
-     */
+
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return Document
-     */
+
     @ModelAttribute
     public Document getDocument(@PathVariable("document") Long id) {
         Document document = documentService.findOne(id);
@@ -83,35 +58,18 @@ public class DocumentsItemJsonController {
         return document;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param document
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Document document) {
         return ResponseEntity.ok(document);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param document
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(Document document) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(DocumentsItemJsonController.class).show(document)).buildAndExpand(document.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedDocument
-     * @param document
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Document storedDocument, @Valid @RequestBody Document document, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class DocumentsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param document
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Document document) {
         getDocumentService().delete(document);

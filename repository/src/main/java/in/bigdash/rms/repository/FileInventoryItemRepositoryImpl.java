@@ -14,72 +14,38 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = FileInventoryItemRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = FileInventoryItemRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class FileInventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<FileInventoryItem> implements FileInventoryItemRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     FileInventoryItemRepositoryImpl() {
         super(FileInventoryItem.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_3 = "ref3";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_2 = "ref2";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_1 = "ref1";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_5 = "ref5";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_4 = "ref4";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String FILE = "file";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<FileInventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QFileInventoryItem fileInventoryItem = QFileInventoryItem.fileInventoryItem;
         JPQLQuery<FileInventoryItem> query = from(fileInventoryItem);
@@ -91,14 +57,7 @@ public class FileInventoryItemRepositoryImpl extends QueryDslRepositorySupportEx
         return loadPage(query, pageable, fileInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<FileInventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QFileInventoryItem fileInventoryItem = QFileInventoryItem.fileInventoryItem;
         JPQLQuery<FileInventoryItem> query = from(fileInventoryItem);
@@ -112,14 +71,7 @@ public class FileInventoryItemRepositoryImpl extends QueryDslRepositorySupportEx
         return loadPage(query, pageable, fileInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param file
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<FileInventoryItem> findByFile(File file, GlobalSearch globalSearch, Pageable pageable) {
         QFileInventoryItem fileInventoryItem = QFileInventoryItem.fileInventoryItem;
         JPQLQuery<FileInventoryItem> query = from(fileInventoryItem);

@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = ClientsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Client.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/clients/{client}", name = "ClientsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ClientsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ClientService clientService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param clientService
-     */
+
     @Autowired
     public ClientsItemJsonController(ClientService clientService) {
         this.clientService = clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ClientService
-     */
+
     public ClientService getClientService() {
         return clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param clientService
-     */
+
     public void setClientService(ClientService clientService) {
         this.clientService = clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return Client
-     */
+
     @ModelAttribute
     public Client getClient(@PathVariable("client") Long id) {
         Client client = clientService.findOne(id);
@@ -83,35 +58,18 @@ public class ClientsItemJsonController {
         return client;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param client
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Client client) {
         return ResponseEntity.ok(client);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param client
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(Client client) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(ClientsItemJsonController.class).show(client)).buildAndExpand(client.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedClient
-     * @param client
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Client storedClient, @Valid @RequestBody Client client, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class ClientsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param client
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Client client) {
         getClientService().delete(client);

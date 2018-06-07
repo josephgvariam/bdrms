@@ -41,20 +41,12 @@ import in.bigdash.rms.model.request.RetrievalRequest;
 import in.bigdash.rms.model.request.TransferRequest;
 import org.springframework.boot.jackson.JsonComponent;
 
-/**
- * = DomainModelModule
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooDomainModelModule
 @JsonComponent
 public class DomainModelModule extends SimpleModule {
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     */
+
     public DomainModelModule() {
         // Mixin registration
         setMixInAnnotation(Box.class, BoxJsonMixin.class);

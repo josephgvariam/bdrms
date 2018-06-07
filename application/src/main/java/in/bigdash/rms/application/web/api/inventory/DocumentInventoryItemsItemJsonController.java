@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = DocumentInventoryItemsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = DocumentInventoryItem.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/documentinventoryitems/{documentInventoryItem}", name = "DocumentInventoryItemsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DocumentInventoryItemsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private DocumentInventoryItemService documentInventoryItemService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param documentInventoryItemService
-     */
+
     @Autowired
     public DocumentInventoryItemsItemJsonController(DocumentInventoryItemService documentInventoryItemService) {
         this.documentInventoryItemService = documentInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return DocumentInventoryItemService
-     */
+
     public DocumentInventoryItemService getDocumentInventoryItemService() {
         return documentInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItemService
-     */
+
     public void setDocumentInventoryItemService(DocumentInventoryItemService documentInventoryItemService) {
         this.documentInventoryItemService = documentInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return DocumentInventoryItem
-     */
+
     @ModelAttribute
     public DocumentInventoryItem getDocumentInventoryItem(@PathVariable("documentInventoryItem") Long id) {
         DocumentInventoryItem documentInventoryItem = documentInventoryItemService.findOne(id);
@@ -83,35 +58,18 @@ public class DocumentInventoryItemsItemJsonController {
         return documentInventoryItem;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute DocumentInventoryItem documentInventoryItem) {
         return ResponseEntity.ok(documentInventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(DocumentInventoryItem documentInventoryItem) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(DocumentInventoryItemsItemJsonController.class).show(documentInventoryItem)).buildAndExpand(documentInventoryItem.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedDocumentInventoryItem
-     * @param documentInventoryItem
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute DocumentInventoryItem storedDocumentInventoryItem, @Valid @RequestBody DocumentInventoryItem documentInventoryItem, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class DocumentInventoryItemsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute DocumentInventoryItem documentInventoryItem) {
         getDocumentInventoryItemService().delete(documentInventoryItem);

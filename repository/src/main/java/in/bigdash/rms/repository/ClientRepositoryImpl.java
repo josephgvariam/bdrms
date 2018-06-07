@@ -12,72 +12,38 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * = ClientRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = ClientRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class ClientRepositoryImpl extends QueryDslRepositorySupportExt<Client> implements ClientRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     ClientRepositoryImpl() {
         super(Client.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String ADDRESS = "address";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String DEPARTMENT = "department";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NAME = "name";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Client> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QClient client = QClient.client;
         JPQLQuery<Client> query = from(client);
@@ -89,14 +55,7 @@ public class ClientRepositoryImpl extends QueryDslRepositorySupportExt<Client> i
         return loadPage(query, pageable, client);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Client> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QClient client = QClient.client;
         JPQLQuery<Client> query = from(client);

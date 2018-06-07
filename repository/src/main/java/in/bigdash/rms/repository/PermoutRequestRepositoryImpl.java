@@ -12,84 +12,44 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * = PermoutRequestRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = PermoutRequestRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class PermoutRequestRepositoryImpl extends QueryDslRepositorySupportExt<PermoutRequest> implements PermoutRequestRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     PermoutRequestRepositoryImpl() {
         super(PermoutRequest.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_ASSIGNED = "userAssigned";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NOTES = "notes";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_CREATED = "userCreated";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STORAGE_TYPE = "storageType";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<PermoutRequest> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QPermoutRequest permoutRequest = QPermoutRequest.permoutRequest;
         JPQLQuery<PermoutRequest> query = from(permoutRequest);
@@ -101,14 +61,7 @@ public class PermoutRequestRepositoryImpl extends QueryDslRepositorySupportExt<P
         return loadPage(query, pageable, permoutRequest);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<PermoutRequest> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QPermoutRequest permoutRequest = QPermoutRequest.permoutRequest;
         JPQLQuery<PermoutRequest> query = from(permoutRequest);

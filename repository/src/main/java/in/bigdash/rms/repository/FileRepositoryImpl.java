@@ -14,78 +14,41 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = FileRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = FileRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class FileRepositoryImpl extends QueryDslRepositorySupportExt<File> implements FileRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     FileRepositoryImpl() {
         super(File.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String LOCATION = "location";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String BARCODE = "barcode";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String BOX = "box";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String INVENTORY_ITEM = "inventoryItem";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<File> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QFile file = QFile.file;
         JPQLQuery<File> query = from(file);
@@ -97,14 +60,7 @@ public class FileRepositoryImpl extends QueryDslRepositorySupportExt<File> imple
         return loadPage(query, pageable, file);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<File> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QFile file = QFile.file;
         JPQLQuery<File> query = from(file);
@@ -118,14 +74,7 @@ public class FileRepositoryImpl extends QueryDslRepositorySupportExt<File> imple
         return loadPage(query, pageable, file);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param box
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<File> findByBox(Box box, GlobalSearch globalSearch, Pageable pageable) {
         QFile file = QFile.file;
         JPQLQuery<File> query = from(file);

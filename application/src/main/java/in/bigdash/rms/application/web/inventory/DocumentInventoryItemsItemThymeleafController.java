@@ -37,55 +37,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = DocumentInventoryItemsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = DocumentInventoryItem.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/documentinventoryitems/{documentInventoryItem}", name = "DocumentInventoryItemsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class DocumentInventoryItemsItemThymeleafController implements ConcurrencyManager<DocumentInventoryItem> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<DocumentInventoryItem> concurrencyTemplate = new ConcurrencyTemplate<DocumentInventoryItem>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<DocumentInventoryItemsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private DocumentInventoryItemService documentInventoryItemService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<DocumentInventoryItemsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param documentInventoryItemService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public DocumentInventoryItemsItemThymeleafController(DocumentInventoryItemService documentInventoryItemService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setDocumentInventoryItemService(documentInventoryItemService);
@@ -94,86 +68,47 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
         setCollectionLink(linkBuilder.of(DocumentInventoryItemsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return DocumentInventoryItemService
-     */
+
     public DocumentInventoryItemService getDocumentInventoryItemService() {
         return documentInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItemService
-     */
+
     public void setDocumentInventoryItemService(DocumentInventoryItemService documentInventoryItemService) {
         this.documentInventoryItemService = documentInventoryItemService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<DocumentInventoryItemsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<DocumentInventoryItemsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<DocumentInventoryItemsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<DocumentInventoryItemsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return DocumentInventoryItem
-     */
+
     @ModelAttribute
     public DocumentInventoryItem getDocumentInventoryItem(@PathVariable("documentInventoryItem") Long id, Locale locale, HttpMethod method) {
         DocumentInventoryItem documentInventoryItem = null;
@@ -189,96 +124,53 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
         return documentInventoryItem;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute DocumentInventoryItem documentInventoryItem, Model model) {
         model.addAttribute("documentInventoryItem", documentInventoryItem);
         return new ModelAndView("documentinventoryitems/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute DocumentInventoryItem documentInventoryItem, Model model) {
         model.addAttribute("documentInventoryItem", documentInventoryItem);
         return new ModelAndView("documentinventoryitems/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
         model.addAttribute("status", Arrays.asList(InventoryItemStatus.values()));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<DocumentInventoryItem> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "documentInventoryItem";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "documentinventoryitems/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(DocumentInventoryItem record) {
         Long versionValue = getDocumentInventoryItemService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(DocumentInventoryItem entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -293,11 +185,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("documentInventoryItem")
     public void initDocumentInventoryItemBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -306,13 +194,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute DocumentInventoryItem documentInventoryItem, Model model) {
         populateForm(model);
@@ -320,16 +202,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
         return new ModelAndView("documentinventoryitems/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute DocumentInventoryItem documentInventoryItem, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -351,12 +224,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param documentInventoryItem
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute DocumentInventoryItem documentInventoryItem) {

@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = ClientsCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Client.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/clients", name = "ClientsCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ClientsCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ClientService clientService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param clientService
-     */
+
     @Autowired
     public ClientsCollectionJsonController(ClientService clientService) {
         this.clientService = clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ClientService
-     */
+
     public ClientService getClientService() {
         return clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param clientService
-     */
+
     public void setClientService(ClientService clientService) {
         this.clientService = clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<Client>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<Client> clients = getClientService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(clients);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(ClientsCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param client
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Client client, BindingResult result) {
         if (client.getId() != null || client.getVersion() != null) {
@@ -113,13 +77,7 @@ public class ClientsCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param clients
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<Client> clients, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class ClientsCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param clients
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<Client> clients, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class ClientsCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getClientService().delete(ids);

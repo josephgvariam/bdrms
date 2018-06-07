@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = RequestsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Request.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/requests/{request}", name = "RequestsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RequestsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private RequestService requestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param requestService
-     */
+
     @Autowired
     public RequestsItemJsonController(RequestService requestService) {
         this.requestService = requestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return RequestService
-     */
+
     public RequestService getRequestService() {
         return requestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param requestService
-     */
+
     public void setRequestService(RequestService requestService) {
         this.requestService = requestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return Request
-     */
+
     @ModelAttribute
     public Request getRequest(@PathVariable("request") Long id) {
         Request request = requestService.findOne(id);
@@ -83,35 +58,18 @@ public class RequestsItemJsonController {
         return request;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Request request) {
         return ResponseEntity.ok(request);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(Request request) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(RequestsItemJsonController.class).show(request)).buildAndExpand(request.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedRequest
-     * @param request
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Request storedRequest, @Valid @RequestBody Request request, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class RequestsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param request
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Request request) {
         getRequestService().delete(request);

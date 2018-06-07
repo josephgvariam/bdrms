@@ -61,56 +61,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = ClientsCollectionThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Client.class, type = ControllerType.COLLECTION)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/clients", name = "ClientsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class ClientsCollectionThymeleafController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<ClientsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ClientService clientService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ConversionService conversionService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<ClientsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param clientService
-     * @param conversionService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public ClientsCollectionThymeleafController(ClientService clientService, ConversionService conversionService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setClientService(clientService);
@@ -120,116 +93,63 @@ public class ClientsCollectionThymeleafController {
         setCollectionLink(linkBuilder.of(ClientsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ClientService
-     */
+
     public ClientService getClientService() {
         return clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param clientService
-     */
+
     public void setClientService(ClientService clientService) {
         this.clientService = clientService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<ClientsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<ClientsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<ClientsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<ClientsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConversionService
-     */
+
     public ConversionService getConversionService() {
         return conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param conversionService
-     */
+
     public void setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
         return new ModelAndView("clients/list");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param datatablesColumns
-     * @param search
-     * @param pageable
-     * @param draw
-     * @return ResponseEntity
-     */
+
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Client>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
@@ -242,16 +162,7 @@ public class ClientsCollectionThymeleafController {
         return ResponseEntity.ok(datatablesData);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param datatablesColumns
-     * @param search
-     * @param pageable
-     * @param draw
-     * @return ResponseEntity
-     */
+
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Client>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
@@ -264,14 +175,7 @@ public class ClientsCollectionThymeleafController {
         return ResponseEntity.ok(datatablesData);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param search
-     * @param pageable
-     * @param locale
-     * @return ResponseEntity
-     */
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Client>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
@@ -281,11 +185,7 @@ public class ClientsCollectionThymeleafController {
         return ResponseEntity.ok(select2Data);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("client")
     public void initClientBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -294,34 +194,19 @@ public class ClientsCollectionThymeleafController {
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
         model.addAttribute("createdDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
         model.addAttribute("modifiedDate_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param client
-     * @param result
-     * @param model
-     * @return ModelAndView
-     */
+
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Client client, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -333,12 +218,7 @@ public class ClientsCollectionThymeleafController {
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
         populateForm(model);
@@ -346,12 +226,7 @@ public class ClientsCollectionThymeleafController {
         return new ModelAndView("clients/create");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
@@ -359,28 +234,7 @@ public class ClientsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Method that obtains the filtered and ordered records using the Datatables information and
-     * export them to a new report file. (It ignores the current pagination).
-     *
-     * To generate the report file it uses the `DynamicJasper` library
-     * (http://dynamicjasper.com). This library allows developers to generate reports dynamically
-     * without use an specific template to each entity.
-     *
-     * To customize the appearance of ALL generated reports, you could customize the
-     * "export_default.jrxml" template located in "src/main/resources/templates/reports/". However,
-     * if you want to customize the appearance of this specific report, you could create a new
-     * ".jrxml" file and provide it to the library replacing the `builder.setTemplateFile();`
-     * operation used in this implementation.
-     *
-     * @param search GlobalSearch that contains the filter provided by the Datatables component.
-     * @param pageable Pageable that contains the Sort info provided by the Datatabes component.
-     * @param datatablesColumns Columns displayed in the Datatables component.
-     * @param response The HttpServletResponse.
-     * @param exporter An specific JasperReportsExporter to be used during export process.
-     * @param fileName The final filename to use.
-     * @param locale The current Locale in the view context.
-     */
+
     public void export(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, String[] datatablesColumns, HttpServletResponse response, JasperReportsExporter exporter, String fileName, Locale locale) {
         // Obtain the filtered and ordered elements
         Page<Client> clients = getClientService().findAll(search, pageable);
@@ -432,16 +286,7 @@ public class ClientsCollectionThymeleafController {
         }
     }
 
-    /**
-     * It delegates in the `export` method providing the necessary information
-     * to generate a CSV report.
-     *
-     * @param search The GlobalSearch that contains the filter provided by the Datatables component
-     * @param pageable The Pageable that contains the Sort info provided by the Datatabes component
-     * @param datatablesColumns The Columns displayed in the Datatables component
-     * @param response The HttpServletResponse
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "exportCsv", value = "/export/csv")
     @ResponseBody
     public ResponseEntity<?> exportCsv(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, @RequestParam("datatablesColumns") String[] datatablesColumns, HttpServletResponse response, Locale locale) {
@@ -449,16 +294,7 @@ public class ClientsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * It delegates in the `export` method providing the necessary information
-     * to generate a PDF report.
-     *
-     * @param search The GlobalSearch that contains the filter provided by the Datatables component
-     * @param pageable The Pageable that contains the Sort info provided by the Datatabes component
-     * @param datatablesColumns The Columns displayed in the Datatables component
-     * @param response The HttpServletResponse
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "exportPdf", value = "/export/pdf")
     @ResponseBody
     public ResponseEntity<?> exportPdf(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, @RequestParam("datatablesColumns") String[] datatablesColumns, HttpServletResponse response, Locale locale) {
@@ -466,16 +302,7 @@ public class ClientsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * It delegates in the `export` method providing the necessary information
-     * to generate a XLS report.
-     *
-     * @param search The GlobalSearch that contains the filter provided by the Datatables component
-     * @param pageable The Pageable that contains the Sort info provided by the Datatabes component
-     * @param datatablesColumns The Columns displayed in the Datatables component
-     * @param response The HttpServletResponse
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "exportXls", value = "/export/xls")
     @ResponseBody
     public ResponseEntity<?> exportXls(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, @RequestParam("datatablesColumns") String[] datatablesColumns, HttpServletResponse response, Locale locale) {
@@ -483,14 +310,7 @@ public class ClientsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * This method contains all the entity fields that are able to be displayed in a
-     * report. The developer could add a new column to the report builder providing the
-     * field name and the builder where the new field will be added as column.
-     *
-     * @param columnName the field name to show as column
-     * @param builder The builder where the new field will be added as column.
-     */
+
     public void addColumnToReportBuilder(String columnName, FastReportBuilder builder, Locale locale, String fileName) {
         try {
             if (columnName.equals("id")) {

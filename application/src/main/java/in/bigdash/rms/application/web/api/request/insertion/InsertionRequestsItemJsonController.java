@@ -22,58 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = InsertionRequestsItemJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = InsertionRequest.class, pathPrefix = "/api", type = ControllerType.ITEM)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/insertionrequests/{insertionRequest}", name = "InsertionRequestsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class InsertionRequestsItemJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private InsertionRequestService insertionRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param insertionRequestService
-     */
+
     @Autowired
     public InsertionRequestsItemJsonController(InsertionRequestService insertionRequestService) {
         this.insertionRequestService = insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return InsertionRequestService
-     */
+
     public InsertionRequestService getInsertionRequestService() {
         return insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequestService
-     */
+
     public void setInsertionRequestService(InsertionRequestService insertionRequestService) {
         this.insertionRequestService = insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @return InsertionRequest
-     */
+
     @ModelAttribute
     public InsertionRequest getInsertionRequest(@PathVariable("insertionRequest") Long id) {
         InsertionRequest insertionRequest = insertionRequestService.findOne(id);
@@ -83,35 +58,18 @@ public class InsertionRequestsItemJsonController {
         return insertionRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute InsertionRequest insertionRequest) {
         return ResponseEntity.ok(insertionRequest);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @return UriComponents
-     */
+
     public static UriComponents showURI(InsertionRequest insertionRequest) {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(InsertionRequestsItemJsonController.class).show(insertionRequest)).buildAndExpand(insertionRequest.getId()).encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storedInsertionRequest
-     * @param insertionRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute InsertionRequest storedInsertionRequest, @Valid @RequestBody InsertionRequest insertionRequest, BindingResult result) {
         if (result.hasErrors()) {
@@ -122,12 +80,7 @@ public class InsertionRequestsItemJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute InsertionRequest insertionRequest) {
         getInsertionRequestService().delete(insertionRequest);

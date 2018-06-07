@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = BoxesCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = Box.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/boxes", name = "BoxesCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BoxesCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private BoxService boxService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param boxService
-     */
+
     @Autowired
     public BoxesCollectionJsonController(BoxService boxService) {
         this.boxService = boxService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return BoxService
-     */
+
     public BoxService getBoxService() {
         return boxService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxService
-     */
+
     public void setBoxService(BoxService boxService) {
         this.boxService = boxService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<Box>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<Box> boxes = getBoxService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(boxes);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(BoxesCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param box
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Box box, BindingResult result) {
         if (box.getId() != null || box.getVersion() != null) {
@@ -113,13 +77,7 @@ public class BoxesCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxes
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<Box> boxes, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class BoxesCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param boxes
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<Box> boxes, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class BoxesCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getBoxService().delete(ids);

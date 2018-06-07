@@ -35,55 +35,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = InsertionRequestsItemThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = InsertionRequest.class, type = ControllerType.ITEM)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/insertionrequests/{insertionRequest}", name = "InsertionRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class InsertionRequestsItemThymeleafController implements ConcurrencyManager<InsertionRequest> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private final ConcurrencyTemplate<InsertionRequest> concurrencyTemplate = new ConcurrencyTemplate<InsertionRequest>(this);
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<InsertionRequestsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private InsertionRequestService insertionRequestService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<InsertionRequestsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param insertionRequestService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public InsertionRequestsItemThymeleafController(InsertionRequestService insertionRequestService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setInsertionRequestService(insertionRequestService);
@@ -92,86 +66,47 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
         setCollectionLink(linkBuilder.of(InsertionRequestsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return InsertionRequestService
-     */
+
     public InsertionRequestService getInsertionRequestService() {
         return insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequestService
-     */
+
     public void setInsertionRequestService(InsertionRequestService insertionRequestService) {
         this.insertionRequestService = insertionRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<InsertionRequestsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<InsertionRequestsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<InsertionRequestsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<InsertionRequestsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param id
-     * @param locale
-     * @param method
-     * @return InsertionRequest
-     */
+
     @ModelAttribute
     public InsertionRequest getInsertionRequest(@PathVariable("insertionRequest") Long id, Locale locale, HttpMethod method) {
         InsertionRequest insertionRequest = null;
@@ -187,95 +122,52 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
         return insertionRequest;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute InsertionRequest insertionRequest, Model model) {
         model.addAttribute("insertionRequest", insertionRequest);
         return new ModelAndView("insertionrequests/show");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/inline", name = "showInline")
     public ModelAndView showInline(@ModelAttribute InsertionRequest insertionRequest, Model model) {
         model.addAttribute("insertionRequest", insertionRequest);
         return new ModelAndView("insertionrequests/showInline :: inline-content");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConcurrencyTemplate
-     */
+
     public ConcurrencyTemplate<InsertionRequest> getConcurrencyTemplate() {
         return concurrencyTemplate;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getModelName() {
         return "insertionRequest";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return String
-     */
+
     public String getEditViewPath() {
         return "insertionrequests/edit";
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param record
-     * @return Integer
-     */
+
     public Integer getLastVersion(InsertionRequest record) {
         Long versionValue = getInsertionRequestService().findOne(record.getId()).getVersion();
         return versionValue != null ? versionValue.intValue() : null;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param entity
-     * @param model
-     * @return ModelAndView
-     */
+
     public ModelAndView populateAndGetFormView(InsertionRequest entity, Model model) {
         // Populate the form with all the necessary elements
         populateForm(model);
@@ -290,11 +182,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
         return new org.springframework.web.servlet.ModelAndView(getEditViewPath(), model.asMap());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("insertionRequest")
     public void initInsertionRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -303,13 +191,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute InsertionRequest insertionRequest, Model model) {
         populateForm(model);
@@ -317,16 +199,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
         return new ModelAndView("insertionrequests/edit");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @param result
-     * @param version
-     * @param concurrencyControl
-     * @param model
-     * @return ModelAndView
-     */
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute InsertionRequest insertionRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         // Check if provided form contain errors
@@ -348,12 +221,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param insertionRequest
-     * @return ResponseEntity
-     */
+
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute InsertionRequest insertionRequest) {

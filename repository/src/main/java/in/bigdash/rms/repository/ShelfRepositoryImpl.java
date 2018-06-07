@@ -14,48 +14,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = ShelfRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = ShelfRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class ShelfRepositoryImpl extends QueryDslRepositorySupportExt<Shelf> implements ShelfRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     ShelfRepositoryImpl() {
         super(Shelf.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String FACILITY = "facility";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String BARCODE = "barcode";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Shelf> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QShelf shelf = QShelf.shelf;
         JPQLQuery<Shelf> query = from(shelf);
@@ -67,14 +45,7 @@ public class ShelfRepositoryImpl extends QueryDslRepositorySupportExt<Shelf> imp
         return loadPage(query, pageable, shelf);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Shelf> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QShelf shelf = QShelf.shelf;
         JPQLQuery<Shelf> query = from(shelf);
@@ -88,14 +59,7 @@ public class ShelfRepositoryImpl extends QueryDslRepositorySupportExt<Shelf> imp
         return loadPage(query, pageable, shelf);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param facility
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Shelf> findByFacility(Facility facility, GlobalSearch globalSearch, Pageable pageable) {
         QShelf shelf = QShelf.shelf;
         JPQLQuery<Shelf> query = from(shelf);

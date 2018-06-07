@@ -25,81 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = PermoutRequestsCollectionJsonController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = PermoutRequest.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
 @RooJSON
 @RestController
 @RequestMapping(value = "/api/permoutrequests", name = "PermoutRequestsCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PermoutRequestsCollectionJsonController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private PermoutRequestService permoutRequestService;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param permoutRequestService
-     */
+
     @Autowired
     public PermoutRequestsCollectionJsonController(PermoutRequestService permoutRequestService) {
         this.permoutRequestService = permoutRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return PermoutRequestService
-     */
+
     public PermoutRequestService getPermoutRequestService() {
         return permoutRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequestService
-     */
+
     public void setPermoutRequestService(PermoutRequestService permoutRequestService) {
         this.permoutRequestService = permoutRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "list")
     public ResponseEntity<Page<PermoutRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
         Page<PermoutRequest> permoutRequests = getPermoutRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(permoutRequests);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return UriComponents
-     */
+
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(PermoutRequestsCollectionJsonController.class).list(null, null)).build().encode();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequest
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody PermoutRequest permoutRequest, BindingResult result) {
         if (permoutRequest.getId() != null || permoutRequest.getVersion() != null) {
@@ -113,13 +77,7 @@ public class PermoutRequestsCollectionJsonController {
         return ResponseEntity.created(showURI.toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<PermoutRequest> permoutRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -129,13 +87,7 @@ public class PermoutRequestsCollectionJsonController {
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param permoutRequests
-     * @param result
-     * @return ResponseEntity
-     */
+
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<PermoutRequest> permoutRequests, BindingResult result) {
         if (result.hasErrors()) {
@@ -145,12 +97,7 @@ public class PermoutRequestsCollectionJsonController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
         getPermoutRequestService().delete(ids);

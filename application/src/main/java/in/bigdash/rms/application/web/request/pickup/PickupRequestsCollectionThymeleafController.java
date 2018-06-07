@@ -62,56 +62,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = PickupRequestsCollectionThymeleafController
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooController(entity = PickupRequest.class, type = ControllerType.COLLECTION)
 @RooThymeleaf
 @Controller
 @RequestMapping(value = "/pickuprequests", name = "PickupRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class PickupRequestsCollectionThymeleafController {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<PickupRequestsItemThymeleafController> itemLink;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private PickupRequestService pickupRequestService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MessageSource messageSource;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private ConversionService conversionService;
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     private MethodLinkBuilderFactory<PickupRequestsCollectionThymeleafController> collectionLink;
 
-    /**
-     * TODO Auto-generated constructor documentation
-     *
-     * @param pickupRequestService
-     * @param conversionService
-     * @param messageSource
-     * @param linkBuilder
-     */
+
     @Autowired
     public PickupRequestsCollectionThymeleafController(PickupRequestService pickupRequestService, ConversionService conversionService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
         setPickupRequestService(pickupRequestService);
@@ -121,116 +94,63 @@ public class PickupRequestsCollectionThymeleafController {
         setCollectionLink(linkBuilder.of(PickupRequestsCollectionThymeleafController.class));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return PickupRequestService
-     */
+
     public PickupRequestService getPickupRequestService() {
         return pickupRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param pickupRequestService
-     */
+
     public void setPickupRequestService(PickupRequestService pickupRequestService) {
         this.pickupRequestService = pickupRequestService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MessageSource
-     */
+
     public MessageSource getMessageSource() {
         return messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param messageSource
-     */
+
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<PickupRequestsItemThymeleafController> getItemLink() {
         return itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param itemLink
-     */
+
     public void setItemLink(MethodLinkBuilderFactory<PickupRequestsItemThymeleafController> itemLink) {
         this.itemLink = itemLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return MethodLinkBuilderFactory
-     */
+
     public MethodLinkBuilderFactory<PickupRequestsCollectionThymeleafController> getCollectionLink() {
         return collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param collectionLink
-     */
+
     public void setCollectionLink(MethodLinkBuilderFactory<PickupRequestsCollectionThymeleafController> collectionLink) {
         this.collectionLink = collectionLink;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return ConversionService
-     */
+
     public ConversionService getConversionService() {
         return conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param conversionService
-     */
+
     public void setConversionService(ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
         return new ModelAndView("pickuprequests/list");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param datatablesColumns
-     * @param search
-     * @param pageable
-     * @param draw
-     * @return ResponseEntity
-     */
+
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<PickupRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
@@ -243,16 +163,7 @@ public class PickupRequestsCollectionThymeleafController {
         return ResponseEntity.ok(datatablesData);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param datatablesColumns
-     * @param search
-     * @param pageable
-     * @param draw
-     * @return ResponseEntity
-     */
+
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<PickupRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
@@ -265,14 +176,7 @@ public class PickupRequestsCollectionThymeleafController {
         return ResponseEntity.ok(datatablesData);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param search
-     * @param pageable
-     * @param locale
-     * @return ResponseEntity
-     */
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<PickupRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
@@ -282,11 +186,7 @@ public class PickupRequestsCollectionThymeleafController {
         return ResponseEntity.ok(select2Data);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param binder
-     */
+
     @InitBinder("pickupRequest")
     public void initPickupRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
@@ -295,34 +195,19 @@ public class PickupRequestsCollectionThymeleafController {
         binder.addValidators(validator);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateFormats(Model model) {
         model.addAttribute("application_locale", LocaleContextHolder.getLocale().getLanguage());
         model.addAttribute("pickupDateTime_date_format", "yyyy-MM-dd HH:mm a");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     */
+
     public void populateForm(Model model) {
         populateFormats(model);
         model.addAttribute("status", Arrays.asList(RequestStatus.values()));
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param pickupRequest
-     * @param result
-     * @param model
-     * @return ModelAndView
-     */
+
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute PickupRequest pickupRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -334,12 +219,7 @@ public class PickupRequestsCollectionThymeleafController {
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param model
-     * @return ModelAndView
-     */
+
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
         populateForm(model);
@@ -347,12 +227,7 @@ public class PickupRequestsCollectionThymeleafController {
         return new ModelAndView("pickuprequests/create");
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @return ResponseEntity
-     */
+
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
@@ -360,28 +235,7 @@ public class PickupRequestsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * Method that obtains the filtered and ordered records using the Datatables information and
-     * export them to a new report file. (It ignores the current pagination).
-     *
-     * To generate the report file it uses the `DynamicJasper` library
-     * (http://dynamicjasper.com). This library allows developers to generate reports dynamically
-     * without use an specific template to each entity.
-     *
-     * To customize the appearance of ALL generated reports, you could customize the
-     * "export_default.jrxml" template located in "src/main/resources/templates/reports/". However,
-     * if you want to customize the appearance of this specific report, you could create a new
-     * ".jrxml" file and provide it to the library replacing the `builder.setTemplateFile();`
-     * operation used in this implementation.
-     *
-     * @param search GlobalSearch that contains the filter provided by the Datatables component.
-     * @param pageable Pageable that contains the Sort info provided by the Datatabes component.
-     * @param datatablesColumns Columns displayed in the Datatables component.
-     * @param response The HttpServletResponse.
-     * @param exporter An specific JasperReportsExporter to be used during export process.
-     * @param fileName The final filename to use.
-     * @param locale The current Locale in the view context.
-     */
+
     public void export(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, String[] datatablesColumns, HttpServletResponse response, JasperReportsExporter exporter, String fileName, Locale locale) {
         // Obtain the filtered and ordered elements
         Page<PickupRequest> pickupRequests = getPickupRequestService().findAll(search, pageable);
@@ -433,16 +287,7 @@ public class PickupRequestsCollectionThymeleafController {
         }
     }
 
-    /**
-     * It delegates in the `export` method providing the necessary information
-     * to generate a CSV report.
-     *
-     * @param search The GlobalSearch that contains the filter provided by the Datatables component
-     * @param pageable The Pageable that contains the Sort info provided by the Datatabes component
-     * @param datatablesColumns The Columns displayed in the Datatables component
-     * @param response The HttpServletResponse
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "exportCsv", value = "/export/csv")
     @ResponseBody
     public ResponseEntity<?> exportCsv(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, @RequestParam("datatablesColumns") String[] datatablesColumns, HttpServletResponse response, Locale locale) {
@@ -450,16 +295,7 @@ public class PickupRequestsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * It delegates in the `export` method providing the necessary information
-     * to generate a PDF report.
-     *
-     * @param search The GlobalSearch that contains the filter provided by the Datatables component
-     * @param pageable The Pageable that contains the Sort info provided by the Datatabes component
-     * @param datatablesColumns The Columns displayed in the Datatables component
-     * @param response The HttpServletResponse
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "exportPdf", value = "/export/pdf")
     @ResponseBody
     public ResponseEntity<?> exportPdf(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, @RequestParam("datatablesColumns") String[] datatablesColumns, HttpServletResponse response, Locale locale) {
@@ -467,16 +303,7 @@ public class PickupRequestsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * It delegates in the `export` method providing the necessary information
-     * to generate a XLS report.
-     *
-     * @param search The GlobalSearch that contains the filter provided by the Datatables component
-     * @param pageable The Pageable that contains the Sort info provided by the Datatabes component
-     * @param datatablesColumns The Columns displayed in the Datatables component
-     * @param response The HttpServletResponse
-     * @return ResponseEntity
-     */
+
     @GetMapping(name = "exportXls", value = "/export/xls")
     @ResponseBody
     public ResponseEntity<?> exportXls(GlobalSearch search, @PageableDefault(size = 2147483647) Pageable pageable, @RequestParam("datatablesColumns") String[] datatablesColumns, HttpServletResponse response, Locale locale) {
@@ -484,14 +311,7 @@ public class PickupRequestsCollectionThymeleafController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * This method contains all the entity fields that are able to be displayed in a
-     * report. The developer could add a new column to the report builder providing the
-     * field name and the builder where the new field will be added as column.
-     *
-     * @param columnName the field name to show as column
-     * @param builder The builder where the new field will be added as column.
-     */
+
     public void addColumnToReportBuilder(String columnName, FastReportBuilder builder, Locale locale, String fileName) {
         try {
             if (columnName.equals("id")) {

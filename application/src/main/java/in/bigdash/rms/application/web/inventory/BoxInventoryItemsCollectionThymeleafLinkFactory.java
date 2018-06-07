@@ -6,93 +6,47 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 
-/**
- * = BoxInventoryItemsCollectionThymeleafLinkFactory
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooLinkFactory(controller = BoxInventoryItemsCollectionThymeleafController.class)
 @Component
 public class BoxInventoryItemsCollectionThymeleafLinkFactory implements MethodLinkFactory<BoxInventoryItemsCollectionThymeleafController> {
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String DATATABLESBYIDSIN = "datatablesByIdsIn";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String SELECT2 = "select2";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATE = "create";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String EXPORTCSV = "exportCsv";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String DELETEBATCH = "deleteBatch";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String DATATABLES = "datatables";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String EXPORTPDF = "exportPdf";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String LIST = "list";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATEFORM = "createForm";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String EXPORTXLS = "exportXls";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @return Class
-     */
+
     public Class<BoxInventoryItemsCollectionThymeleafController> getControllerClass() {
         return BoxInventoryItemsCollectionThymeleafController.class;
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param methodName
-     * @param parameters
-     * @param pathVariables
-     * @return UriComponents
-     */
+
     public UriComponents toUri(String methodName, Object[] parameters, Map<String, Object> pathVariables) {
         if (methodName.equals(LIST)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).list(null)).buildAndExpand(pathVariables);

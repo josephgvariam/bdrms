@@ -14,78 +14,41 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = BoxRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = BoxRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class BoxRepositoryImpl extends QueryDslRepositorySupportExt<Box> implements BoxRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     BoxRepositoryImpl() {
         super(Box.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String LOCATION = "location";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String BARCODE = "barcode";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String SHELF = "shelf";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String INVENTORY_ITEM = "inventoryItem";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Box> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QBox box = QBox.box;
         JPQLQuery<Box> query = from(box);
@@ -97,14 +60,7 @@ public class BoxRepositoryImpl extends QueryDslRepositorySupportExt<Box> impleme
         return loadPage(query, pageable, box);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Box> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QBox box = QBox.box;
         JPQLQuery<Box> query = from(box);
@@ -118,14 +74,7 @@ public class BoxRepositoryImpl extends QueryDslRepositorySupportExt<Box> impleme
         return loadPage(query, pageable, box);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param shelf
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Box> findByShelf(Shelf shelf, GlobalSearch globalSearch, Pageable pageable) {
         QBox box = QBox.box;
         JPQLQuery<Box> query = from(box);

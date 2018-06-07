@@ -15,84 +15,44 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = RequestRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = RequestRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request> implements RequestRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     RequestRepositoryImpl() {
         super(Request.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_ASSIGNED = "userAssigned";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NOTES = "notes";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_CREATED = "userCreated";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STORAGE_TYPE = "storageType";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Request> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QRequest request = QRequest.request;
         JPQLQuery<Request> query = from(request);
@@ -104,14 +64,7 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
         return loadPage(query, pageable, request);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Request> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QRequest request = QRequest.request;
         JPQLQuery<Request> query = from(request);
@@ -125,14 +78,7 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
         return loadPage(query, pageable, request);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param storageType
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Request> findByStorageType(StorageType storageType, GlobalSearch globalSearch, Pageable pageable) {
         QRequest request = QRequest.request;
         JPQLQuery<Request> query = from(request);
@@ -146,14 +92,7 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
         return loadPage(query, pageable, request);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param userAssigned
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Request> findByUserAssigned(User userAssigned, GlobalSearch globalSearch, Pageable pageable) {
         QRequest request = QRequest.request;
         JPQLQuery<Request> query = from(request);
@@ -167,14 +106,7 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
         return loadPage(query, pageable, request);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param userCreated
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Request> findByUserCreated(User userCreated, GlobalSearch globalSearch, Pageable pageable) {
         QRequest request = QRequest.request;
         JPQLQuery<Request> query = from(request);

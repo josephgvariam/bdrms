@@ -14,66 +14,35 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-/**
- * = InventoryItemRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = InventoryItemRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<InventoryItem> implements InventoryItemRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     InventoryItemRepositoryImpl() {
         super(InventoryItem.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_3 = "ref3";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_2 = "ref2";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_1 = "ref1";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_5 = "ref5";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String REF_4 = "ref4";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<InventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
         JPQLQuery<InventoryItem> query = from(inventoryItem);
@@ -85,14 +54,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
         return loadPage(query, pageable, inventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<InventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
         JPQLQuery<InventoryItem> query = from(inventoryItem);
@@ -106,14 +68,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
         return loadPage(query, pageable, inventoryItem);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param requests
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<InventoryItem> findByRequestsContains(Request requests, GlobalSearch globalSearch, Pageable pageable) {
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
         JPQLQuery<InventoryItem> query = from(inventoryItem);

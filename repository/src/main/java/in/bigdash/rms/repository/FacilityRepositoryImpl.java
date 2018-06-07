@@ -12,66 +12,35 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * = FacilityRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = FacilityRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class FacilityRepositoryImpl extends QueryDslRepositorySupportExt<Facility> implements FacilityRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     FacilityRepositoryImpl() {
         super(Facility.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String ADDRESS = "address";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NAME = "name";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Facility> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QFacility facility = QFacility.facility;
         JPQLQuery<Facility> query = from(facility);
@@ -83,14 +52,7 @@ public class FacilityRepositoryImpl extends QueryDslRepositorySupportExt<Facilit
         return loadPage(query, pageable, facility);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<Facility> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QFacility facility = QFacility.facility;
         JPQLQuery<Facility> query = from(facility);

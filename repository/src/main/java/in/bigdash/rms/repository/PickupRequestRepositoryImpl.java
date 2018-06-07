@@ -12,102 +12,53 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * = PickupRequestRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = PickupRequestRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class PickupRequestRepositoryImpl extends QueryDslRepositorySupportExt<PickupRequest> implements PickupRequestRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     PickupRequestRepositoryImpl() {
         super(PickupRequest.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_ASSIGNED = "userAssigned";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NOTES = "notes";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String PICKUP_DATE_TIME = "pickupDateTime";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NUMBER_FILES = "numberFiles";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_CREATED = "userCreated";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String DOCUMENT_TYPE = "documentType";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STORAGE_TYPE = "storageType";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<PickupRequest> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QPickupRequest pickupRequest = QPickupRequest.pickupRequest;
         JPQLQuery<PickupRequest> query = from(pickupRequest);
@@ -119,14 +70,7 @@ public class PickupRequestRepositoryImpl extends QueryDslRepositorySupportExt<Pi
         return loadPage(query, pageable, pickupRequest);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<PickupRequest> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QPickupRequest pickupRequest = QPickupRequest.pickupRequest;
         JPQLQuery<PickupRequest> query = from(pickupRequest);

@@ -12,84 +12,44 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * = RetrievalRequestRepositoryImpl
- *
- * TODO Auto-generated class documentation
- *
- */
+
 @RooJpaRepositoryCustomImpl(repository = RetrievalRequestRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class RetrievalRequestRepositoryImpl extends QueryDslRepositorySupportExt<RetrievalRequest> implements RetrievalRequestRepositoryCustom {
 
-    /**
-     * Default constructor
-     */
+
     RetrievalRequestRepositoryImpl() {
         super(RetrievalRequest.class);
     }
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_BY = "createdBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_ASSIGNED = "userAssigned";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String NOTES = "notes";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STATUS = "status";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_BY = "modifiedBy";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String CREATED_DATE = "createdDate";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String USER_CREATED = "userCreated";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String STORAGE_TYPE = "storageType";
 
-    /**
-     * TODO Auto-generated attribute documentation
-     *
-     */
+
     public static final String MODIFIED_DATE = "modifiedDate";
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<RetrievalRequest> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QRetrievalRequest retrievalRequest = QRetrievalRequest.retrievalRequest;
         JPQLQuery<RetrievalRequest> query = from(retrievalRequest);
@@ -101,14 +61,7 @@ public class RetrievalRequestRepositoryImpl extends QueryDslRepositorySupportExt
         return loadPage(query, pageable, retrievalRequest);
     }
 
-    /**
-     * TODO Auto-generated method documentation
-     *
-     * @param ids
-     * @param globalSearch
-     * @param pageable
-     * @return Page
-     */
+
     public Page<RetrievalRequest> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         QRetrievalRequest retrievalRequest = QRetrievalRequest.retrievalRequest;
         JPQLQuery<RetrievalRequest> query = from(retrievalRequest);
