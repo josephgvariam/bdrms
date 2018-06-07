@@ -197,6 +197,9 @@ public class UserServiceImpl implements UserService {
         return getUserRepository().save(entity);
     }
 
+    public User findByUsername(String username){
+        return getUserRepository().findByUsername(username);
+    }
 
     public User findOne(Long id) {
         return getUserRepository().findOne(id);

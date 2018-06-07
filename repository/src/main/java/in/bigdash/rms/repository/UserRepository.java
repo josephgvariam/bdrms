@@ -10,4 +10,6 @@ public interface UserRepository extends DetachableJpaRepository<User, Long>, Use
 
 
     public abstract long countByClient(Client client);
+
+    public abstract User findByUsername(String username);
 }

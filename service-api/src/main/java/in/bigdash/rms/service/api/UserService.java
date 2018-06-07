@@ -14,6 +14,7 @@ public interface UserService extends EntityResolver<User, Long>, ValidatorServic
 
     public abstract User findOne(Long id);
 
+    public abstract User findByUsername(String username);
 
     public abstract void delete(User user);
 

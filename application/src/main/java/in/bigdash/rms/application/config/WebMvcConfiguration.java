@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -108,5 +109,11 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
         resolver.setCheckExistence(true);
         resolver.setCacheable(getThymeleafProperties().isCache());
         return resolver;
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // forward the request for "/login" to a view called "login"
+        registry.addViewController("/login").setViewName("login");
     }
 }
