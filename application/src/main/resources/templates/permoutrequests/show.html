@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+  <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_permoutrequest})}|">Show PermoutRequest - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-layout-fragment="content" data-th-object="${permoutRequest}">
+        <div class="container-fluid content">
+
+          <!-- CONTENT -->
+          <h1 data-th-text="#{label_show_entity(#{label_permoutrequest})}">Show PermoutRequest</h1>
+
+            <div id="mainEntityFieldSet">
+              <h2 data-th-text="#{label_data_entity(#{label_permoutrequest})}">PermoutRequest data</h2>
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="permoutrequest-usercreated-field" data-z="d4808e2">
+            	      <strong data-th-text="#{label_permoutrequest_usercreated}">userCreated</strong>
+                    <span data-th-text="*{{userCreated}}">userCreatedValue</span>
+         	        </li>
+                  <li id="permoutrequest-userassigned-field" data-z="b814517c">
+            	      <strong data-th-text="#{label_permoutrequest_userassigned}">userAssigned</strong>
+                    <span data-th-text="*{{userAssigned}}">userAssignedValue</span>
+         	        </li>
+                  <li id="permoutrequest-status-field" data-z="df3747fc">
+            	      <strong data-th-text="#{label_permoutrequest_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+                  <li id="permoutrequest-notes-field" data-z="283966c2">
+            	      <strong data-th-text="#{label_permoutrequest_notes}">notes</strong>
+                    <span data-th-text="*{{notes}}">notesValue</span>
+         	        </li>
+                  <li id="permoutrequest-createddate-field" data-z="f783fe02">
+            	      <strong data-th-text="#{label_permoutrequest_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="permoutrequest-createdby-field" data-z="d9389a2">
+            	      <strong data-th-text="#{label_permoutrequest_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="permoutrequest-modifieddate-field" data-z="66f7edbc">
+            	      <strong data-th-text="#{label_permoutrequest_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="permoutrequest-modifiedby-field" data-z="cad41fdc">
+            	      <strong data-th-text="#{label_permoutrequest_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+
+          <div class="clearfix">
+            <div class="pull-right">
+             <a id="PermoutRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('PermoutRequestsItemThymeleafController').to('editForm').with('permoutRequest', permoutRequest.id)}" data-th-text="#{label_edit}">Edit</a>
+            </div>
+          </div>
+
+
+          <div class="clearfix">
+            <div class="pull-left">
+              <a id="PermoutRequest_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('PermoutRequestsCollectionThymeleafController').to('list')}">
+  	             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+  	             <span data-th-text="#{label_back}">Back</span>
+  	          </a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

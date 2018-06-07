@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+    <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_user})}|">Show User - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-th-fragment="inline-content" data-layout-fragment="content" data-th-object="${user}">
+        <div>
+
+          <!-- CONTENT -->
+            <div id="mainEntityFieldSet">
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="user-username-field" data-z="39033ed6">
+            	      <strong data-th-text="#{label_user_username}">username</strong>
+                    <span data-th-text="*{{username}}">usernameValue</span>
+         	        </li>
+                  <li id="user-password-field" data-z="adc41a36">
+            	      <strong data-th-text="#{label_user_password}">password</strong>
+                    <span data-th-text="*{{password}}">passwordValue</span>
+         	        </li>
+                  <li id="user-name-field" data-z="7a590fb6">
+            	      <strong data-th-text="#{label_user_name}">name</strong>
+                    <span data-th-text="*{{name}}">nameValue</span>
+         	        </li>
+                  <li id="user-phone-field" data-z="4a68d4c8">
+            	      <strong data-th-text="#{label_user_phone}">phone</strong>
+                    <span data-th-text="*{{phone}}">phoneValue</span>
+         	        </li>
+                  <li id="user-email-field" data-z="f9bfc708">
+            	      <strong data-th-text="#{label_user_email}">email</strong>
+                    <span data-th-text="*{{email}}">emailValue</span>
+         	        </li>
+                  <li id="user-employeenumber-field" data-z="93b14d96">
+            	      <strong data-th-text="#{label_user_employeenumber}">employeeNumber</strong>
+                    <span data-th-text="*{{employeeNumber}}">employeeNumberValue</span>
+         	        </li>
+                  <li id="user-locked-field" data-z="f876aa16">
+            	      <strong data-th-text="#{label_user_locked}">locked</strong>
+                    <span data-th-text="*{{locked}}">lockedValue</span>
+         	        </li>
+                  <li id="user-client-field" data-z="dbe195f6">
+            	      <strong data-th-text="#{label_user_client}">client</strong>
+                    <span data-th-text="*{{client}}">clientValue</span>
+         	        </li>
+                  <li id="user-createddate-field" data-z="abf9b928">
+            	      <strong data-th-text="#{label_user_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="user-createdby-field" data-z="9e69d648">
+            	      <strong data-th-text="#{label_user_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="user-modifieddate-field" data-z="41399756">
+            	      <strong data-th-text="#{label_user_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="user-modifiedby-field" data-z="54c767f6">
+            	      <strong data-th-text="#{label_user_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

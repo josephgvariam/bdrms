@@ -1,0 +1,24 @@
+<!--TABLE-->
+<div class="table-responsive" id="containerFields" data-th-fragment="destructionrequest-entityModalConfirmBody" data-th-with="collectionLink=${@linkBuilder.of('DestructionRequestsCollectionThymeleafController')},itemLink=${@linkBuilder.of('DestructionRequestsItemThymeleafController')}">
+    <table id="destructionrequest-entity-table-item-to-remove" data-data-load-url="${collectionLink.to('datatablesByIdsIn')}">
+      <thead>
+        <tr>
+          <th data-data="userCreated" data-th-text="#{label_destructionrequest_usercreated}">userCreated</th>
+          <th data-data="userAssigned" data-th-text="#{label_destructionrequest_userassigned}">userAssigned</th>
+          <th data-data="status" data-th-text="#{label_destructionrequest_status}">status</th>
+          <th data-data="notes" data-th-text="#{label_destructionrequest_notes}">notes</th>
+          <th data-data="createdDate" data-th-text="#{label_destructionrequest_createddate}">createdDate</th>
+        </tr>
+      </thead>
+      <tbody data-th-remove="all">
+        <tr>
+          <td>userCreated</td>
+          <td>userAssigned</td>
+          <td>status</td>
+          <td>notes</td>
+          <td>createdDate</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<!-- /TABLE -->

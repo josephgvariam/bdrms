@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+  <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_inventoryitem})}|">Show InventoryItem - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-layout-fragment="content" data-th-object="${inventoryItem}">
+        <div class="container-fluid content">
+
+          <!-- CONTENT -->
+          <h1 data-th-text="#{label_show_entity(#{label_inventoryitem})}">Show InventoryItem</h1>
+
+            <div id="mainEntityFieldSet">
+              <h2 data-th-text="#{label_data_entity(#{label_inventoryitem})}">InventoryItem data</h2>
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="inventoryitem-ref1-field" data-z="7f5b5104">
+            	      <strong data-th-text="#{label_inventoryitem_ref1}">ref1</strong>
+                    <span data-th-text="*{{ref1}}">ref1Value</span>
+         	        </li>
+                  <li id="inventoryitem-ref2-field" data-z="7f5b54e4">
+            	      <strong data-th-text="#{label_inventoryitem_ref2}">ref2</strong>
+                    <span data-th-text="*{{ref2}}">ref2Value</span>
+         	        </li>
+                  <li id="inventoryitem-ref3-field" data-z="7f5b58c4">
+            	      <strong data-th-text="#{label_inventoryitem_ref3}">ref3</strong>
+                    <span data-th-text="*{{ref3}}">ref3Value</span>
+         	        </li>
+                  <li id="inventoryitem-ref4-field" data-z="7f5b5ca4">
+            	      <strong data-th-text="#{label_inventoryitem_ref4}">ref4</strong>
+                    <span data-th-text="*{{ref4}}">ref4Value</span>
+         	        </li>
+                  <li id="inventoryitem-ref5-field" data-z="7f5b6084">
+            	      <strong data-th-text="#{label_inventoryitem_ref5}">ref5</strong>
+                    <span data-th-text="*{{ref5}}">ref5Value</span>
+         	        </li>
+                  <li id="inventoryitem-status-field" data-z="df2cdd44">
+            	      <strong data-th-text="#{label_inventoryitem_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+
+          <div class="clearfix">
+            <div class="pull-right">
+             <a id="InventoryItem_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('InventoryItemsItemThymeleafController').to('editForm').with('inventoryItem', inventoryItem.id)}" data-th-text="#{label_edit}">Edit</a>
+            </div>
+          </div>
+
+
+          <div class="clearfix">
+            <div class="pull-left">
+              <a id="InventoryItem_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('InventoryItemsCollectionThymeleafController').to('list')}">
+  	             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+  	             <span data-th-text="#{label_back}">Back</span>
+  	          </a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

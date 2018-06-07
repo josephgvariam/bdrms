@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+  <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_insertionrequest})}|">Show InsertionRequest - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-layout-fragment="content" data-th-object="${insertionRequest}">
+        <div class="container-fluid content">
+
+          <!-- CONTENT -->
+          <h1 data-th-text="#{label_show_entity(#{label_insertionrequest})}">Show InsertionRequest</h1>
+
+            <div id="mainEntityFieldSet">
+              <h2 data-th-text="#{label_data_entity(#{label_insertionrequest})}">InsertionRequest data</h2>
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="insertionrequest-usercreated-field" data-z="9d8dd573">
+            	      <strong data-th-text="#{label_insertionrequest_usercreated}">userCreated</strong>
+                    <span data-th-text="*{{userCreated}}">userCreatedValue</span>
+         	        </li>
+                  <li id="insertionrequest-userassigned-field" data-z="3088170b">
+            	      <strong data-th-text="#{label_insertionrequest_userassigned}">userAssigned</strong>
+                    <span data-th-text="*{{userAssigned}}">userAssignedValue</span>
+         	        </li>
+                  <li id="insertionrequest-status-field" data-z="151624cb">
+            	      <strong data-th-text="#{label_insertionrequest_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+                  <li id="insertionrequest-notes-field" data-z="21b43413">
+            	      <strong data-th-text="#{label_insertionrequest_notes}">notes</strong>
+                    <span data-th-text="*{{notes}}">notesValue</span>
+         	        </li>
+                  <li id="insertionrequest-createddate-field" data-z="87c9ca93">
+            	      <strong data-th-text="#{label_insertionrequest_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="insertionrequest-createdby-field" data-z="7554673">
+            	      <strong data-th-text="#{label_insertionrequest_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="insertionrequest-modifieddate-field" data-z="df6bb34b">
+            	      <strong data-th-text="#{label_insertionrequest_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="insertionrequest-modifiedby-field" data-z="949fd2b">
+            	      <strong data-th-text="#{label_insertionrequest_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+
+          <div class="clearfix">
+            <div class="pull-right">
+             <a id="InsertionRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('InsertionRequestsItemThymeleafController').to('editForm').with('insertionRequest', insertionRequest.id)}" data-th-text="#{label_edit}">Edit</a>
+            </div>
+          </div>
+
+
+          <div class="clearfix">
+            <div class="pull-left">
+              <a id="InsertionRequest_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('InsertionRequestsCollectionThymeleafController').to('list')}">
+  	             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+  	             <span data-th-text="#{label_back}">Back</span>
+  	          </a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

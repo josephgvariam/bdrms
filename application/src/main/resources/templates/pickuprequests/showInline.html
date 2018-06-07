@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+    <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_pickuprequest})}|">Show PickupRequest - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-th-fragment="inline-content" data-layout-fragment="content" data-th-object="${pickupRequest}">
+        <div>
+
+          <!-- CONTENT -->
+            <div id="mainEntityFieldSet">
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="pickuprequest-usercreated-field" data-z="3fdebcf6">
+            	      <strong data-th-text="#{label_pickuprequest_usercreated}">userCreated</strong>
+                    <span data-th-text="*{{userCreated}}">userCreatedValue</span>
+         	        </li>
+                  <li id="pickuprequest-userassigned-field" data-z="d8541fe8">
+            	      <strong data-th-text="#{label_pickuprequest_userassigned}">userAssigned</strong>
+                    <span data-th-text="*{{userAssigned}}">userAssignedValue</span>
+         	        </li>
+                  <li id="pickuprequest-status-field" data-z="e55d5768">
+            	      <strong data-th-text="#{label_pickuprequest_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+                  <li id="pickuprequest-notes-field" data-z="ee9db9d6">
+            	      <strong data-th-text="#{label_pickuprequest_notes}">notes</strong>
+                    <span data-th-text="*{{notes}}">notesValue</span>
+         	        </li>
+                  <li id="pickuprequest-createddate-field" data-z="2a1ab216">
+            	      <strong data-th-text="#{label_pickuprequest_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="pickuprequest-createdby-field" data-z="94b032b6">
+            	      <strong data-th-text="#{label_pickuprequest_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="pickuprequest-modifieddate-field" data-z="8737bc28">
+            	      <strong data-th-text="#{label_pickuprequest_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="pickuprequest-modifiedby-field" data-z="274c9948">
+            	      <strong data-th-text="#{label_pickuprequest_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+                  <li id="pickuprequest-documenttype-field" data-z="daec9868">
+            	      <strong data-th-text="#{label_pickuprequest_documenttype}">documentType</strong>
+                    <span data-th-text="*{{documentType}}">documentTypeValue</span>
+         	        </li>
+                  <li id="pickuprequest-pickupdatetime-field" data-z="523f9a08">
+            	      <strong data-th-text="#{label_pickuprequest_pickupdatetime}">pickupDateTime</strong>
+                    <span data-th-text="*{{pickupDateTime}}">pickupDateTimeValue</span>
+         	        </li>
+                  <li id="pickuprequest-numberfiles-field" data-z="a67df6d6">
+            	      <strong data-th-text="#{label_pickuprequest_numberfiles}">numberFiles</strong>
+                    <span data-th-text="*{{numberFiles}}">numberFilesValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

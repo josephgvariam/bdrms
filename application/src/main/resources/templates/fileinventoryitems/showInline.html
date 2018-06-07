@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+    <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_fileinventoryitem})}|">Show FileInventoryItem - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-th-fragment="inline-content" data-layout-fragment="content" data-th-object="${fileInventoryItem}">
+        <div>
+
+          <!-- CONTENT -->
+            <div id="mainEntityFieldSet">
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="fileinventoryitem-ref1-field" data-z="90aeef88">
+            	      <strong data-th-text="#{label_fileinventoryitem_ref1}">ref1</strong>
+                    <span data-th-text="*{{ref1}}">ref1Value</span>
+         	        </li>
+                  <li id="fileinventoryitem-ref2-field" data-z="90aef368">
+            	      <strong data-th-text="#{label_fileinventoryitem_ref2}">ref2</strong>
+                    <span data-th-text="*{{ref2}}">ref2Value</span>
+         	        </li>
+                  <li id="fileinventoryitem-ref3-field" data-z="90aef748">
+            	      <strong data-th-text="#{label_fileinventoryitem_ref3}">ref3</strong>
+                    <span data-th-text="*{{ref3}}">ref3Value</span>
+         	        </li>
+                  <li id="fileinventoryitem-ref4-field" data-z="90aefb28">
+            	      <strong data-th-text="#{label_fileinventoryitem_ref4}">ref4</strong>
+                    <span data-th-text="*{{ref4}}">ref4Value</span>
+         	        </li>
+                  <li id="fileinventoryitem-ref5-field" data-z="90aeff08">
+            	      <strong data-th-text="#{label_fileinventoryitem_ref5}">ref5</strong>
+                    <span data-th-text="*{{ref5}}">ref5Value</span>
+         	        </li>
+                  <li id="fileinventoryitem-status-field" data-z="ea12eac8">
+            	      <strong data-th-text="#{label_fileinventoryitem_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+                  <li id="fileinventoryitem-file-field" data-z="7bc977c8">
+            	      <strong data-th-text="#{label_fileinventoryitem_file}">file</strong>
+                    <span data-th-text="*{{file}}">fileValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

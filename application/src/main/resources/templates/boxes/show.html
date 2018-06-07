@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+  <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_box})}|">Show Box - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-layout-fragment="content" data-th-object="${box}">
+        <div class="container-fluid content">
+
+          <!-- CONTENT -->
+          <h1 data-th-text="#{label_show_entity(#{label_box})}">Show Box</h1>
+
+            <div id="mainEntityFieldSet">
+              <h2 data-th-text="#{label_data_entity(#{label_box})}">Box data</h2>
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="box-barcode-field" data-z="146343be">
+            	      <strong data-th-text="#{label_box_barcode}">barcode</strong>
+                    <span data-th-text="*{{barcode}}">barcodeValue</span>
+         	        </li>
+                  <li id="box-location-field" data-z="3c95e40">
+            	      <strong data-th-text="#{label_box_location}">location</strong>
+                    <span data-th-text="*{{location}}">locationValue</span>
+         	        </li>
+                  <li id="box-inventoryitem-field" data-z="d998eabe">
+            	      <strong data-th-text="#{label_box_inventoryitem}">inventoryItem</strong>
+                    <span data-th-text="*{{inventoryItem}}">inventoryItemValue</span>
+         	        </li>
+                  <li id="box-shelf-field" data-z="aba9823e">
+            	      <strong data-th-text="#{label_box_shelf}">shelf</strong>
+                    <span data-th-text="*{{shelf}}">shelfValue</span>
+         	        </li>
+                  <li id="box-createddate-field" data-z="a3897d9e">
+            	      <strong data-th-text="#{label_box_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="box-createdby-field" data-z="2cec403e">
+            	      <strong data-th-text="#{label_box_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="box-modifieddate-field" data-z="3ba261a0">
+            	      <strong data-th-text="#{label_box_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="box-modifiedby-field" data-z="96923cc0">
+            	      <strong data-th-text="#{label_box_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+
+          <div class="clearfix">
+            <div class="pull-right">
+             <a id="Box_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('BoxesItemThymeleafController').to('editForm').with('box', box.id)}" data-th-text="#{label_edit}">Edit</a>
+            </div>
+          </div>
+
+
+          <div class="clearfix">
+            <div class="pull-left">
+              <a id="Box_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('BoxesCollectionThymeleafController').to('list')}">
+  	             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+  	             <span data-th-text="#{label_back}">Back</span>
+  	          </a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

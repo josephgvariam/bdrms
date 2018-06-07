@@ -1,0 +1,166 @@
+// Spring Roo 2.0.0.RELEASE [rev 4a2e9f1] log opened at 2018-06-07 15:30:58
+project setup --topLevelPackage in.bigdash.rms --projectName BigDashRMS --java 8 --multimodule
+jpa setup --provider HIBERNATE --database HYPERSONIC_PERSISTENT
+module focus --moduleName model
+enum type --class ~.request.RequestStatus
+enum constant --name OPEN --class ~.request.RequestStatus --permitReservedWords
+enum constant --name ASSIGNED --class ~.request.RequestStatus
+enum constant --name INPROGRESS --class ~.request.RequestStatus
+enum constant --name PACKED --class ~.request.RequestStatus
+enum constant --name TRANSIT --class ~.request.RequestStatus
+enum constant --name INCOMING --class ~.request.RequestStatus
+enum constant --name VALIDATED --class ~.request.RequestStatus
+enum constant --name STORED --class ~.request.RequestStatus
+enum constant --name HOLDINGBAY --class ~.request.RequestStatus
+enum constant --name SIGNOFF --class ~.request.RequestStatus
+enum constant --name DELIVERED --class ~.request.RequestStatus
+enum constant --name SHREDDING --class ~.request.RequestStatus
+enum constant --name INSERTED --class ~.request.RequestStatus
+enum constant --name CLOSED --class ~.request.RequestStatus
+enum constant --name CANCELED --class ~.request.RequestStatus
+enum type --class ~.inventory.InventoryItemStatus
+enum constant --name NOTSTORED --class ~.inventory.InventoryItemStatus
+enum constant --name STORED --class ~.inventory.InventoryItemStatus
+enum constant --name VALIDATED --class ~.inventory.InventoryItemStatus
+enum constant --name TRANSIT --class ~.inventory.InventoryItemStatus
+enum constant --name PERMOUT --class ~.inventory.InventoryItemStatus
+enum constant --name DESTROYED --class ~.inventory.InventoryItemStatus
+enum type --class ~.ShelfStatus
+enum constant --name ACTIVE --class ~.ShelfStatus
+enum constant --name INACTIVE --class ~.ShelfStatus
+entity jpa --class ~.Document --table BD_DOCUMENT --sequenceName BD_DOCUMENT_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{barcode}"
+entity jpa --class ~.File --table BD_FILE --sequenceName BD_FILE_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{barcode}"
+entity jpa --class ~.Box --table BD_BOX --sequenceName BD_BOX_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{barcode}"
+entity jpa --class ~.Shelf --table BD_SHELF --sequenceName BD_SHELF_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{barcode}"
+entity jpa --class ~.Facility --table BD_FACILITY --sequenceName BD_FACILITY_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{name}"
+entity jpa --class ~.Client --table BD_CLIENT --sequenceName BD_CLIENT_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{name}"
+entity jpa --class ~.User --table BD_USER --sequenceName BD_USER_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{username} - #{name}"
+entity jpa --class ~.Role --table BD_ROLE --sequenceName BD_ROLE_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{name}"
+entity jpa --class ~.StorageType --table BD_STORAGE_TYPE --sequenceName BD_STORAGE_TYPE_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --entityFormatExpression "#{name}"
+entity jpa --class ~.inventory.InventoryItem --table BD_INVENTORY_ITEM --sequenceName BD_INVENTORY_ITEM_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION  --inheritanceType SINGLE_TABLE --entityFormatExpression "#{id}"
+entity jpa --class ~.inventory.BoxInventoryItem --extends ~.inventory.InventoryItem
+entity jpa --class ~.inventory.FileInventoryItem --extends ~.inventory.InventoryItem
+entity jpa --class ~.inventory.DocumentInventoryItem --extends ~.inventory.InventoryItem
+entity jpa --class ~.request.Request --table BD_REQUEST --sequenceName BD_REQUEST_ID_SEQ --identifierStrategy SEQUENCE --identifierColumn ID --versionField version --versionType java.lang.Long --versionColumn VERSION --inheritanceType SINGLE_TABLE --entityFormatExpression "#{id}"
+entity jpa --class ~.request.PickupRequest --extends ~.request.Request
+entity jpa --class ~.request.RetrievalRequest --extends ~.request.Request
+entity jpa --class ~.request.RefilingRequest --extends ~.request.Request
+entity jpa --class ~.request.PermoutRequest --extends ~.request.Request
+entity jpa --class ~.request.TransferRequest --extends ~.request.Request
+entity jpa --class ~.request.DestructionRequest --extends ~.request.Request
+entity jpa --class ~.request.InsertionRequest --extends ~.request.Request
+focus --class ~.Role
+field string --fieldName name --column NAME --notNull --unique
+field string --fieldName description --column DESCRIPTION
+focus --class ~.User
+field string --fieldName username --column USERNAME --notNull --unique
+field string --fieldName password --column PASSWORD --notNull
+field string --fieldName name --column NAME --notNull
+field string --fieldName phone --column PHONE --notNull
+field string --fieldName email --column EMAIL --notNull
+field string --fieldName employeeNumber --column EMPLOYEE_NUMBER
+field boolean --fieldName locked --column LOCKED --notNull
+field set --fieldName roles --type ~.Role --cardinality MANY_TO_MANY --joinTable bd_user_role --joinColumns user_id --referencedColumns id --inverseJoinColumns role_id --inverseReferencedColumns id
+field set --fieldName requestsCreated --type ~.request.Request --mappedBy userCreated --joinColumnName USER_CREATED_ID
+field set --fieldName requestsAssigned --type ~.request.Request --mappedBy userAssigned --joinColumnName USER_ASSIGNED_ID
+focus --class ~.Client
+field string --fieldName name --column NAME --notNull
+field string --fieldName department --column department --notNull
+field string --fieldName address --column ADDRESS --notNull
+field set --fieldName users --type ~.User --mappedBy client --joinColumnName CLIENT_ID
+field set --fieldName storageTypes --type ~.StorageType --cardinality MANY_TO_MANY --joinTable bd_client_storage_types --joinColumns client_id --referencedColumns id --inverseJoinColumns storage_type_id --inverseReferencedColumns id
+focus --class ~.inventory.InventoryItem
+field string --fieldName ref1 --column REF1 --notNull
+field string --fieldName ref2 --column REF2
+field string --fieldName ref3 --column REF3
+field string --fieldName ref4 --column REF4
+field string --fieldName ref5 --column REF5
+field enum --fieldName status --type ~.inventory.InventoryItemStatus --column STATUS --enumType STRING
+focus --class ~.Document
+field string --fieldName barcode --column BARCODE --notNull --unique
+field string --fieldName location --column LOCATION
+field reference --fieldName inventoryItem --type ~.inventory.DocumentInventoryItem --mappedBy document --joinColumnName DOCUMENT_ID
+focus --class ~.File
+field string --fieldName barcode --column BARCODE --notNull --unique
+field string --fieldName location --column LOCATION
+field set --fieldName documents --type ~.Document --mappedBy file --joinColumnName FILE_ID
+field reference --fieldName inventoryItem --type ~.inventory.FileInventoryItem --mappedBy file --joinColumnName FILE_ID
+focus --class ~.Box
+field string --fieldName barcode --column BARCODE --notNull --unique
+field string --fieldName location --column LOCATION
+field set --fieldName files --type ~.File --mappedBy box --joinColumnName BOX_ID
+field reference --fieldName inventoryItem --type ~.inventory.BoxInventoryItem --mappedBy box --joinColumnName BOX_ID
+focus --class ~.Shelf
+field string --fieldName barcode --column BARCODE --notNull --unique
+field enum --fieldName status --type ~.ShelfStatus --column STATUS --enumType STRING
+field set --fieldName boxes --type ~.Box --mappedBy shelf --joinColumnName SHELF_ID
+focus --class ~.Facility
+field string --fieldName name --column NAME --notNull
+field string --fieldName address --column ADDRESS --notNull
+field set --fieldName shelves --type ~.Shelf --mappedBy facility --joinColumnName FACILITY_ID --notNull
+focus --class ~.StorageType
+field string --fieldName name --column NAME --notNull
+field string --fieldName description --column DESCRIPTION
+field set --fieldName requests --type ~.request.Request --mappedBy storageType --joinColumnName STORAGE_TYPE_ID
+focus --class ~.request.Request
+field enum --fieldName status --type ~.request.RequestStatus --column STATUS --enumType STRING --notNull
+field string --fieldName notes --column NOTES
+field set --fieldName inventoryItems --type ~.inventory.InventoryItem --cardinality MANY_TO_MANY --joinTable bd_request_inventory_item --joinColumns inventory_item_id --referencedColumns id --inverseJoinColumns request_id --inverseReferencedColumns id
+focus --class ~.request.PickupRequest
+field string --fieldName documentType --column DOCUMENT_TYPE
+field date --fieldName pickupDateTime --type java.util.Calendar --column PICKUP_DATE_TIME --persistenceType JPA_TIMESTAMP --future --dateTimeFormatPattern "yyyy-MM-dd HH:mm a"
+field number --fieldName numberFiles --type java.lang.Integer --min 0
+repository jpa --all
+service --all
+web mvc setup
+web mvc view setup --type THYMELEAF
+web mvc controller --entity model:~.Document --responseType THYMELEAF --package application:~.web.document
+web mvc controller --entity model:~.File --responseType THYMELEAF --package application:~.web.file
+web mvc controller --entity model:~.Box --responseType THYMELEAF --package application:~.web.box
+web mvc controller --entity model:~.Shelf --responseType THYMELEAF --package application:~.web.shelf
+web mvc controller --entity model:~.Facility --responseType THYMELEAF --package application:~.web.facility
+web mvc controller --entity model:~.Client --responseType THYMELEAF --package application:~.web.client
+web mvc controller --entity model:~.User --responseType THYMELEAF --package application:~.web.user
+web mvc controller --entity model:~.request.Request --responseType THYMELEAF --package application:~.web.request.pickup
+web mvc controller --entity model:~.request.PickupRequest --responseType THYMELEAF --package application:~.web.request.pickup
+web mvc controller --entity model:~.request.RetrievalRequest --responseType THYMELEAF --package application:~.web.request.retrieval
+web mvc controller --entity model:~.request.RefilingRequest --responseType THYMELEAF --package application:~.web.request.refiling
+web mvc controller --entity model:~.request.PermoutRequest --responseType THYMELEAF --package application:~.web.request.permout
+web mvc controller --entity model:~.request.TransferRequest --responseType THYMELEAF --package application:~.web.request.transfer
+web mvc controller --entity model:~.request.DestructionRequest --responseType THYMELEAF --package application:~.web.request.destruction
+web mvc controller --entity model:~.request.InsertionRequest --responseType THYMELEAF --package application:~.web.request.insertion
+web mvc controller --entity model:~.inventory.InventoryItem --responseType THYMELEAF --package application:~.web.inventory
+web mvc controller --entity model:~.inventory.DocumentInventoryItem --responseType THYMELEAF --package application:~.web.inventory
+web mvc controller --entity model:~.inventory.FileInventoryItem --responseType THYMELEAF --package application:~.web.inventory
+web mvc controller --entity model:~.inventory.BoxInventoryItem --responseType THYMELEAF --package application:~.web.inventory
+web mvc controller --entity model:~.Document --responseType JSON --pathPrefix /api --package application:~.web.api.document
+web mvc controller --entity model:~.File --responseType JSON --pathPrefix /api --package application:~.web.api.file
+web mvc controller --entity model:~.Box --responseType JSON --pathPrefix /api --package application:~.web.api.box
+web mvc controller --entity model:~.Shelf --responseType JSON --package application:~.web.api.shelf
+web mvc controller --entity model:~.Facility --responseType JSON --pathPrefix /api --package application:~.web.api.facility
+web mvc controller --entity model:~.Client --responseType JSON --pathPrefix /api --package application:~.web.api.client
+web mvc controller --entity model:~.User --responseType JSON --pathPrefix /api --package application:~.web.api.user
+web mvc controller --entity model:~.request.Request --responseType JSON --pathPrefix /api --package application:~.web.api.request.pickup
+web mvc controller --entity model:~.request.PickupRequest --responseType JSON --pathPrefix /api --package application:~.web.api.request.pickup
+web mvc controller --entity model:~.request.RetrievalRequest --responseType JSON --pathPrefix /api --package application:~.web.api.request.retrieval
+web mvc controller --entity model:~.request.RefilingRequest --responseType JSON --pathPrefix /api --package application:~.web.api.request.refiling
+web mvc controller --entity model:~.request.PermoutRequest --responseType JSON --pathPrefix /api --package application:~.web.api.request.permout
+web mvc controller --entity model:~.request.TransferRequest --responseType JSON --pathPrefix /api --package application:~.web.api.request.transfer
+web mvc controller --entity model:~.request.DestructionRequest --responseType JSON --pathPrefix /api --package application:~.web.api.request.destruction
+web mvc controller --entity model:~.request.InsertionRequest --responseType JSON --pathPrefix /api --package application:~.web.api.request.insertion
+web mvc controller --entity model:~.inventory.InventoryItem --responseType JSON --pathPrefix /api --package application:~.web.api.inventory
+web mvc controller --entity model:~.inventory.DocumentInventoryItem --responseType JSON --pathPrefix /api --package application:~.web.api.inventory
+web mvc controller --entity model:~.inventory.FileInventoryItem --responseType JSON --pathPrefix /api --package application:~.web.api.inventory
+web mvc controller --entity model:~.inventory.BoxInventoryItem --responseType JSON --pathPrefix /api --package application:~.web.api.inventory
+cache setup --provider GUAVA
+security setup --provider DEFAULT
+jpa audit setup
+jpa audit add --entity model:~.Document --createdDateColumn CREATED_DATE --modifiedDateColumn MODIFIED_DATE --createdByColumn CREATED_BY --modifiedByColumn MODIFIED_BY
+jpa audit add --entity model:~.File --createdDateColumn CREATED_DATE --modifiedDateColumn MODIFIED_DATE --createdByColumn CREATED_BY --modifiedByColumn MODIFIED_BY
+jpa audit add --entity model:~.Box --createdDateColumn CREATED_DATE --modifiedDateColumn MODIFIED_DATE --createdByColumn CREATED_BY --modifiedByColumn MODIFIED_BY
+jpa audit add --entity model:~.request.Request --createdDateColumn CREATED_DATE --modifiedDateColumn MODIFIED_DATE --createdByColumn CREATED_BY --modifiedByColumn MODIFIED_BY
+jpa audit add --entity model:~.Client --createdDateColumn CREATED_DATE --modifiedDateColumn MODIFIED_DATE --createdByColumn CREATED_BY --modifiedByColumn MODIFIED_BY
+jpa audit add --entity model:~.Facility --createdDateColumn CREATED_DATE --modifiedDateColumn MODIFIED_DATE --createdByColumn CREATED_BY --modifiedByColumn MODIFIED_BY
+jpa audit add --entity model:~.User --createdDateColumn CREATED_DATE --modifiedDateColumn MODIFIED_DATE --createdByColumn CREATED_BY --modifiedByColumn MODIFIED_BY
+push-in --all --force
+// script --file ../2bdrms.roo

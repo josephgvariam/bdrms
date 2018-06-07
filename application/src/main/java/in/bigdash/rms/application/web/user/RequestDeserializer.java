@@ -1,0 +1,104 @@
+package in.bigdash.rms.application.web.user;
+import in.bigdash.rms.model.request.Request;
+import in.bigdash.rms.service.api.RequestService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import io.springlets.web.NotFoundException;
+import org.springframework.boot.jackson.JsonComponent;
+
+/**
+ * = RequestDeserializer
+ *
+ * TODO Auto-generated class documentation
+ *
+ */
+@RooDeserializer(entity = Request.class)
+@JsonComponent
+public class RequestDeserializer extends JsonObjectDeserializer<Request> {
+
+    /**
+     * TODO Auto-generated attribute documentation
+     *
+     */
+    private RequestService requestService;
+
+    /**
+     * TODO Auto-generated attribute documentation
+     *
+     */
+    private ConversionService conversionService;
+
+    /**
+     * TODO Auto-generated constructor documentation
+     *
+     * @param requestService
+     * @param conversionService
+     */
+    @Autowired
+    public RequestDeserializer(@Lazy RequestService requestService, ConversionService conversionService) {
+        this.requestService = requestService;
+        this.conversionService = conversionService;
+    }
+
+    /**
+     * TODO Auto-generated method documentation
+     *
+     * @return RequestService
+     */
+    public RequestService getRequestService() {
+        return requestService;
+    }
+
+    /**
+     * TODO Auto-generated method documentation
+     *
+     * @param requestService
+     */
+    public void setRequestService(RequestService requestService) {
+        this.requestService = requestService;
+    }
+
+    /**
+     * TODO Auto-generated method documentation
+     *
+     * @return ConversionService
+     */
+    public ConversionService getConversionService() {
+        return conversionService;
+    }
+
+    /**
+     * TODO Auto-generated method documentation
+     *
+     * @param conversionService
+     */
+    public void setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
+
+    /**
+     * TODO Auto-generated method documentation
+     *
+     * @param jsonParser
+     * @param context
+     * @param codec
+     * @param tree
+     * @return Request
+     */
+    public Request deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+        String idText = tree.asText();
+        Long id = conversionService.convert(idText, Long.class);
+        Request request = requestService.findOne(id);
+        if (request == null) {
+            throw new NotFoundException("Request not found");
+        }
+        return request;
+    }
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+    <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_document})}|">Show Document - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-th-fragment="inline-content" data-layout-fragment="content" data-th-object="${document}">
+        <div>
+
+          <!-- CONTENT -->
+            <div id="mainEntityFieldSet">
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="document-barcode-field" data-z="b78be678">
+            	      <strong data-th-text="#{label_document_barcode}">barcode</strong>
+                    <span data-th-text="*{{barcode}}">barcodeValue</span>
+         	        </li>
+                  <li id="document-location-field" data-z="c5b512c6">
+            	      <strong data-th-text="#{label_document_location}">location</strong>
+                    <span data-th-text="*{{location}}">locationValue</span>
+         	        </li>
+                  <li id="document-inventoryitem-field" data-z="9f8719f8">
+            	      <strong data-th-text="#{label_document_inventoryitem}">inventoryItem</strong>
+                    <span data-th-text="*{{inventoryItem}}">inventoryItemValue</span>
+         	        </li>
+                  <li id="document-file-field" data-z="5fa11166">
+            	      <strong data-th-text="#{label_document_file}">file</strong>
+                    <span data-th-text="*{{file}}">fileValue</span>
+         	        </li>
+                  <li id="document-createddate-field" data-z="67ce3358">
+            	      <strong data-th-text="#{label_document_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="document-createdby-field" data-z="a8771c78">
+            	      <strong data-th-text="#{label_document_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="document-modifieddate-field" data-z="fff46326">
+            	      <strong data-th-text="#{label_document_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="document-modifiedby-field" data-z="8c62e7c6">
+            	      <strong data-th-text="#{label_document_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

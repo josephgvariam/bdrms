@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+  <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_documentinventoryitem})}|">Show DocumentInventoryItem - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-layout-fragment="content" data-th-object="${documentInventoryItem}">
+        <div class="container-fluid content">
+
+          <!-- CONTENT -->
+          <h1 data-th-text="#{label_show_entity(#{label_documentinventoryitem})}">Show DocumentInventoryItem</h1>
+
+            <div id="mainEntityFieldSet">
+              <h2 data-th-text="#{label_data_entity(#{label_documentinventoryitem})}">DocumentInventoryItem data</h2>
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="documentinventoryitem-ref1-field" data-z="c6157709">
+            	      <strong data-th-text="#{label_documentinventoryitem_ref1}">ref1</strong>
+                    <span data-th-text="*{{ref1}}">ref1Value</span>
+         	        </li>
+                  <li id="documentinventoryitem-ref2-field" data-z="c6157ae9">
+            	      <strong data-th-text="#{label_documentinventoryitem_ref2}">ref2</strong>
+                    <span data-th-text="*{{ref2}}">ref2Value</span>
+         	        </li>
+                  <li id="documentinventoryitem-ref3-field" data-z="c6157ec9">
+            	      <strong data-th-text="#{label_documentinventoryitem_ref3}">ref3</strong>
+                    <span data-th-text="*{{ref3}}">ref3Value</span>
+         	        </li>
+                  <li id="documentinventoryitem-ref4-field" data-z="c61582a9">
+            	      <strong data-th-text="#{label_documentinventoryitem_ref4}">ref4</strong>
+                    <span data-th-text="*{{ref4}}">ref4Value</span>
+         	        </li>
+                  <li id="documentinventoryitem-ref5-field" data-z="c6158689">
+            	      <strong data-th-text="#{label_documentinventoryitem_ref5}">ref5</strong>
+                    <span data-th-text="*{{ref5}}">ref5Value</span>
+         	        </li>
+                  <li id="documentinventoryitem-status-field" data-z="5ff59609">
+            	      <strong data-th-text="#{label_documentinventoryitem_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+                  <li id="documentinventoryitem-document-field" data-z="aba3c269">
+            	      <strong data-th-text="#{label_documentinventoryitem_document}">document</strong>
+                    <span data-th-text="*{{document}}">documentValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+
+          <div class="clearfix">
+            <div class="pull-right">
+             <a id="DocumentInventoryItem_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('DocumentInventoryItemsItemThymeleafController').to('editForm').with('documentInventoryItem', documentInventoryItem.id)}" data-th-text="#{label_edit}">Edit</a>
+            </div>
+          </div>
+
+
+          <div class="clearfix">
+            <div class="pull-left">
+              <a id="DocumentInventoryItem_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('DocumentInventoryItemsCollectionThymeleafController').to('list')}">
+  	             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+  	             <span data-th-text="#{label_back}">Back</span>
+  	          </a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

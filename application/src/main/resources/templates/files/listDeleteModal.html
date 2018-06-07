@@ -1,0 +1,24 @@
+<!--TABLE-->
+<div class="table-responsive" id="containerFields" data-th-fragment="file-entityModalConfirmBody" data-th-with="collectionLink=${@linkBuilder.of('FilesCollectionThymeleafController')},itemLink=${@linkBuilder.of('FilesItemThymeleafController')}">
+    <table id="file-entity-table-item-to-remove" data-data-load-url="${collectionLink.to('datatablesByIdsIn')}">
+      <thead>
+        <tr>
+          <th data-data="barcode" data-th-text="#{label_file_barcode}">barcode</th>
+          <th data-data="location" data-th-text="#{label_file_location}">location</th>
+          <th data-data="inventoryItem" data-th-text="#{label_file_inventoryitem}">inventoryItem</th>
+          <th data-data="box" data-th-text="#{label_file_box}">box</th>
+          <th data-data="createdDate" data-th-text="#{label_file_createddate}">createdDate</th>
+        </tr>
+      </thead>
+      <tbody data-th-remove="all">
+        <tr>
+          <td>barcode</td>
+          <td>location</td>
+          <td>inventoryItem</td>
+          <td>box</td>
+          <td>createdDate</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<!-- /TABLE -->

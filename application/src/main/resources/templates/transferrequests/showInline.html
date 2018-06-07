@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+    <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_transferrequest})}|">Show TransferRequest - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-th-fragment="inline-content" data-layout-fragment="content" data-th-object="${transferRequest}">
+        <div>
+
+          <!-- CONTENT -->
+            <div id="mainEntityFieldSet">
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="transferrequest-usercreated-field" data-z="75cfe25">
+            	      <strong data-th-text="#{label_transferrequest_usercreated}">userCreated</strong>
+                    <span data-th-text="*{{userCreated}}">userCreatedValue</span>
+         	        </li>
+                  <li id="transferrequest-userassigned-field" data-z="9e0499">
+            	      <strong data-th-text="#{label_transferrequest_userassigned}">userAssigned</strong>
+                    <span data-th-text="*{{userAssigned}}">userAssignedValue</span>
+         	        </li>
+                  <li id="transferrequest-status-field" data-z="7158d4d9">
+            	      <strong data-th-text="#{label_transferrequest_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+                  <li id="transferrequest-notes-field" data-z="3d744a45">
+            	      <strong data-th-text="#{label_transferrequest_notes}">notes</strong>
+                    <span data-th-text="*{{notes}}">notesValue</span>
+         	        </li>
+                  <li id="transferrequest-createddate-field" data-z="f198f345">
+            	      <strong data-th-text="#{label_transferrequest_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="transferrequest-createdby-field" data-z="7bdaf3a5">
+            	      <strong data-th-text="#{label_transferrequest_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="transferrequest-modifieddate-field" data-z="af81a0d9">
+            	      <strong data-th-text="#{label_transferrequest_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="transferrequest-modifiedby-field" data-z="2579f639">
+            	      <strong data-th-text="#{label_transferrequest_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,24 @@
+<!--TABLE-->
+<div class="table-responsive" id="containerFields" data-th-fragment="request-entityModalConfirmBody" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')},itemLink=${@linkBuilder.of('RequestsItemThymeleafController')}">
+    <table id="request-entity-table-items-to-remove-batch" data-data-load-url="${collectionLink.to('datatablesByIdsIn')}">
+      <thead>
+        <tr>
+          <th data-data="userCreated" data-th-text="#{label_request_usercreated}">userCreated</th>
+          <th data-data="userAssigned" data-th-text="#{label_request_userassigned}">userAssigned</th>
+          <th data-data="status" data-th-text="#{label_request_status}">status</th>
+          <th data-data="notes" data-th-text="#{label_request_notes}">notes</th>
+          <th data-data="createdDate" data-th-text="#{label_request_createddate}">createdDate</th>
+        </tr>
+      </thead>
+      <tbody data-th-remove="all">
+        <tr>
+          <td>userCreated</td>
+          <td>userAssigned</td>
+          <td>status</td>
+          <td>notes</td>
+          <td>createdDate</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<!-- /TABLE -->

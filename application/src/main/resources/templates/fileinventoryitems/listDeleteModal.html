@@ -1,0 +1,24 @@
+<!--TABLE-->
+<div class="table-responsive" id="containerFields" data-th-fragment="fileinventoryitem-entityModalConfirmBody" data-th-with="collectionLink=${@linkBuilder.of('FileInventoryItemsCollectionThymeleafController')},itemLink=${@linkBuilder.of('FileInventoryItemsItemThymeleafController')}">
+    <table id="fileinventoryitem-entity-table-item-to-remove" data-data-load-url="${collectionLink.to('datatablesByIdsIn')}">
+      <thead>
+        <tr>
+          <th data-data="ref1" data-th-text="#{label_fileinventoryitem_ref1}">ref1</th>
+          <th data-data="ref2" data-th-text="#{label_fileinventoryitem_ref2}">ref2</th>
+          <th data-data="ref3" data-th-text="#{label_fileinventoryitem_ref3}">ref3</th>
+          <th data-data="ref4" data-th-text="#{label_fileinventoryitem_ref4}">ref4</th>
+          <th data-data="ref5" data-th-text="#{label_fileinventoryitem_ref5}">ref5</th>
+        </tr>
+      </thead>
+      <tbody data-th-remove="all">
+        <tr>
+          <td>ref1</td>
+          <td>ref2</td>
+          <td>ref3</td>
+          <td>ref4</td>
+          <td>ref5</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<!-- /TABLE -->

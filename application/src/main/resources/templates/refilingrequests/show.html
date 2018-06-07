@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
+  <head id="head">
+
+    <title data-th-text="|#{label_show_entity(#{label_refilingrequest})}|">Show RefilingRequest - Spring Roo application</title>
+
+  </head>
+
+  <body id="body">
+
+    <header role="banner">
+      <!-- Content replaced by layout of the page displayed -->
+    </header>
+
+    <!--CONTAINER-->
+    <div class="container bg-container">
+      <!-- CONTENT -->
+      <!--
+        Only the inner content of the following tag "section" is included
+        within the template, in the section "content"
+      -->
+      <section data-layout-fragment="content" data-th-object="${refilingRequest}">
+        <div class="container-fluid content">
+
+          <!-- CONTENT -->
+          <h1 data-th-text="#{label_show_entity(#{label_refilingrequest})}">Show RefilingRequest</h1>
+
+            <div id="mainEntityFieldSet">
+              <h2 data-th-text="#{label_data_entity(#{label_refilingrequest})}">RefilingRequest data</h2>
+              <ul class="list-unstyled" id="containerFields">
+                  <li id="refilingrequest-usercreated-field" data-z="db951ae6">
+            	      <strong data-th-text="#{label_refilingrequest_usercreated}">userCreated</strong>
+                    <span data-th-text="*{{userCreated}}">userCreatedValue</span>
+         	        </li>
+                  <li id="refilingrequest-userassigned-field" data-z="b3697ff8">
+            	      <strong data-th-text="#{label_refilingrequest_userassigned}">userAssigned</strong>
+                    <span data-th-text="*{{userAssigned}}">userAssignedValue</span>
+         	        </li>
+                  <li id="refilingrequest-status-field" data-z="93c00378">
+            	      <strong data-th-text="#{label_refilingrequest_status}">status</strong>
+                    <span data-th-text="*{{status}}">statusValue</span>
+         	        </li>
+                  <li id="refilingrequest-notes-field" data-z="b22d4bc6">
+            	      <strong data-th-text="#{label_refilingrequest_notes}">notes</strong>
+                    <span data-th-text="*{{notes}}">notesValue</span>
+         	        </li>
+                  <li id="refilingrequest-createddate-field" data-z="c5d11006">
+            	      <strong data-th-text="#{label_refilingrequest_createddate}">createdDate</strong>
+                    <span data-th-text="*{{createdDate}}">createdDateValue</span>
+         	        </li>
+                  <li id="refilingrequest-createdby-field" data-z="1454ca6">
+            	      <strong data-th-text="#{label_refilingrequest_createdby}">createdBy</strong>
+                    <span data-th-text="*{{createdBy}}">createdByValue</span>
+         	        </li>
+                  <li id="refilingrequest-modifieddate-field" data-z="624d1c38">
+            	      <strong data-th-text="#{label_refilingrequest_modifieddate}">modifiedDate</strong>
+                    <span data-th-text="*{{modifiedDate}}">modifiedDateValue</span>
+         	        </li>
+                  <li id="refilingrequest-modifiedby-field" data-z="4d5abd58">
+            	      <strong data-th-text="#{label_refilingrequest_modifiedby}">modifiedBy</strong>
+                    <span data-th-text="*{{modifiedBy}}">modifiedByValue</span>
+         	        </li>
+              </ul>
+            </div>
+
+
+          <div class="clearfix">
+            <div class="pull-right">
+             <a id="RefilingRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('RefilingRequestsItemThymeleafController').to('editForm').with('refilingRequest', refilingRequest.id)}" data-th-text="#{label_edit}">Edit</a>
+            </div>
+          </div>
+
+
+          <div class="clearfix">
+            <div class="pull-left">
+              <a id="RefilingRequest_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('RefilingRequestsCollectionThymeleafController').to('list')}">
+  	             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+  	             <span data-th-text="#{label_back}">Back</span>
+  	          </a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- /CONTENT -->
+  </div>
+  <!-- /CONTAINER -->
+
+  <footer class="container">
+    <!-- Content replaced by layout of the page displayed -->
+  </footer>
+
+  <!-- JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so that the pages load faster -->
+  <!-- JavaScript loaded by layout of the page displayed -->
+  <!--
+       Only the inner content of the following tag "javascript" is included
+       within the template, in the div "javascript"
+      -->
+  <div data-layout-fragment="javascript">
+  </div>
+
+  </body>
+
+</html>
