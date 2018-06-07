@@ -2,14 +2,12 @@ package in.bigdash.rms.service.api;
 import in.bigdash.rms.model.Facility;
 import io.springlets.data.web.validation.ValidatorService;
 import io.springlets.format.EntityResolver;
-import org.springframework.roo.addon.layers.service.annotations.RooService;
 import io.springlets.data.domain.GlobalSearch;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
-@RooService(entity = Facility.class)
 public interface FacilityService extends EntityResolver<Facility, Long>, ValidatorService<Facility> {
 
 

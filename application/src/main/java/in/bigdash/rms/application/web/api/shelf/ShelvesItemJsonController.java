@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.api.shelf;
 import in.bigdash.rms.model.Shelf;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.controller.annotations.responses.json.RooJSON;
+
 import in.bigdash.rms.service.api.ShelfService;
 import io.springlets.web.NotFoundException;
 import javax.validation.Valid;
@@ -23,8 +21,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = Shelf.class, type = ControllerType.ITEM)
-@RooJSON
 @RestController
 @RequestMapping(value = "/shelves/{shelf}", name = "ShelvesItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShelvesItemJsonController {

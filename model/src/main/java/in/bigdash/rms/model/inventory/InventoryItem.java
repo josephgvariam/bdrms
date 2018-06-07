@@ -1,8 +1,4 @@
 package in.bigdash.rms.model.inventory;
-import org.springframework.roo.addon.javabean.annotations.RooEquals;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,10 +24,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity(inheritanceType = "SINGLE_TABLE", table = "BD_INVENTORY_ITEM", entityFormatExpression = "#{id}")
-@RooEquals(isJpaEntity = true)
 @Entity
 @Table(name = "BD_INVENTORY_ITEM")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

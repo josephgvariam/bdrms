@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.facility;
 import in.bigdash.rms.model.Facility;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
@@ -62,8 +60,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = Facility.class, type = ControllerType.COLLECTION)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/facilities", name = "FacilitiesCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class FacilitiesCollectionThymeleafController {

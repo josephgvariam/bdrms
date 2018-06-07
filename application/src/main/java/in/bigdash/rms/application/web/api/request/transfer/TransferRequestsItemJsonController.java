@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.api.request.transfer;
 import in.bigdash.rms.model.request.TransferRequest;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.controller.annotations.responses.json.RooJSON;
+
 import in.bigdash.rms.service.api.TransferRequestService;
 import io.springlets.web.NotFoundException;
 import javax.validation.Valid;
@@ -23,8 +21,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = TransferRequest.class, pathPrefix = "/api", type = ControllerType.ITEM)
-@RooJSON
 @RestController
 @RequestMapping(value = "/api/transferrequests/{transferRequest}", name = "TransferRequestsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TransferRequestsItemJsonController {

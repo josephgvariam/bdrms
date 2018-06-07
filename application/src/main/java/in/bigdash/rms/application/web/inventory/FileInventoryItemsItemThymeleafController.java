@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.inventory;
 import in.bigdash.rms.model.inventory.FileInventoryItem;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.model.inventory.InventoryItemStatus;
 import in.bigdash.rms.service.api.FileInventoryItemService;
 import io.springlets.data.web.validation.GenericValidator;
@@ -38,8 +36,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = FileInventoryItem.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/fileinventoryitems/{fileInventoryItem}", name = "FileInventoryItemsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class FileInventoryItemsItemThymeleafController implements ConcurrencyManager<FileInventoryItem> {

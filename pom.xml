@@ -17,7 +17,6 @@
   <packaging>pom</packaging>
 
   <properties>
-    <roo.version>2.0.0.RELEASE</roo.version>
     <java.product.version>8</java.product.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <aspectj.plugin.version>1.8</aspectj.plugin.version>
@@ -77,25 +76,12 @@
           <enabled>true</enabled>
         </snapshots>
     </repository>
-    <!-- Spring Roo repository -->
-    <repository>
-      <id>spring-roo-repository</id>
-      <name>Spring Roo Repository</name>
-      <url>http://repo.spring.io/spring-roo</url>
-    </repository>
+
   </repositories>
 
   <dependencyManagement>
     <dependencies>
 
-      <!-- Spring Roo annotations -->
-      <dependency>
-        <groupId>org.springframework.roo</groupId>
-        <artifactId>org.springframework.roo.annotations</artifactId>
-        <version>${roo.version}</version>
-        <type>pom</type>
-        <scope>provided</scope>
-      </dependency>
 
     <dependency>
                 <groupId>in.bigdash.rms</groupId>

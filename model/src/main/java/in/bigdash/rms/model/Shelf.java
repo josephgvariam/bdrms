@@ -1,8 +1,4 @@
 package in.bigdash.rms.model;
-import org.springframework.roo.addon.javabean.annotations.RooEquals;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import org.springframework.roo.addon.jpa.annotations.entity.JpaRelationType;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaRelation;
+
 import io.springlets.format.EntityFormat;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,10 +22,6 @@ import javax.persistence.Table;
 import org.springframework.util.Assert;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity(table = "BD_SHELF", entityFormatExpression = "#{barcode}")
-@RooEquals(isJpaEntity = true)
 @Entity
 @Table(name = "BD_SHELF")
 @EntityFormat("#{barcode}")
@@ -60,7 +51,6 @@ public class Shelf {
 
 
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "shelf")
-    @RooJpaRelation(type = JpaRelationType.AGGREGATION)
     private Set<Box> boxes = new HashSet<Box>();
 
 

@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.DestructionRequestService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.request.DestructionRequest;
 import in.bigdash.rms.repository.DestructionRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = DestructionRequestService.class)
 @Service
 @Transactional(readOnly = true)
 public class DestructionRequestServiceImpl implements DestructionRequestService {

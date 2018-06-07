@@ -1,13 +1,11 @@
 package in.bigdash.rms.application.web.client;
 import in.bigdash.rms.model.Client;
-import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooJsonMixin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.model.User;
 import java.util.Set;
 
 
-@RooJsonMixin(entity = Client.class)
 public abstract class ClientJsonMixin {
 
 

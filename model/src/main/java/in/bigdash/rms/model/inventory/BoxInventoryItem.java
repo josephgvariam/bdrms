@@ -1,7 +1,4 @@
 package in.bigdash.rms.model.inventory;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import in.bigdash.rms.model.Box;
 import io.springlets.format.EntityFormat;
 import javax.persistence.FetchType;
@@ -10,9 +7,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Entity;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity
 @Entity
 @EntityFormat
 public class BoxInventoryItem extends InventoryItem {

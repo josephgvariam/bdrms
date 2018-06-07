@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.api.facility;
 import in.bigdash.rms.model.Facility;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.controller.annotations.responses.json.RooJSON;
+
 import in.bigdash.rms.service.api.FacilityService;
 import io.springlets.data.domain.GlobalSearch;
 import java.util.Collection;
@@ -26,8 +24,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = Facility.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
-@RooJSON
 @RestController
 @RequestMapping(value = "/api/facilities", name = "FacilitiesCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FacilitiesCollectionJsonController {

@@ -1,8 +1,4 @@
 package in.bigdash.rms.model;
-import org.springframework.roo.addon.javabean.annotations.RooEquals;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import org.springframework.roo.addon.jpa.annotations.entity.JpaRelationType;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaRelation;
+
 import java.util.Calendar;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,7 +19,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.jpa.annotations.audit.RooJpaAudit;
 import io.springlets.format.EntityFormat;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -34,11 +28,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity(table = "BD_FACILITY", entityFormatExpression = "#{name}")
-@RooEquals(isJpaEntity = true)
-@RooJpaAudit
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "BD_FACILITY")
@@ -70,7 +59,6 @@ public class Facility {
 
     @NotNull
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "facility")
-    @RooJpaRelation(type = JpaRelationType.AGGREGATION)
     private Set<Shelf> shelves = new HashSet<Shelf>();
 
 

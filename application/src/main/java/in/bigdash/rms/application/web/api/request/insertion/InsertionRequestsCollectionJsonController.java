@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.api.request.insertion;
 import in.bigdash.rms.model.request.InsertionRequest;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.controller.annotations.responses.json.RooJSON;
+
 import in.bigdash.rms.service.api.InsertionRequestService;
 import io.springlets.data.domain.GlobalSearch;
 import java.util.Collection;
@@ -26,8 +24,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = InsertionRequest.class, pathPrefix = "/api", type = ControllerType.COLLECTION)
-@RooJSON
 @RestController
 @RequestMapping(value = "/api/insertionrequests", name = "InsertionRequestsCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class InsertionRequestsCollectionJsonController {

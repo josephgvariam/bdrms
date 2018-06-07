@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.document;
 import in.bigdash.rms.model.Document;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.service.api.DocumentService;
 import io.springlets.data.web.validation.GenericValidator;
 import io.springlets.web.NotFoundException;
@@ -37,8 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = Document.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/documents/{document}", name = "DocumentsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class DocumentsItemThymeleafController implements ConcurrencyManager<Document> {

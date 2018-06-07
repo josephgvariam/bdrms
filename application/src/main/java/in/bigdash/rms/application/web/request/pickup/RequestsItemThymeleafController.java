@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.request.pickup;
 import in.bigdash.rms.model.request.Request;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.RequestService;
 import io.springlets.data.web.validation.GenericValidator;
@@ -39,8 +37,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = Request.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/requests/{request}", name = "RequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RequestsItemThymeleafController implements ConcurrencyManager<Request> {

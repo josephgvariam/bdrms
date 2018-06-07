@@ -1,8 +1,4 @@
 package in.bigdash.rms.model;
-import org.springframework.roo.addon.javabean.annotations.RooEquals;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,8 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import in.bigdash.rms.model.request.Request;
 import javax.persistence.OneToMany;
-import org.springframework.roo.addon.jpa.annotations.entity.JpaRelationType;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaRelation;
+
 import io.springlets.format.EntityFormat;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -27,10 +22,6 @@ import javax.persistence.Table;
 import org.springframework.util.Assert;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity(table = "BD_STORAGE_TYPE", entityFormatExpression = "#{name}")
-@RooEquals(isJpaEntity = true)
 @Entity
 @Table(name = "BD_STORAGE_TYPE")
 @EntityFormat("#{name}")
@@ -64,7 +55,6 @@ public class StorageType {
 
 
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "storageType")
-    @RooJpaRelation(type = JpaRelationType.AGGREGATION)
     private Set<Request> requests = new HashSet<Request>();
 
 

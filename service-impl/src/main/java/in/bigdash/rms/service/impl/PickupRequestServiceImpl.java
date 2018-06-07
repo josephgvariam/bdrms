@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.PickupRequestService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.request.PickupRequest;
 import in.bigdash.rms.repository.PickupRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = PickupRequestService.class)
 @Service
 @Transactional(readOnly = true)
 public class PickupRequestServiceImpl implements PickupRequestService {

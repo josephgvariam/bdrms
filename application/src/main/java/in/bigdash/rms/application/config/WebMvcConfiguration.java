@@ -1,7 +1,5 @@
 package in.bigdash.rms.application.config;
-import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooWebMvcConfiguration;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooWebMvcThymeleafUIConfiguration;
 import io.tracee.binding.springmvc.TraceeInterceptor;
 import java.lang.Override;
 import java.util.Locale;
@@ -23,8 +21,6 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 
-@RooWebMvcConfiguration(defaultLanguage = "en")
-@RooWebMvcThymeleafUIConfiguration
 @Configuration
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 

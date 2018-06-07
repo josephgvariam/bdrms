@@ -1,5 +1,4 @@
 package in.bigdash.rms.application.web.facility;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooLinkFactory;
 import io.springlets.web.mvc.util.MethodLinkFactory;
 import io.springlets.web.mvc.util.SpringletsMvcUriComponentsBuilder;
 import java.util.Map;
@@ -7,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 
 
-@RooLinkFactory(controller = FacilitiesItemThymeleafController.class)
 @Component
 public class FacilitiesItemThymeleafLinkFactory implements MethodLinkFactory<FacilitiesItemThymeleafController> {
 

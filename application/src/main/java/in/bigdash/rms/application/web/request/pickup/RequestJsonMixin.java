@@ -1,6 +1,5 @@
 package in.bigdash.rms.application.web.request.pickup;
 import in.bigdash.rms.model.request.Request;
-import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooJsonMixin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import in.bigdash.rms.application.web.client.StorageTypeDeserializer;
@@ -11,7 +10,6 @@ import in.bigdash.rms.model.inventory.InventoryItem;
 import java.util.Set;
 
 
-@RooJsonMixin(entity = Request.class)
 public abstract class RequestJsonMixin {
 
 

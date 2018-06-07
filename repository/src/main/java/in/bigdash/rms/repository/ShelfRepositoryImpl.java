@@ -1,6 +1,5 @@
 package in.bigdash.rms.repository;
 import io.springlets.data.jpa.repository.support.QueryDslRepositorySupportExt;
-import org.springframework.roo.addon.layers.repository.jpa.annotations.RooJpaRepositoryCustomImpl;
 import in.bigdash.rms.model.Shelf;
 import com.querydsl.core.types.Path;
 import com.querydsl.jpa.JPQLQuery;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 
-@RooJpaRepositoryCustomImpl(repository = ShelfRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class ShelfRepositoryImpl extends QueryDslRepositorySupportExt<Shelf> implements ShelfRepositoryCustom {
 

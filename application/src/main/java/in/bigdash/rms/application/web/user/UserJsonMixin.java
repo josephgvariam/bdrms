@@ -1,6 +1,5 @@
 package in.bigdash.rms.application.web.user;
 import in.bigdash.rms.model.User;
-import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooJsonMixin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import in.bigdash.rms.application.web.client.ClientDeserializer;
@@ -10,7 +9,6 @@ import in.bigdash.rms.model.request.Request;
 import java.util.Set;
 
 
-@RooJsonMixin(entity = User.class)
 public abstract class UserJsonMixin {
 
 

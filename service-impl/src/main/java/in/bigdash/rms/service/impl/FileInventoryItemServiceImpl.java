@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.FileInventoryItemService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.File;
 import in.bigdash.rms.model.inventory.FileInventoryItem;
 import in.bigdash.rms.repository.FileInventoryItemRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = FileInventoryItemService.class)
 @Service
 @Transactional(readOnly = true)
 public class FileInventoryItemServiceImpl implements FileInventoryItemService {

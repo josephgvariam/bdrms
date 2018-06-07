@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.shelf;
 import in.bigdash.rms.model.Shelf;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.model.ShelfStatus;
 import in.bigdash.rms.service.api.ShelfService;
 import io.springlets.data.web.validation.GenericValidator;
@@ -38,8 +36,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = Shelf.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/shelves/{shelf}", name = "ShelvesItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class ShelvesItemThymeleafController implements ConcurrencyManager<Shelf> {

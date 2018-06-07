@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.FacilityService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.Facility;
 import in.bigdash.rms.model.Shelf;
 import in.bigdash.rms.repository.FacilityRepository;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = FacilityService.class)
 @Service
 @Transactional(readOnly = true)
 public class FacilityServiceImpl implements FacilityService {

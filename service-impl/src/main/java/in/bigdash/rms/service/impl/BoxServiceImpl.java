@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.BoxService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.Box;
 import in.bigdash.rms.model.File;
 import in.bigdash.rms.model.Shelf;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = BoxService.class)
 @Service
 @Transactional(readOnly = true)
 public class BoxServiceImpl implements BoxService {

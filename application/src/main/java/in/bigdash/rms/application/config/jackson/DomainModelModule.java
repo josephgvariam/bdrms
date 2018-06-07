@@ -1,5 +1,4 @@
 package in.bigdash.rms.application.config.jackson;
-import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooDomainModelModule;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import in.bigdash.rms.application.web.box.BoxJsonMixin;
 import in.bigdash.rms.application.web.client.ClientJsonMixin;
@@ -42,7 +41,6 @@ import in.bigdash.rms.model.request.TransferRequest;
 import org.springframework.boot.jackson.JsonComponent;
 
 
-@RooDomainModelModule
 @JsonComponent
 public class DomainModelModule extends SimpleModule {
 

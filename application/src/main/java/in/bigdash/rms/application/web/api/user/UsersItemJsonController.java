@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.api.user;
 import in.bigdash.rms.model.User;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.controller.annotations.responses.json.RooJSON;
+
 import in.bigdash.rms.service.api.UserService;
 import io.springlets.web.NotFoundException;
 import javax.validation.Valid;
@@ -23,8 +21,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = User.class, pathPrefix = "/api", type = ControllerType.ITEM)
-@RooJSON
 @RestController
 @RequestMapping(value = "/api/users/{user}", name = "UsersItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsersItemJsonController {

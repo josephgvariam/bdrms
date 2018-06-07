@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.request.pickup;
 import in.bigdash.rms.model.request.PickupRequest;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.PickupRequestService;
 import io.springlets.data.web.validation.GenericValidator;
@@ -38,8 +36,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = PickupRequest.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/pickuprequests/{pickupRequest}", name = "PickupRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class PickupRequestsItemThymeleafController implements ConcurrencyManager<PickupRequest> {

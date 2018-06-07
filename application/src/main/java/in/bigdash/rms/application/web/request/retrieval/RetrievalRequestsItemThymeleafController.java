@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.request.retrieval;
 import in.bigdash.rms.model.request.RetrievalRequest;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.service.api.RetrievalRequestService;
 import io.springlets.data.web.validation.GenericValidator;
 import io.springlets.web.NotFoundException;
@@ -36,8 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = RetrievalRequest.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/retrievalrequests/{retrievalRequest}", name = "RetrievalRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RetrievalRequestsItemThymeleafController implements ConcurrencyManager<RetrievalRequest> {

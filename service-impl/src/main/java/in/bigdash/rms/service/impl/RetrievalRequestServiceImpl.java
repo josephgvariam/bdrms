@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.RetrievalRequestService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.request.RetrievalRequest;
 import in.bigdash.rms.repository.RetrievalRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = RetrievalRequestService.class)
 @Service
 @Transactional(readOnly = true)
 public class RetrievalRequestServiceImpl implements RetrievalRequestService {

@@ -1,6 +1,5 @@
 package in.bigdash.rms.application.web.box;
 import in.bigdash.rms.model.Box;
-import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooJsonMixin;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
@@ -10,7 +9,6 @@ import in.bigdash.rms.model.Shelf;
 import java.util.Set;
 
 
-@RooJsonMixin(entity = Box.class)
 @JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
 public abstract class BoxJsonMixin {
 

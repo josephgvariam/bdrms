@@ -1,6 +1,5 @@
 package in.bigdash.rms.application.web.shelf;
 import in.bigdash.rms.model.Shelf;
-import org.springframework.roo.addon.web.mvc.controller.annotations.config.RooJsonMixin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import in.bigdash.rms.model.Box;
@@ -8,7 +7,6 @@ import in.bigdash.rms.model.Facility;
 import java.util.Set;
 
 
-@RooJsonMixin(entity = Shelf.class)
 public abstract class ShelfJsonMixin {
 
 

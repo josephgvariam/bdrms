@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.request.pickup;
 import in.bigdash.rms.model.request.PickupRequest;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
@@ -63,8 +61,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = PickupRequest.class, type = ControllerType.COLLECTION)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/pickuprequests", name = "PickupRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class PickupRequestsCollectionThymeleafController {

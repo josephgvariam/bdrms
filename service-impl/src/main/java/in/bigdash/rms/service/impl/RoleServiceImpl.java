@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.RoleService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.Role;
 import in.bigdash.rms.model.User;
 import in.bigdash.rms.repository.RoleRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = RoleService.class)
 @Service
 @Transactional(readOnly = true)
 public class RoleServiceImpl implements RoleService {

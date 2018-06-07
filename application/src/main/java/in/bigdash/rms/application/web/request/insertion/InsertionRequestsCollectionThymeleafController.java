@@ -1,8 +1,6 @@
 package in.bigdash.rms.application.web.request.insertion;
 import in.bigdash.rms.model.request.InsertionRequest;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
@@ -60,8 +58,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = InsertionRequest.class, type = ControllerType.COLLECTION)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/insertionrequests", name = "InsertionRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class InsertionRequestsCollectionThymeleafController {

@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.InsertionRequestService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.request.InsertionRequest;
 import in.bigdash.rms.repository.InsertionRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = InsertionRequestService.class)
 @Service
 @Transactional(readOnly = true)
 public class InsertionRequestServiceImpl implements InsertionRequestService {

@@ -1,8 +1,4 @@
 package in.bigdash.rms.model.request;
-import org.springframework.roo.addon.javabean.annotations.RooEquals;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,8 +18,7 @@ import in.bigdash.rms.model.inventory.InventoryItem;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.ManyToMany;
-import org.springframework.roo.addon.jpa.annotations.entity.JpaRelationType;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaRelation;
+
 import java.util.Calendar;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,7 +27,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.jpa.annotations.audit.RooJpaAudit;
 import java.util.Objects;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -44,11 +38,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity(inheritanceType = "SINGLE_TABLE", table = "BD_REQUEST", entityFormatExpression = "#{id}")
-@RooEquals(isJpaEntity = true)
-@RooJpaAudit
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "BD_REQUEST")
@@ -99,7 +88,6 @@ public class Request {
 
 
     @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "requests")
-    @RooJpaRelation(type = JpaRelationType.AGGREGATION)
     private Set<InventoryItem> inventoryItems = new HashSet<InventoryItem>();
 
 

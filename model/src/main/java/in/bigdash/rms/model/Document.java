@@ -1,8 +1,4 @@
 package in.bigdash.rms.model;
-import org.springframework.roo.addon.javabean.annotations.RooEquals;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,8 +10,7 @@ import in.bigdash.rms.model.inventory.DocumentInventoryItem;
 import io.springlets.format.EntityFormat;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
-import org.springframework.roo.addon.jpa.annotations.entity.JpaRelationType;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaRelation;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Calendar;
@@ -26,7 +21,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.jpa.annotations.audit.RooJpaAudit;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -34,11 +28,6 @@ import javax.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity(table = "BD_DOCUMENT", entityFormatExpression = "#{barcode}")
-@RooEquals(isJpaEntity = true)
-@RooJpaAudit
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "BD_DOCUMENT")
@@ -68,7 +57,6 @@ public class Document {
 
 
     @OneToOne(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "document")
-    @RooJpaRelation(type = JpaRelationType.AGGREGATION)
     @EntityFormat
     private DocumentInventoryItem inventoryItem;
 

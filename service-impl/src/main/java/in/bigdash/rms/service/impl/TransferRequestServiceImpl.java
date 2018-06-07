@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.TransferRequestService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.request.TransferRequest;
 import in.bigdash.rms.repository.TransferRequestRepository;
 import io.springlets.data.domain.GlobalSearch;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = TransferRequestService.class)
 @Service
 @Transactional(readOnly = true)
 public class TransferRequestServiceImpl implements TransferRequestService {

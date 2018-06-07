@@ -2,7 +2,6 @@ package in.bigdash.rms.service.api;
 import in.bigdash.rms.model.Document;
 import io.springlets.data.web.validation.ValidatorService;
 import io.springlets.format.EntityResolver;
-import org.springframework.roo.addon.layers.service.annotations.RooService;
 import in.bigdash.rms.model.File;
 import io.springlets.data.domain.GlobalSearch;
 import java.util.List;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
-@RooService(entity = Document.class)
 public interface DocumentService extends EntityResolver<Document, Long>, ValidatorService<Document> {
 
 

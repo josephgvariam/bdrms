@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.file;
 import in.bigdash.rms.model.File;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.service.api.FileService;
 import io.springlets.data.web.validation.GenericValidator;
 import io.springlets.web.NotFoundException;
@@ -37,8 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = File.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/files/{file}", name = "FilesItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class FilesItemThymeleafController implements ConcurrencyManager<File> {

@@ -1,5 +1,4 @@
 package in.bigdash.rms.application.web;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleafMainController;
 import io.springlets.web.NotFoundException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
-@RooThymeleafMainController
 @Controller
 public class MainController {
 

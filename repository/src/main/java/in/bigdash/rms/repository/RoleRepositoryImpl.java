@@ -1,6 +1,5 @@
 package in.bigdash.rms.repository;
 import io.springlets.data.jpa.repository.support.QueryDslRepositorySupportExt;
-import org.springframework.roo.addon.layers.repository.jpa.annotations.RooJpaRepositoryCustomImpl;
 import in.bigdash.rms.model.Role;
 import com.querydsl.core.types.Path;
 import com.querydsl.jpa.JPQLQuery;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 
-@RooJpaRepositoryCustomImpl(repository = RoleRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class RoleRepositoryImpl extends QueryDslRepositorySupportExt<Role> implements RoleRepositoryCustom {
 

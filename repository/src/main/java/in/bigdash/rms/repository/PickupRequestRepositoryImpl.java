@@ -1,6 +1,5 @@
 package in.bigdash.rms.repository;
 import io.springlets.data.jpa.repository.support.QueryDslRepositorySupportExt;
-import org.springframework.roo.addon.layers.repository.jpa.annotations.RooJpaRepositoryCustomImpl;
 import in.bigdash.rms.model.request.PickupRequest;
 import com.querydsl.core.types.Path;
 import com.querydsl.jpa.JPQLQuery;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooJpaRepositoryCustomImpl(repository = PickupRequestRepositoryCustom.class)
 @Transactional(readOnly = true)
 public class PickupRequestRepositoryImpl extends QueryDslRepositorySupportExt<PickupRequest> implements PickupRequestRepositoryCustom {
 

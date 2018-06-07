@@ -1,9 +1,7 @@
 package in.bigdash.rms.application.web.request.destruction;
 import in.bigdash.rms.model.request.DestructionRequest;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
-import org.springframework.roo.addon.web.mvc.controller.annotations.ControllerType;
-import org.springframework.roo.addon.web.mvc.controller.annotations.RooController;
-import org.springframework.roo.addon.web.mvc.thymeleaf.annotations.RooThymeleaf;
+
 import in.bigdash.rms.service.api.DestructionRequestService;
 import io.springlets.data.web.validation.GenericValidator;
 import io.springlets.web.NotFoundException;
@@ -36,8 +34,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponents;
 
 
-@RooController(entity = DestructionRequest.class, type = ControllerType.ITEM)
-@RooThymeleaf
 @Controller
 @RequestMapping(value = "/destructionrequests/{destructionRequest}", name = "DestructionRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class DestructionRequestsItemThymeleafController implements ConcurrencyManager<DestructionRequest> {

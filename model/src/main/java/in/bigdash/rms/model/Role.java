@@ -1,8 +1,4 @@
 package in.bigdash.rms.model;
-import org.springframework.roo.addon.javabean.annotations.RooEquals;
-import org.springframework.roo.addon.javabean.annotations.RooJavaBean;
-import org.springframework.roo.addon.javabean.annotations.RooToString;
-import org.springframework.roo.addon.jpa.annotations.entity.RooJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,10 +18,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 
-@RooJavaBean
-@RooToString
-@RooJpaEntity(table = "BD_ROLE", entityFormatExpression = "#{name}")
-@RooEquals(isJpaEntity = true)
 @Entity
 @Table(name = "BD_ROLE")
 @EntityFormat("#{name}")

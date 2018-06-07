@@ -1,6 +1,5 @@
 package in.bigdash.rms.service.impl;
 import in.bigdash.rms.service.api.StorageTypeService;
-import org.springframework.roo.addon.layers.service.annotations.RooServiceImpl;
 import in.bigdash.rms.model.Client;
 import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.model.request.Request;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooServiceImpl(service = StorageTypeService.class)
 @Service
 @Transactional(readOnly = true)
 public class StorageTypeServiceImpl implements StorageTypeService {
