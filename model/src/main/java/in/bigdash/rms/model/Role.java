@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import io.springlets.format.EntityFormat;
+import org.hibernate.envers.NotAudited;
+
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -45,8 +47,8 @@ public class Role {
     private String description;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "bd_user_role", joinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") })
+    @NotAudited
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<User>();
 
 

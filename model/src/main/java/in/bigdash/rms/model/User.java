@@ -1,24 +1,13 @@
 package in.bigdash.rms.model;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
 
 import in.bigdash.rms.model.request.Request;
-import javax.persistence.OneToMany;
 import io.springlets.format.EntityFormat;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import java.util.Calendar;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -28,9 +17,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
 
@@ -89,7 +76,8 @@ public class User {
     private Boolean locked;
 
     @NotAudited
-    @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "users")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "bd_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<Role>();
 
     @NotAudited
