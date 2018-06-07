@@ -1,8 +1,6 @@
 package in.bigdash.rms.model.request;
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.util.Calendar;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.Future;
 
 import org.hibernate.envers.Audited;
@@ -10,12 +8,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Min;
 import org.springframework.format.annotation.NumberFormat;
 import io.springlets.format.EntityFormat;
-import javax.persistence.Entity;
 
 
 @Entity
 @EntityFormat
 @Audited
+@DiscriminatorValue("PICKUP")
 public class PickupRequest extends Request {
 
 

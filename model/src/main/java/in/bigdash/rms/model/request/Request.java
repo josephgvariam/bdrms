@@ -1,27 +1,16 @@
 package in.bigdash.rms.model.request;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
+
 import in.bigdash.rms.model.User;
 import io.springlets.format.EntityFormat;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import in.bigdash.rms.model.StorageType;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+
 import javax.validation.constraints.NotNull;
 import in.bigdash.rms.model.inventory.InventoryItem;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.ManyToMany;
 
 import java.util.Calendar;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
@@ -30,12 +19,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Objects;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
 
@@ -44,7 +28,7 @@ import org.springframework.util.Assert;
 @Entity
 @Table(name = "BD_REQUEST")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn
+@DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING, length=20)
 @EntityFormat("#{id}")
 @Audited
 public class Request {
@@ -60,6 +44,9 @@ public class Request {
     @Version
     @Column(name = "VERSION")
     private Long version;
+
+    @Column(name = "TYPE", insertable = false, updatable = false)
+    private String type;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -255,6 +242,9 @@ public class Request {
         return this;
     }
 
+    public String getType() {
+        return type;
+    }
 
     public boolean equals(Object obj) {
         if (this == obj) {

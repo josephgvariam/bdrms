@@ -3,15 +3,13 @@ import in.bigdash.rms.model.Document;
 import io.springlets.format.EntityFormat;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 
 @Entity
 @EntityFormat
 @Audited
+@DiscriminatorValue("DOCUMENT")
 public class DocumentInventoryItem extends InventoryItem {
 
 

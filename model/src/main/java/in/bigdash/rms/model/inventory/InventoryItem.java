@@ -1,35 +1,21 @@
 package in.bigdash.rms.model.inventory;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+
 import in.bigdash.rms.model.request.Request;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+
 import io.springlets.format.EntityFormat;
 import org.hibernate.envers.Audited;
 
 import java.util.Objects;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
 
 
 @Entity
 @Table(name = "BD_INVENTORY_ITEM")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn
+@DiscriminatorColumn(name="TYPE", discriminatorType=DiscriminatorType.STRING, length=20)
 @EntityFormat("#{id}")
 @Audited
 public class InventoryItem {
@@ -46,6 +32,8 @@ public class InventoryItem {
     @Column(name = "VERSION")
     private Long version;
 
+    @Column(name = "TYPE", insertable = false, updatable = false)
+    private String type;
 
     @NotNull
     @Column(name = "REF1")
@@ -182,6 +170,9 @@ public class InventoryItem {
         return this;
     }
 
+    public String getType() {
+        return type;
+    }
 
     public boolean equals(Object obj) {
         if (this == obj) {
