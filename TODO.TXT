@@ -1,0 +1,5 @@
+1. add global exception handler for database sql exceptions like unique constraint violated
+https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
+
+2. filter entities by user in views
+https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
