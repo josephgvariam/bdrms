@@ -1,20 +1,7 @@
 package in.bigdash.rms.model;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-
-import javax.persistence.ManyToMany;
-import java.util.Calendar;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.util.*;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -24,10 +11,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import io.springlets.format.EntityFormat;
-import java.util.Objects;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+
+import javax.validation.constraints.Size;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
 
@@ -71,8 +57,10 @@ public class Client {
     private Set<User> users = new HashSet<User>();
 
 
+    @Size(min=1)
     @NotAudited
-    @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "clients")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "bd_client_storage_types", joinColumns = { @JoinColumn(name = "client_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "storage_type_id", referencedColumnName = "id") })
     private Set<StorageType> storageTypes = new HashSet<StorageType>();
 
 
@@ -176,6 +164,15 @@ public class Client {
         return this.storageTypes;
     }
 
+    public String getStorageTypesString()
+    {
+        List<String> tmp = new ArrayList<>();
+        for(StorageType s : this.getStorageTypes()){
+            tmp.add(s.getName());
+        }
+
+        return String.join(", ", tmp);
+    }
 
     public Client setStorageTypes(Set<StorageType> storageTypes) {
         this.storageTypes = storageTypes;

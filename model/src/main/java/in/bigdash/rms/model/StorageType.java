@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.util.Assert;
 
 
@@ -41,9 +42,8 @@ public class StorageType {
     @Column(name = "VERSION")
     private Long version;
 
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "bd_client_storage_types", joinColumns = { @JoinColumn(name = "storage_type_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "client_id", referencedColumnName = "id") })
+    @NotAudited
+    @ManyToMany(mappedBy = "storageTypes")
     private Set<Client> clients = new HashSet<Client>();
 
 
