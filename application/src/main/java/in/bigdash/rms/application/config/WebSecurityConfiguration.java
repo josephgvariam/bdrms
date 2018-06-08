@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
+import org.springframework.web.accept.ContentNegotiationStrategy;
 
 
 @Configuration
@@ -78,6 +79,24 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     }
+
+    /**
+     * By default, this method provided by {@link WebSecurityConfigurerAdapter}
+     * is annotated with @Autowired. That causes that the {@link ContentNegotiationStrategy}
+     * load process registers a ConversionService before the Formatters have been registered
+     * in the Spring Context.
+     *
+     * To solve this, override the default method removing the @Autowired annotation
+     * to be able to load the Formatters before the Conversion Service register
+     * them.
+     *
+     * https://stackoverflow.com/questions/42698006/select2-autocomplete-error-on-views-spring-roo-rc1
+     *
+     */
+    @Override
+  	public void setContentNegotationStrategy(ContentNegotiationStrategy contentNegotiationStrategy) {
+    	super.setContentNegotationStrategy(contentNegotiationStrategy);
+  	}
 
     @Bean
     @Override
