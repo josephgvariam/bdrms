@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.user;
-import in.bigdash.rms.model.request.Request;
-import in.bigdash.rms.service.api.RequestService;
+package in.bigdash.rms.application.web.role;
+import in.bigdash.rms.model.Role;
+import in.bigdash.rms.service.api.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class RequestDeserializer extends JsonObjectDeserializer<Request> {
+public class RoleDeserializer extends JsonObjectDeserializer<Role> {
 
 
-    private RequestService requestService;
+    private RoleService roleService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public RequestDeserializer(@Lazy RequestService requestService, ConversionService conversionService) {
-        this.requestService = requestService;
+    public RoleDeserializer(@Lazy RoleService roleService, ConversionService conversionService) {
+        this.roleService = roleService;
         this.conversionService = conversionService;
     }
 
 
-    public RequestService getRequestService() {
-        return requestService;
+    public RoleService getRoleService() {
+        return roleService;
     }
 
 
-    public void setRequestService(RequestService requestService) {
-        this.requestService = requestService;
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
     }
 
 
@@ -50,13 +50,13 @@ public class RequestDeserializer extends JsonObjectDeserializer<Request> {
     }
 
 
-    public Request deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public Role deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        Request request = requestService.findOne(id);
-        if (request == null) {
-            throw new NotFoundException("Request not found");
+        Role role = roleService.findOne(id);
+        if (role == null) {
+            throw new NotFoundException("Role not found");
         }
-        return request;
+        return role;
     }
 }

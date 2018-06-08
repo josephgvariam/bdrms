@@ -1,4 +1,4 @@
-package in.bigdash.rms.application.web.file;
+package in.bigdash.rms.application.web.inventory;
 import in.bigdash.rms.model.inventory.FileInventoryItem;
 import in.bigdash.rms.service.api.FileInventoryItemService;
 import org.springframework.beans.factory.annotation.Autowired;

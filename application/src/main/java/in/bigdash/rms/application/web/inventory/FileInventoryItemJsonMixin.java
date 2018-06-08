@@ -1,7 +1,6 @@
 package in.bigdash.rms.application.web.inventory;
-import in.bigdash.rms.model.inventory.FileInventoryItem;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import in.bigdash.rms.application.web.document.FileDeserializer;
+import in.bigdash.rms.application.web.file.FileDeserializer;
 import in.bigdash.rms.model.File;
 
 

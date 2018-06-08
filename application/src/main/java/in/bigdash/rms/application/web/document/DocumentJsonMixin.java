@@ -1,5 +1,5 @@
 package in.bigdash.rms.application.web.document;
-import in.bigdash.rms.model.Document;
+import in.bigdash.rms.application.web.file.FileDeserializer;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

@@ -1,4 +1,4 @@
-package in.bigdash.rms.application.web.api.request.pickup;
+package in.bigdash.rms.application.web.api.request;
 import in.bigdash.rms.model.request.Request;
 
 import in.bigdash.rms.service.api.RequestService;

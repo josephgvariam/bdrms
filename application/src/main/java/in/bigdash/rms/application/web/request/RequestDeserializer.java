@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.file;
-import in.bigdash.rms.model.Box;
-import in.bigdash.rms.service.api.BoxService;
+package in.bigdash.rms.application.web.request;
+import in.bigdash.rms.model.request.Request;
+import in.bigdash.rms.service.api.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class BoxDeserializer extends JsonObjectDeserializer<Box> {
+public class RequestDeserializer extends JsonObjectDeserializer<Request> {
 
 
-    private BoxService boxService;
+    private RequestService requestService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public BoxDeserializer(@Lazy BoxService boxService, ConversionService conversionService) {
-        this.boxService = boxService;
+    public RequestDeserializer(@Lazy RequestService requestService, ConversionService conversionService) {
+        this.requestService = requestService;
         this.conversionService = conversionService;
     }
 
 
-    public BoxService getBoxService() {
-        return boxService;
+    public RequestService getRequestService() {
+        return requestService;
     }
 
 
-    public void setBoxService(BoxService boxService) {
-        this.boxService = boxService;
+    public void setRequestService(RequestService requestService) {
+        this.requestService = requestService;
     }
 
 
@@ -50,13 +50,13 @@ public class BoxDeserializer extends JsonObjectDeserializer<Box> {
     }
 
 
-    public Box deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public Request deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        Box box = boxService.findOne(id);
-        if (box == null) {
-            throw new NotFoundException("Box not found");
+        Request request = requestService.findOne(id);
+        if (request == null) {
+            throw new NotFoundException("Request not found");
         }
-        return box;
+        return request;
     }
 }

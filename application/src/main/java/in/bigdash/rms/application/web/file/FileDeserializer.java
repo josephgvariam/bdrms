@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.shelf;
-import in.bigdash.rms.model.Facility;
-import in.bigdash.rms.service.api.FacilityService;
+package in.bigdash.rms.application.web.file;
+import in.bigdash.rms.model.File;
+import in.bigdash.rms.service.api.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class FacilityDeserializer extends JsonObjectDeserializer<Facility> {
+public class FileDeserializer extends JsonObjectDeserializer<File> {
 
 
-    private FacilityService facilityService;
+    private FileService fileService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public FacilityDeserializer(@Lazy FacilityService facilityService, ConversionService conversionService) {
-        this.facilityService = facilityService;
+    public FileDeserializer(@Lazy FileService fileService, ConversionService conversionService) {
+        this.fileService = fileService;
         this.conversionService = conversionService;
     }
 
 
-    public FacilityService getFacilityService() {
-        return facilityService;
+    public FileService getFileService() {
+        return fileService;
     }
 
 
-    public void setFacilityService(FacilityService facilityService) {
-        this.facilityService = facilityService;
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
     }
 
 
@@ -50,13 +50,13 @@ public class FacilityDeserializer extends JsonObjectDeserializer<Facility> {
     }
 
 
-    public Facility deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public File deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        Facility facility = facilityService.findOne(id);
-        if (facility == null) {
-            throw new NotFoundException("Facility not found");
+        File file = fileService.findOne(id);
+        if (file == null) {
+            throw new NotFoundException("File not found");
         }
-        return facility;
+        return file;
     }
 }

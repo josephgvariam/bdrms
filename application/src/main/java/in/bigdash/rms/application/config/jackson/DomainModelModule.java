@@ -13,7 +13,7 @@ import in.bigdash.rms.application.web.request.destruction.DestructionRequestJson
 import in.bigdash.rms.application.web.request.insertion.InsertionRequestJsonMixin;
 import in.bigdash.rms.application.web.request.permout.PermoutRequestJsonMixin;
 import in.bigdash.rms.application.web.request.pickup.PickupRequestJsonMixin;
-import in.bigdash.rms.application.web.request.pickup.RequestJsonMixin;
+import in.bigdash.rms.application.web.request.RequestJsonMixin;
 import in.bigdash.rms.application.web.request.refiling.RefilingRequestJsonMixin;
 import in.bigdash.rms.application.web.request.retrieval.RetrievalRequestJsonMixin;
 import in.bigdash.rms.application.web.request.transfer.TransferRequestJsonMixin;

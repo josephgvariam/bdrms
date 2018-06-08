@@ -1,5 +1,5 @@
 package in.bigdash.rms.application.web.shelf;
-import in.bigdash.rms.model.Shelf;
+import in.bigdash.rms.application.web.facility.FacilityDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import in.bigdash.rms.model.Box;

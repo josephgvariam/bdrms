@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.box;
-import in.bigdash.rms.model.Shelf;
-import in.bigdash.rms.service.api.ShelfService;
+package in.bigdash.rms.application.web.user;
+import in.bigdash.rms.model.User;
+import in.bigdash.rms.service.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
+public class UserDeserializer extends JsonObjectDeserializer<User> {
 
 
-    private ShelfService shelfService;
+    private UserService userService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public ShelfDeserializer(@Lazy ShelfService shelfService, ConversionService conversionService) {
-        this.shelfService = shelfService;
+    public UserDeserializer(@Lazy UserService userService, ConversionService conversionService) {
+        this.userService = userService;
         this.conversionService = conversionService;
     }
 
 
-    public ShelfService getShelfService() {
-        return shelfService;
+    public UserService getUserService() {
+        return userService;
     }
 
 
-    public void setShelfService(ShelfService shelfService) {
-        this.shelfService = shelfService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
 
@@ -50,13 +50,13 @@ public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
     }
 
 
-    public Shelf deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public User deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        Shelf shelf = shelfService.findOne(id);
-        if (shelf == null) {
-            throw new NotFoundException("Shelf not found");
+        User user = userService.findOne(id);
+        if (user == null) {
+            throw new NotFoundException("User not found");
         }
-        return shelf;
+        return user;
     }
 }

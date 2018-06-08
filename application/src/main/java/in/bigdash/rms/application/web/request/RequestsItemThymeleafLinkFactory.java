@@ -1,4 +1,4 @@
-package in.bigdash.rms.application.web.request.pickup;
+package in.bigdash.rms.application.web.request;
 import io.springlets.web.mvc.util.MethodLinkFactory;
 import io.springlets.web.mvc.util.SpringletsMvcUriComponentsBuilder;
 import java.util.Map;

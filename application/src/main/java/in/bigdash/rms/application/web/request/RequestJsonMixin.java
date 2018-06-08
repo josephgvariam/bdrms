@@ -1,9 +1,8 @@
-package in.bigdash.rms.application.web.request.pickup;
-import in.bigdash.rms.model.request.Request;
+package in.bigdash.rms.application.web.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import in.bigdash.rms.application.web.client.StorageTypeDeserializer;
-import in.bigdash.rms.application.web.client.UserDeserializer;
+import in.bigdash.rms.application.web.storagetype.StorageTypeDeserializer;
+import in.bigdash.rms.application.web.user.UserDeserializer;
 import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.model.User;
 import in.bigdash.rms.model.inventory.InventoryItem;

@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.document;
-import in.bigdash.rms.model.File;
-import in.bigdash.rms.service.api.FileService;
+package in.bigdash.rms.application.web.storagetype;
+import in.bigdash.rms.model.StorageType;
+import in.bigdash.rms.service.api.StorageTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class FileDeserializer extends JsonObjectDeserializer<File> {
+public class StorageTypeDeserializer extends JsonObjectDeserializer<StorageType> {
 
 
-    private FileService fileService;
+    private StorageTypeService storageTypeService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public FileDeserializer(@Lazy FileService fileService, ConversionService conversionService) {
-        this.fileService = fileService;
+    public StorageTypeDeserializer(@Lazy StorageTypeService storageTypeService, ConversionService conversionService) {
+        this.storageTypeService = storageTypeService;
         this.conversionService = conversionService;
     }
 
 
-    public FileService getFileService() {
-        return fileService;
+    public StorageTypeService getStorageTypeService() {
+        return storageTypeService;
     }
 
 
-    public void setFileService(FileService fileService) {
-        this.fileService = fileService;
+    public void setStorageTypeService(StorageTypeService storageTypeService) {
+        this.storageTypeService = storageTypeService;
     }
 
 
@@ -50,13 +50,13 @@ public class FileDeserializer extends JsonObjectDeserializer<File> {
     }
 
 
-    public File deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public StorageType deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        File file = fileService.findOne(id);
-        if (file == null) {
-            throw new NotFoundException("File not found");
+        StorageType storageType = storageTypeService.findOne(id);
+        if (storageType == null) {
+            throw new NotFoundException("StorageType not found");
         }
-        return file;
+        return storageType;
     }
 }

@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.user;
-import in.bigdash.rms.model.Role;
-import in.bigdash.rms.service.api.RoleService;
+package in.bigdash.rms.application.web.shelf;
+import in.bigdash.rms.model.Shelf;
+import in.bigdash.rms.service.api.ShelfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class RoleDeserializer extends JsonObjectDeserializer<Role> {
+public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
 
 
-    private RoleService roleService;
+    private ShelfService shelfService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public RoleDeserializer(@Lazy RoleService roleService, ConversionService conversionService) {
-        this.roleService = roleService;
+    public ShelfDeserializer(@Lazy ShelfService shelfService, ConversionService conversionService) {
+        this.shelfService = shelfService;
         this.conversionService = conversionService;
     }
 
 
-    public RoleService getRoleService() {
-        return roleService;
+    public ShelfService getShelfService() {
+        return shelfService;
     }
 
 
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
+    public void setShelfService(ShelfService shelfService) {
+        this.shelfService = shelfService;
     }
 
 
@@ -50,13 +50,13 @@ public class RoleDeserializer extends JsonObjectDeserializer<Role> {
     }
 
 
-    public Role deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public Shelf deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        Role role = roleService.findOne(id);
-        if (role == null) {
-            throw new NotFoundException("Role not found");
+        Shelf shelf = shelfService.findOne(id);
+        if (shelf == null) {
+            throw new NotFoundException("Shelf not found");
         }
-        return role;
+        return shelf;
     }
 }

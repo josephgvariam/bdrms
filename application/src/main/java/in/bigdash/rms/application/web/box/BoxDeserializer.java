@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.client;
-import in.bigdash.rms.model.StorageType;
-import in.bigdash.rms.service.api.StorageTypeService;
+package in.bigdash.rms.application.web.box;
+import in.bigdash.rms.model.Box;
+import in.bigdash.rms.service.api.BoxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class StorageTypeDeserializer extends JsonObjectDeserializer<StorageType> {
+public class BoxDeserializer extends JsonObjectDeserializer<Box> {
 
 
-    private StorageTypeService storageTypeService;
+    private BoxService boxService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public StorageTypeDeserializer(@Lazy StorageTypeService storageTypeService, ConversionService conversionService) {
-        this.storageTypeService = storageTypeService;
+    public BoxDeserializer(@Lazy BoxService boxService, ConversionService conversionService) {
+        this.boxService = boxService;
         this.conversionService = conversionService;
     }
 
 
-    public StorageTypeService getStorageTypeService() {
-        return storageTypeService;
+    public BoxService getBoxService() {
+        return boxService;
     }
 
 
-    public void setStorageTypeService(StorageTypeService storageTypeService) {
-        this.storageTypeService = storageTypeService;
+    public void setBoxService(BoxService boxService) {
+        this.boxService = boxService;
     }
 
 
@@ -50,13 +50,13 @@ public class StorageTypeDeserializer extends JsonObjectDeserializer<StorageType>
     }
 
 
-    public StorageType deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public Box deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        StorageType storageType = storageTypeService.findOne(id);
-        if (storageType == null) {
-            throw new NotFoundException("StorageType not found");
+        Box box = boxService.findOne(id);
+        if (box == null) {
+            throw new NotFoundException("Box not found");
         }
-        return storageType;
+        return box;
     }
 }

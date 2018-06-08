@@ -1,6 +1,6 @@
-package in.bigdash.rms.application.web.client;
-import in.bigdash.rms.model.User;
-import in.bigdash.rms.service.api.UserService;
+package in.bigdash.rms.application.web.facility;
+import in.bigdash.rms.model.Facility;
+import in.bigdash.rms.service.api.FacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -14,29 +14,29 @@ import org.springframework.boot.jackson.JsonComponent;
 
 
 @JsonComponent
-public class UserDeserializer extends JsonObjectDeserializer<User> {
+public class FacilityDeserializer extends JsonObjectDeserializer<Facility> {
 
 
-    private UserService userService;
+    private FacilityService facilityService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public UserDeserializer(@Lazy UserService userService, ConversionService conversionService) {
-        this.userService = userService;
+    public FacilityDeserializer(@Lazy FacilityService facilityService, ConversionService conversionService) {
+        this.facilityService = facilityService;
         this.conversionService = conversionService;
     }
 
 
-    public UserService getUserService() {
-        return userService;
+    public FacilityService getFacilityService() {
+        return facilityService;
     }
 
 
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public void setFacilityService(FacilityService facilityService) {
+        this.facilityService = facilityService;
     }
 
 
@@ -50,13 +50,13 @@ public class UserDeserializer extends JsonObjectDeserializer<User> {
     }
 
 
-    public User deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
+    public Facility deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
         String idText = tree.asText();
         Long id = conversionService.convert(idText, Long.class);
-        User user = userService.findOne(id);
-        if (user == null) {
-            throw new NotFoundException("User not found");
+        Facility facility = facilityService.findOne(id);
+        if (facility == null) {
+            throw new NotFoundException("Facility not found");
         }
-        return user;
+        return facility;
     }
 }
