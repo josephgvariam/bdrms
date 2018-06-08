@@ -31,7 +31,7 @@ public class StorageType {
 
 
     @Id
-    @SequenceGenerator(name = "storageTypeGen", sequenceName = "BD_STORAGE_TYPE_ID_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "storageTypeGen", sequenceName = "BD_STORAGE_TYPE_ID_SEQ", initialValue = 50, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storageTypeGen")
     @Column(name = "ID")
     private Long id;

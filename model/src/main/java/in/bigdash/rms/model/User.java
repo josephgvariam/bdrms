@@ -1,13 +1,10 @@
 package in.bigdash.rms.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import in.bigdash.rms.model.request.Request;
 import io.springlets.format.EntityFormat;
-
-import java.util.Calendar;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -16,7 +13,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
-import java.util.Objects;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
@@ -31,7 +27,7 @@ public class User {
 
 
     @Id
-    @SequenceGenerator(name = "userGen", sequenceName = "BD_USER_ID_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "userGen", sequenceName = "BD_USER_ID_SEQ", initialValue = 50, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userGen")
     @Column(name = "ID")
     private Long id;
@@ -229,6 +225,14 @@ public class User {
         return this.roles;
     }
 
+    public String getRolesString() {
+        List<String> rolesList = new ArrayList<>();
+        for(Role r : this.getRoles()){
+            rolesList.add(r.getName());
+        }
+
+        return String.join(", ", rolesList);
+    }
 
     public User setRoles(Set<Role> roles) {
         this.roles = roles;

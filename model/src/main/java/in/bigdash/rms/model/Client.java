@@ -41,7 +41,7 @@ public class Client {
 
 
     @Id
-    @SequenceGenerator(name = "clientGen", sequenceName = "BD_CLIENT_ID_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "clientGen", sequenceName = "BD_CLIENT_ID_SEQ", initialValue = 50, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientGen")
     @Column(name = "ID")
     private Long id;
