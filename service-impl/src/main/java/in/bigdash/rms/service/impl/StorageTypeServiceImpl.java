@@ -165,6 +165,9 @@ public class StorageTypeServiceImpl implements StorageTypeService {
         return getStorageTypeRepository().findAll(globalSearch, pageable);
     }
 
+    public Page<StorageType> findAllByCurrentUser(GlobalSearch globalSearch, Pageable pageable) {
+        return getStorageTypeRepository().findAllByCurrentUser(globalSearch, pageable);
+    }
 
     public Page<StorageType> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         return getStorageTypeRepository().findAllByIdsIn(ids, globalSearch, pageable);

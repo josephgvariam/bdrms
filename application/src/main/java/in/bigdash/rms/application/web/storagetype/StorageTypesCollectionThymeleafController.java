@@ -168,6 +168,14 @@ public class StorageTypesCollectionThymeleafController {
         return ResponseEntity.ok(select2Data);
     }
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2user", value = "/s2u")
+    @ResponseBody
+    public ResponseEntity<Select2DataSupport<StorageType>> select2user(GlobalSearch search, Pageable pageable, Locale locale) {
+        Page<StorageType> storageTypes = getStorageTypeService().findAllByCurrentUser(search, pageable);
+        String idExpression = "#{id}";
+        Select2DataSupport<StorageType> select2Data = new Select2DataWithConversion<StorageType>(storageTypes, idExpression, getConversionService());
+        return ResponseEntity.ok(select2Data);
+    }
 
     @InitBinder("storageType")
     public void initStorageTypeBinder(WebDataBinder binder) {

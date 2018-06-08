@@ -60,6 +60,9 @@ public class StorageTypesCollectionThymeleafLinkFactory implements MethodLinkFac
         if (methodName.equals(SELECT2)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).select2(null, null, null)).buildAndExpand(pathVariables);
         }
+        if (methodName.equals("select2user")) {
+            return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).select2user(null, null, null)).buildAndExpand(pathVariables);
+        }
         if (methodName.equals(CREATE)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).create(null, null, null)).buildAndExpand(pathVariables);
         }

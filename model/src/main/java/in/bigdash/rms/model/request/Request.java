@@ -61,7 +61,7 @@ public class Request {
     @EntityFormat
     private User userAssigned;
 
-
+    @NotNull
     @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STORAGE_TYPE_ID")

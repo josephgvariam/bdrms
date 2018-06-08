@@ -41,6 +41,8 @@ public interface StorageTypeService extends EntityResolver<StorageType, Long>, V
 
     public abstract Page<StorageType> findAll(GlobalSearch globalSearch, Pageable pageable);
 
+    public abstract Page<StorageType> findAllByCurrentUser(GlobalSearch globalSearch, Pageable pageable);
+
 
     public abstract Page<StorageType> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable);
 
