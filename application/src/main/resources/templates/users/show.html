@@ -58,8 +58,12 @@
          	        </li>
                   <li id="user-client-field" data-z="dbe195f6">
             	      <strong data-th-text="#{label_user_client}">client</strong>
-                    <span data-th-text="*{{client}}">clientValue</span>
+                    <span data-th-text="*{{client.name}}">clientValue</span>
          	        </li>
+                  <li id="user-roles-field" data-z="dbe195f6">
+                      <strong data-th-text="#{label_user_roles}">roles</strong>
+                      <span data-th-text="*{{rolesString}}">rolesValue</span>
+                  </li>
                   <li id="user-createddate-field" data-z="abf9b928">
             	      <strong data-th-text="#{label_user_createddate}">createdDate</strong>
                     <span data-th-text="*{{createdDate}}">createdDateValue</span>

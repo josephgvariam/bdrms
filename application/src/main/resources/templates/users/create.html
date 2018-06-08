@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en" data-layout-decorate="~{layouts/default-layout}">
   <head id="head">
 
@@ -103,6 +103,17 @@
       <span id="client-error" class="help-block" data-th-if="${#fields.hasErrors('client')}" data-th-errors="*{client}">Error message.</span>
     </div>
 </div>
+
+<div class="form-group has-error has-feedback" data-z="dbe195f6" id="user-roles-field" data-th-classappend="${#fields.hasErrors('roles')}? 'has-error has-feedback'" data-th-class="form-group" data-th-with="collectionLink=${@linkBuilder.of('RolesCollectionThymeleafController')}">
+  <label for="roles" class="col-md-3 control-label" data-th-text="#{label_user_roles}">Roles</label>
+  <div class="col-md-6">
+    <!-- Select2 -->
+    <select id="rolesselect2" data-th-field="*{roles}" class="form-control dropdown-select-ajax" data-allow-clear="true" data-data-ajax--url="${collectionLink.to('select2')}" data-ajax--cache="true" data-ajax--delay="250" data-ajax--data-type="json" data-data-placeholder="#{info_select_an_option}" multiple></select>
+    <span data-th-classappend="${#fields.hasErrors('client')}? 'glyphicon glyphicon-remove form-control-feedback'" class="glyphicon glyphicon-remove form-control-feedback" data-th-if="${#fields.hasErrors('client')}" aria-hidden="true"></span>
+    <span id="roles-error" class="help-block" data-th-if="${#fields.hasErrors('roles')}" data-th-errors="*{roles}">Error message.</span>
+  </div>
+</div>
+
             </fieldset>
 
 
@@ -190,6 +201,13 @@
 										});
 					})(jQuery);
 		  </script>
+
+    <script type="text/javascript" >
+        $('#rolesselect2').on('select2:opening select2:closing', function( event ) {
+            var $searchfield = $(this).parent().find('.select2-search__field');
+            $searchfield.prop('disabled', true);
+        });
+    </script>
 
     </div>
 

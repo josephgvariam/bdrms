@@ -1,6 +1,7 @@
 package in.bigdash.rms.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 import in.bigdash.rms.model.request.Request;
@@ -71,6 +72,7 @@ public class User {
     @Column(name = "LOCKED")
     private Boolean locked;
 
+    @Size(min=1)
     @NotAudited
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "bd_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -85,7 +87,7 @@ public class User {
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "userAssigned")
     private Set<Request> requestsAssigned = new HashSet<Request>();
 
-
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLIENT_ID")
     @EntityFormat
