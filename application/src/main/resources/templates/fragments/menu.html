@@ -37,46 +37,11 @@
             <div id="mainnav" class="navbar-collapse collapse">
 
               <ul class="nav navbar-nav" id="entitiesMenuEntries">
-                <li class="dropdown" id="box-entry" data-z="f1ffd843">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_box})}">Box<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/boxes/create-form" data-th-href="@{/boxes/create-form}" data-th-utext="#{label_create_entity(#{label_box})}">Create Box</a></li>
-	                  <li><a href="/boxes" data-th-href="@{/boxes}" data-th-utext="#{label_list_entity(#{label_box_plural})}">List Box</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="boxinventoryitem-entry" data-z="11fc09e8">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_boxinventoryitem})}">BoxInventoryItem<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/boxinventoryitems/create-form" data-th-href="@{/boxinventoryitems/create-form}" data-th-utext="#{label_create_entity(#{label_boxinventoryitem})}">Create BoxInventoryItem</a></li>
-	                  <li><a href="/boxinventoryitems" data-th-href="@{/boxinventoryitems}" data-th-utext="#{label_list_entity(#{label_boxinventoryitem_plural})}">List BoxInventoryItem</a></li>
-                 </ul>
-                </li>
                 <li class="dropdown" id="client-entry" data-z="7dd05d28">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_client})}">Client<span class="caret"></span></a>
                  <ul class="dropdown-menu">
 	                   <li><a href="/clients/create-form" data-th-href="@{/clients/create-form}" data-th-utext="#{label_create_entity(#{label_client})}">Create Client</a></li>
 	                  <li><a href="/clients" data-th-href="@{/clients}" data-th-utext="#{label_list_entity(#{label_client_plural})}">List Client</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="destructionrequest-entry" data-z="e0406f88">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_destructionrequest})}">DestructionRequest<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/destructionrequests/create-form" data-th-href="@{/destructionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_destructionrequest})}">Create DestructionRequest</a></li>
-	                  <li><a href="/destructionrequests" data-th-href="@{/destructionrequests}" data-th-utext="#{label_list_entity(#{label_destructionrequest_plural})}">List DestructionRequest</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="document-entry" data-z="8350b2e8">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_document})}">Document<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/documents/create-form" data-th-href="@{/documents/create-form}" data-th-utext="#{label_create_entity(#{label_document})}">Create Document</a></li>
-	                  <li><a href="/documents" data-th-href="@{/documents}" data-th-utext="#{label_list_entity(#{label_document_plural})}">List Document</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="documentinventoryitem-entry" data-z="30b81996">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_documentinventoryitem})}">DocumentInventoryItem<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/documentinventoryitems/create-form" data-th-href="@{/documentinventoryitems/create-form}" data-th-utext="#{label_create_entity(#{label_documentinventoryitem})}">Create DocumentInventoryItem</a></li>
-	                  <li><a href="/documentinventoryitems" data-th-href="@{/documentinventoryitems}" data-th-utext="#{label_list_entity(#{label_documentinventoryitem_plural})}">List DocumentInventoryItem</a></li>
                  </ul>
                 </li>
                 <li class="dropdown" id="facility-entry" data-z="a96cfb79">
@@ -86,81 +51,23 @@
 	                  <li><a href="/facilities" data-th-href="@{/facilities}" data-th-utext="#{label_list_entity(#{label_facility_plural})}">List Facility</a></li>
                  </ul>
                 </li>
-                <li class="dropdown" id="file-entry" data-z="ef06f368">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_file})}">File<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/files/create-form" data-th-href="@{/files/create-form}" data-th-utext="#{label_create_entity(#{label_file})}">Create File</a></li>
-	                  <li><a href="/files" data-th-href="@{/files}" data-th-utext="#{label_list_entity(#{label_file_plural})}">List File</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="fileinventoryitem-entry" data-z="5e0ea916">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_fileinventoryitem})}">FileInventoryItem<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/fileinventoryitems/create-form" data-th-href="@{/fileinventoryitems/create-form}" data-th-utext="#{label_create_entity(#{label_fileinventoryitem})}">Create FileInventoryItem</a></li>
-	                  <li><a href="/fileinventoryitems" data-th-href="@{/fileinventoryitems}" data-th-utext="#{label_list_entity(#{label_fileinventoryitem_plural})}">List FileInventoryItem</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="insertionrequest-entry" data-z="fd279dc8">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_insertionrequest})}">InsertionRequest<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/insertionrequests/create-form" data-th-href="@{/insertionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_insertionrequest})}">Create InsertionRequest</a></li>
-	                  <li><a href="/insertionrequests" data-th-href="@{/insertionrequests}" data-th-utext="#{label_list_entity(#{label_insertionrequest_plural})}">List InsertionRequest</a></li>
-                 </ul>
-                </li>
                 <li class="dropdown" id="inventoryitem-entry" data-z="d307a4b6">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_inventoryitem})}">InventoryItem<span class="caret"></span></a>
                  <ul class="dropdown-menu">
-	                   <li><a href="/inventoryitems/create-form" data-th-href="@{/inventoryitems/create-form}" data-th-utext="#{label_create_entity(#{label_inventoryitem})}">Create InventoryItem</a></li>
 	                  <li><a href="/inventoryitems" data-th-href="@{/inventoryitems}" data-th-utext="#{label_list_entity(#{label_inventoryitem_plural})}">List InventoryItem</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="permoutrequest-entry" data-z="6736408">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_permoutrequest})}">PermoutRequest<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/permoutrequests/create-form" data-th-href="@{/permoutrequests/create-form}" data-th-utext="#{label_create_entity(#{label_permoutrequest})}">Create PermoutRequest</a></li>
-	                  <li><a href="/permoutrequests" data-th-href="@{/permoutrequests}" data-th-utext="#{label_list_entity(#{label_permoutrequest_plural})}">List PermoutRequest</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="pickuprequest-entry" data-z="8fffd876">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_pickuprequest})}">PickupRequest<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/pickuprequests/create-form" data-th-href="@{/pickuprequests/create-form}" data-th-utext="#{label_create_entity(#{label_pickuprequest})}">Create PickupRequest</a></li>
-	                  <li><a href="/pickuprequests" data-th-href="@{/pickuprequests}" data-th-utext="#{label_list_entity(#{label_pickuprequest_plural})}">List PickupRequest</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="refilingrequest-entry" data-z="94b10ab6">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_refilingrequest})}">RefilingRequest<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/refilingrequests/create-form" data-th-href="@{/refilingrequests/create-form}" data-th-utext="#{label_create_entity(#{label_refilingrequest})}">Create RefilingRequest</a></li>
-	                  <li><a href="/refilingrequests" data-th-href="@{/refilingrequests}" data-th-utext="#{label_list_entity(#{label_refilingrequest_plural})}">List RefilingRequest</a></li>
                  </ul>
                 </li>
                 <li class="dropdown" id="request-entry" data-z="7da209d6">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_request})}">Request<span class="caret"></span></a>
                  <ul class="dropdown-menu">
-	                   <li><a href="/requests/create-form" data-th-href="@{/requests/create-form}" data-th-utext="#{label_create_entity(#{label_request})}">Create Request</a></li>
-	                  <li><a href="/requests" data-th-href="@{/requests}" data-th-utext="#{label_list_entity(#{label_request_plural})}">List Request</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="retrievalrequest-entry" data-z="d1a951c8">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_retrievalrequest})}">RetrievalRequest<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/retrievalrequests/create-form" data-th-href="@{/retrievalrequests/create-form}" data-th-utext="#{label_create_entity(#{label_retrievalrequest})}">Create RetrievalRequest</a></li>
-	                  <li><a href="/retrievalrequests" data-th-href="@{/retrievalrequests}" data-th-utext="#{label_list_entity(#{label_retrievalrequest_plural})}">List RetrievalRequest</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="shelf-entry" data-z="fbc69b15">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_shelf})}">Shelf<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/shelves/create-form" data-th-href="@{/shelves/create-form}" data-th-utext="#{label_create_entity(#{label_shelf})}">Create Shelf</a></li>
-	                  <li><a href="/shelves" data-th-href="@{/shelves}" data-th-utext="#{label_list_entity(#{label_shelf_plural})}">List Shelf</a></li>
-                 </ul>
-                </li>
-                <li class="dropdown" id="transferrequest-entry" data-z="4b68e6b6">
-                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_transferrequest})}">TransferRequest<span class="caret"></span></a>
-                 <ul class="dropdown-menu">
-	                   <li><a href="/transferrequests/create-form" data-th-href="@{/transferrequests/create-form}" data-th-utext="#{label_create_entity(#{label_transferrequest})}">Create TransferRequest</a></li>
-	                  <li><a href="/transferrequests" data-th-href="@{/transferrequests}" data-th-utext="#{label_list_entity(#{label_transferrequest_plural})}">List TransferRequest</a></li>
+                     <li><a href="/requests" data-th-href="@{/requests}" data-th-utext="#{label_list_entity(#{label_request_plural})}">List Request</a></li>
+                     <li><a href="/pickuprequests/create-form" data-th-href="@{/pickuprequests/create-form}" data-th-utext="#{label_create_entity(#{label_pickuprequest})}">Create PickupRequest</a></li>
+                     <li><a href="/retrievalrequests/create-form" data-th-href="@{/retrievalrequests/create-form}" data-th-utext="#{label_create_entity(#{label_retrievalrequest})}">Create RetrievalRequest</a></li>
+                     <li><a href="/refilingrequests/create-form" data-th-href="@{/refilingrequests/create-form}" data-th-utext="#{label_create_entity(#{label_refilingrequest})}">Create RefilingRequest</a></li>
+                     <li><a href="/transferrequests/create-form" data-th-href="@{/transferrequests/create-form}" data-th-utext="#{label_create_entity(#{label_transferrequest})}">Create TransferRequest</a></li>
+                     <li><a href="/permoutrequests/create-form" data-th-href="@{/permoutrequests/create-form}" data-th-utext="#{label_create_entity(#{label_permoutrequest})}">Create PermoutRequest</a></li>
+                     <li><a href="/destructionrequests/create-form" data-th-href="@{/destructionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_destructionrequest})}">Create DestructionRequest</a></li>
+                     <li><a href="/insertionrequests/create-form" data-th-href="@{/insertionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_insertionrequest})}">Create InsertionRequest</a></li>
                  </ul>
                 </li>
                 <li class="dropdown" id="user-entry" data-z="a49e5768">
