@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "BD_CLIENT")
-@EntityFormat("#{name}")
+@EntityFormat("#{name} - #{department}")
 @Audited
 public class Client {
 
