@@ -10,6 +10,7 @@ import in.bigdash.rms.application.web.reports.JasperReportsCsvExporter;
 import in.bigdash.rms.application.web.reports.JasperReportsExporter;
 import in.bigdash.rms.application.web.reports.JasperReportsPdfExporter;
 import in.bigdash.rms.application.web.reports.JasperReportsXlsExporter;
+import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.PermoutRequestService;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.data.web.datatables.ConvertedDatatablesData;
@@ -22,6 +23,7 @@ import io.springlets.data.web.validation.GenericValidator;
 import io.springlets.web.mvc.util.ControllerMethodLinkBuilderFactory;
 import io.springlets.web.mvc.util.MethodLinkBuilderFactory;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -196,6 +198,7 @@ public class PermoutRequestsCollectionThymeleafController {
 
     public void populateForm(Model model) {
         populateFormats(model);
+        model.addAttribute("status", Arrays.asList(RequestStatus.values()));
     }
 
 

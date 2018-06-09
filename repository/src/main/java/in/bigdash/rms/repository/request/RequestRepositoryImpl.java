@@ -1,4 +1,6 @@
 package in.bigdash.rms.repository.request;
+import in.bigdash.rms.model.QUser;
+import in.bigdash.rms.model.Role;
 import io.springlets.data.jpa.repository.support.QueryDslRepositorySupportExt;
 import in.bigdash.rms.model.request.Request;
 import com.querydsl.core.types.Path;
@@ -11,6 +13,9 @@ import io.springlets.data.domain.GlobalSearch;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -54,6 +59,12 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
     public Page<Request> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QRequest request = QRequest.request;
         JPQLQuery<Request> query = from(request);
+
+        User currentUser = getCurrentUser();
+        if(!userHasRole(currentUser, "ROLE_OPERATOR")) {
+            query.where(request.userCreated.client.eq(currentUser.getClient()));
+        }
+
         Path<?>[] paths = new Path<?>[] { request.userCreated, request.userAssigned, request.storageType, request.status, request.notes, request.createdDate, request.createdBy, request.modifiedDate, request.modifiedBy };
         applyGlobalSearch(globalSearch, query, paths);
         AttributeMappingBuilder mapping = buildMapper().map(USER_CREATED, request.userCreated).map(USER_ASSIGNED, request.userAssigned).map(STORAGE_TYPE, request.storageType).map(STATUS, request.status).map(NOTES, request.notes).map(CREATED_DATE, request.createdDate).map(CREATED_BY, request.createdBy).map(MODIFIED_DATE, request.modifiedDate).map(MODIFIED_BY, request.modifiedBy);
@@ -117,4 +128,31 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
         applyOrderById(query);
         return loadPage(query, pageable, request);
     }
+
+    private User getCurrentUser()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+
+            QUser user = QUser.user;
+            return from(user).where(user.username.eq(currentUserName)).fetchOne();
+        }
+
+        return null;
+    }
+
+    private boolean userHasRole(User user, String role)
+    {
+        if(user != null) {
+            for (Role r : user.getRoles()) {
+                if (r.getName().equals(role)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

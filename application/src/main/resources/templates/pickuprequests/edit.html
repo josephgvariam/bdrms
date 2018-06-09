@@ -75,7 +75,20 @@
       <span id="status-error" class="help-block" data-th-if="${#fields.hasErrors('status')}" data-th-errors="*{status}">Error message.</span>
     </div>
 </div>
-<div class="form-group has-error has-feedback" data-z="ee9db9d6" id="pickuprequest-notes-field" data-th-classappend="${#fields.hasErrors('notes')}? 'has-error has-feedback'" data-th-class="form-group">
+
+                 <div class="form-group has-error has-feedback" data-z="cb5441fa" id="request-storagetype-field" data-th-classappend="${#fields.hasErrors('storageType')}? 'has-error has-feedback'" data-th-class="form-group" data-th-with="collectionLink=${@linkBuilder.of('StorageTypesCollectionThymeleafController')}">
+                     <label for="storageType" class="col-md-3 control-label" data-th-text="#{label_request_storagetype}">StorageType</label>
+                     <div class="col-md-6">
+                         <!-- Select2 -->
+                         <select id="storagetypesselect2" data-th-field="*{storageType}" class="form-control dropdown-select-ajax" data-allow-clear="true" data-data-ajax--url="${collectionLink.to('select2user')}" data-ajax--cache="true" data-ajax--delay="250" data-ajax--data-type="json" data-data-placeholder="#{info_select_an_option}">
+                             <option data-th-unless="*{storageType} == null" data-th-value="*{storageType.id}" data-th-text="*{{storageType}}" selected="selected">StorageType</option>
+                         </select>
+                         <span data-th-classappend="${#fields.hasErrors('storageType')}? 'glyphicon glyphicon-remove form-control-feedback'" class="glyphicon glyphicon-remove form-control-feedback" data-th-if="${#fields.hasErrors('storageType')}" aria-hidden="true"></span>
+                         <span id="storageType-error" class="help-block" data-th-if="${#fields.hasErrors('storageType')}" data-th-errors="*{storageType}">Error message.</span>
+                     </div>
+                 </div>
+
+                 <div class="form-group has-error has-feedback" data-z="ee9db9d6" id="pickuprequest-notes-field" data-th-classappend="${#fields.hasErrors('notes')}? 'has-error has-feedback'" data-th-class="form-group">
   <label for="notes" class="col-md-3 control-label" data-th-text="#{label_pickuprequest_notes}">notes</label>
   <div class="col-md-6">
     <input id="notes" name="notes" data-th-value="*{{notes}}" type="text" class="form-control" placeholder="notes" data-th-placeholder="#{label_pickuprequest_notes}" data-toggle="tooltip" aria-describedby="notesStatus" />
@@ -113,7 +126,7 @@
               <div class="form-group">
                 <div class="col-md-12">
                   <div class="pull-left">
-                    <button type="reset" class="btn btn-default" onclick="location.href='list.html'" data-th-onclick="'location.href=\'' + @{${collectionLink.to('list')}} + '\''" data-th-text="#{label_reset}">Cancel</button>
+                    <button type="reset" class="btn btn-default" onclick="location.href='/requests'" data-th-text="#{label_reset}">Cancel</button>
                   </div>
                   <div class="pull-right">
                     <button type="submit" class="btn btn-primary" data-th-text="#{label_save}">Save</button>
@@ -190,6 +203,16 @@
       	   });
       	 });
       })(jQuery);
+      </script>
+
+      <script type="text/javascript" >
+          $(document).ready(function() {
+              $("#storagetypesselect2").select2({
+                  minimumResultsForSearch: Infinity,
+                  theme: 'bootstrap'
+              });
+
+          });
       </script>
 
     </div>

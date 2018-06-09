@@ -1,6 +1,7 @@
 package in.bigdash.rms.model.request;
 import javax.persistence.*;
 
+import in.bigdash.rms.model.Client;
 import in.bigdash.rms.model.User;
 import io.springlets.format.EntityFormat;
 import in.bigdash.rms.model.StorageType;
@@ -50,6 +51,7 @@ public class Request {
     private String type;
 
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_CREATED_ID")
     @EntityFormat
@@ -137,6 +139,16 @@ public class Request {
 
     public User getUserCreated() {
         return this.userCreated;
+    }
+
+    public Client getClient()
+    {
+        return this.userCreated.getClient();
+    }
+
+    public String getDepartment()
+    {
+        return this.userCreated.getClient().getDepartment();
     }
 
 

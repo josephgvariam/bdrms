@@ -124,8 +124,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Request request, Model model) {
-        model.addAttribute("request", request);
-        return new ModelAndView("requests/show");
+        return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId());
     }
 
 
@@ -187,18 +186,13 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
     @InitBinder("request")
     public void initRequestBinder(WebDataBinder binder) {
-        binder.setDisallowedFields("id");
-        // Register validators
-        GenericValidator validator = new GenericValidator(Request.class, getRequestService());
-        binder.addValidators(validator);
+
     }
 
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Request request, Model model) {
-        populateForm(model);
-        model.addAttribute("request", request);
-        return new ModelAndView("requests/edit");
+        return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId() + "/edit-form");
     }
 
 

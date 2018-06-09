@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.*;
 
+import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.model.request.Request;
 import io.springlets.format.EntityFormat;
 
@@ -86,6 +87,10 @@ public class User {
     @NotAudited
     @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "userAssigned")
     private Set<Request> requestsAssigned = new HashSet<Request>();
+
+    @NotAudited
+    @OneToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "userCreated")
+    private Set<InventoryItem> inventoryItemsCreated = new HashSet<InventoryItem>();
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

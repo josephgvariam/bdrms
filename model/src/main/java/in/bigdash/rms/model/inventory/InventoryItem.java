@@ -2,6 +2,8 @@ package in.bigdash.rms.model.inventory;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import in.bigdash.rms.model.Client;
+import in.bigdash.rms.model.User;
 import in.bigdash.rms.model.request.Request;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,6 +63,11 @@ public class InventoryItem {
     @Enumerated(EnumType.STRING)
     private InventoryItemStatus status;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_CREATED_ID")
+    @EntityFormat
+    private User userCreated;
 
     @NotAudited
     @ManyToMany(fetch = FetchType.LAZY)
@@ -172,8 +179,46 @@ public class InventoryItem {
         return this;
     }
 
+    public User getUserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(User userCreated) {
+        this.userCreated = userCreated;
+    }
+
+    public Client getClient()
+    {
+        return this.userCreated.getClient();
+    }
+
     public String getType() {
         return type;
+    }
+
+    public String getDocumentBarcode()
+    {
+        return null;
+    }
+
+    public String getFileBarcode()
+    {
+        return null;
+    }
+
+    public String getBoxBarcode()
+    {
+        return null;
+    }
+
+    public String getShelfBarcode()
+    {
+        return null;
+    }
+
+    public String getLocation()
+    {
+        return null;
     }
 
     public boolean equals(Object obj) {

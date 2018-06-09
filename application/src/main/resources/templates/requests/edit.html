@@ -181,7 +181,13 @@
       </script>
 
       <script type="text/javascript" >
-          $('#storagetypesselect2').select2({minimumResultsForSearch: -1});
+          $(document).ready(function() {
+              $("#storagetypesselect2").select2({
+                  minimumResultsForSearch: Infinity,
+                  theme: 'bootstrap'
+              });
+
+          });
       </script>
 
   </div>

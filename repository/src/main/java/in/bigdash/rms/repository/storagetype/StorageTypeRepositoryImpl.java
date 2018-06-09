@@ -6,9 +6,7 @@ import com.querydsl.jpa.JPQLQuery;
 import io.springlets.data.domain.GlobalSearch;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -96,6 +94,20 @@ public class StorageTypeRepositoryImpl extends QueryDslRepositorySupportExt<Stor
             QUser user = QUser.user;
             return from(user).where(user.username.eq(currentUserName)).fetchOne();
         }
+
         return null;
+    }
+
+    private boolean userHasRole(User user, String role)
+    {
+        if(user != null) {
+            for (Role r : user.getRoles()) {
+                if (r.getName().equals(role)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

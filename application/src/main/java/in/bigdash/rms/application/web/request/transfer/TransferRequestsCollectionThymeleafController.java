@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.request.transfer;
+import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.model.request.TransferRequest;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
@@ -22,6 +23,7 @@ import io.springlets.data.web.validation.GenericValidator;
 import io.springlets.web.mvc.util.ControllerMethodLinkBuilderFactory;
 import io.springlets.web.mvc.util.MethodLinkBuilderFactory;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -196,6 +198,7 @@ public class TransferRequestsCollectionThymeleafController {
 
     public void populateForm(Model model) {
         populateFormats(model);
+        model.addAttribute("status", Arrays.asList(RequestStatus.values()));
     }
 
 

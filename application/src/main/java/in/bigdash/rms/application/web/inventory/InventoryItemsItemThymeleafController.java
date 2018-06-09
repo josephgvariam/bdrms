@@ -123,8 +123,7 @@ public class InventoryItemsItemThymeleafController implements ConcurrencyManager
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute InventoryItem inventoryItem, Model model) {
-        model.addAttribute("inventoryItem", inventoryItem);
-        return new ModelAndView("inventoryitems/show");
+        return new ModelAndView("forward:/" + inventoryItem.getType().toLowerCase() + "inventoryitems/" + inventoryItem.getId());
     }
 
 
@@ -184,18 +183,13 @@ public class InventoryItemsItemThymeleafController implements ConcurrencyManager
 
     @InitBinder("inventoryItem")
     public void initInventoryItemBinder(WebDataBinder binder) {
-        binder.setDisallowedFields("id");
-        // Register validators
-        GenericValidator validator = new GenericValidator(InventoryItem.class, getInventoryItemService());
-        binder.addValidators(validator);
+
     }
 
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute InventoryItem inventoryItem, Model model) {
-        populateForm(model);
-        model.addAttribute("inventoryItem", inventoryItem);
-        return new ModelAndView("inventoryitems/edit");
+        return new ModelAndView("forward:/" + inventoryItem.getType().toLowerCase() + "inventoryitems/" + inventoryItem.getId() + "/edit-form");
     }
 
 

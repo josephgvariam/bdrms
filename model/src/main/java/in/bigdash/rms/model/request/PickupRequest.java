@@ -6,6 +6,8 @@ import javax.validation.constraints.Future;
 import org.hibernate.envers.Audited;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.NumberFormat;
 import io.springlets.format.EntityFormat;
 
@@ -21,14 +23,15 @@ public class PickupRequest extends Request {
     private String documentType;
 
 
+    @NotNull
     @Column(name = "PICKUP_DATE_TIME")
     @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm a")
     private Calendar pickupDateTime;
 
-
-    @Min(0L)
+    @NotNull
+    @Min(1L)
     @NumberFormat
     private Integer numberFiles;
 

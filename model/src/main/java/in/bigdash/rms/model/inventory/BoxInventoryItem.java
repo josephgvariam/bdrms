@@ -4,6 +4,7 @@ import io.springlets.format.EntityFormat;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @DiscriminatorValue("BOX")
 public class BoxInventoryItem extends InventoryItem {
 
-
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOX_ID")
     @EntityFormat
@@ -27,5 +28,20 @@ public class BoxInventoryItem extends InventoryItem {
     public BoxInventoryItem setBox(Box box) {
         this.box = box;
         return this;
+    }
+
+    @Override
+    public String getBoxBarcode() {
+        return box != null ? box.getBarcode() : null;
+    }
+
+    @Override
+    public String getShelfBarcode() {
+        return box != null && box.getShelf() != null ? box.getShelf().getBarcode() : null;
+    }
+
+    @Override
+    public String getLocation() {
+        return box != null ? box.getLocation() : null;
     }
 }

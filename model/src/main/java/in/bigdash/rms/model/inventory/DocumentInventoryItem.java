@@ -4,6 +4,7 @@ import io.springlets.format.EntityFormat;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @DiscriminatorValue("DOCUMENT")
 public class DocumentInventoryItem extends InventoryItem {
 
-
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOCUMENT_ID")
     @EntityFormat
@@ -35,5 +36,28 @@ public class DocumentInventoryItem extends InventoryItem {
         return this;
     }
 
+    @Override
+    public String getDocumentBarcode() {
+        return document != null ? document.getBarcode() : null;
+    }
 
+    @Override
+    public String getFileBarcode() {
+        return document != null && document.getFile() != null ? document.getFile().getBarcode() : null;
+    }
+
+    @Override
+    public String getBoxBarcode() {
+        return document != null && document.getFile() != null && document.getFile().getBox() != null ? document.getFile().getBox().getBarcode() : null;
+    }
+
+    @Override
+    public String getShelfBarcode() {
+        return document != null && document.getFile() != null && document.getFile().getBox() != null && document.getFile().getBox().getShelf() != null ? document.getFile().getBox().getShelf().getBarcode() : null;
+    }
+
+    @Override
+    public String getLocation() {
+        return document != null ? document.getLocation() : null;
+    }
 }

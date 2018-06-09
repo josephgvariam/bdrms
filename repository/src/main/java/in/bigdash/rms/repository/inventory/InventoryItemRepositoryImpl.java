@@ -1,4 +1,7 @@
 package in.bigdash.rms.repository.inventory;
+import in.bigdash.rms.model.QUser;
+import in.bigdash.rms.model.Role;
+import in.bigdash.rms.model.User;
 import io.springlets.data.jpa.repository.support.QueryDslRepositorySupportExt;
 import in.bigdash.rms.model.inventory.InventoryItem;
 import com.querydsl.core.types.Path;
@@ -10,6 +13,9 @@ import io.springlets.data.domain.GlobalSearch;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -44,6 +50,12 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
     public Page<InventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
         JPQLQuery<InventoryItem> query = from(inventoryItem);
+
+        User currentUser = getCurrentUser();
+        if(!userHasRole(currentUser, "ROLE_OPERATOR")) {
+            query.where(inventoryItem.userCreated.client.eq(currentUser.getClient()));
+        }
+
         Path<?>[] paths = new Path<?>[] { inventoryItem.ref1, inventoryItem.ref2, inventoryItem.ref3, inventoryItem.ref4, inventoryItem.ref5, inventoryItem.status };
         applyGlobalSearch(globalSearch, query, paths);
         AttributeMappingBuilder mapping = buildMapper().map(REF_1, inventoryItem.ref1).map(REF_2, inventoryItem.ref2).map(REF_3, inventoryItem.ref3).map(REF_4, inventoryItem.ref4).map(REF_5, inventoryItem.ref5).map(STATUS, inventoryItem.status);
@@ -79,4 +91,31 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
         applyOrderById(query);
         return loadPage(query, pageable, inventoryItem);
     }
+
+    private User getCurrentUser()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUserName = authentication.getName();
+
+            QUser user = QUser.user;
+            return from(user).where(user.username.eq(currentUserName)).fetchOne();
+        }
+
+        return null;
+    }
+
+    private boolean userHasRole(User user, String role)
+    {
+        if(user != null) {
+            for (Role r : user.getRoles()) {
+                if (r.getName().equals(role)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }
