@@ -11,6 +11,9 @@ import io.springlets.web.mvc.util.concurrency.ConcurrencyCallback;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyTemplate;
 import java.util.Locale;
 import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -38,6 +41,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/refilingrequests/{refilingRequest}", name = "RefilingRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RefilingRequestsItemThymeleafController implements ConcurrencyManager<RefilingRequest> {
 
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<RefilingRequest> concurrencyTemplate = new ConcurrencyTemplate<RefilingRequest>(this);
 

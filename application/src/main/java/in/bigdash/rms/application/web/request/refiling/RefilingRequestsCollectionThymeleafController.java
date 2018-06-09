@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.request.refiling;
+import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.request.RefilingRequest;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
@@ -34,6 +35,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -43,9 +46,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +69,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/refilingrequests", name = "RefilingRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RefilingRequestsCollectionThymeleafController {
 
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private MethodLinkBuilderFactory<RefilingRequestsItemThymeleafController> itemLink;
 
@@ -79,6 +85,8 @@ public class RefilingRequestsCollectionThymeleafController {
 
     private MethodLinkBuilderFactory<RefilingRequestsCollectionThymeleafController> collectionLink;
 
+    @Autowired
+    Validator validator;
 
     @Autowired
     public RefilingRequestsCollectionThymeleafController(RefilingRequestService refilingRequestService, ConversionService conversionService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
@@ -186,8 +194,8 @@ public class RefilingRequestsCollectionThymeleafController {
     public void initRefilingRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
         // Register validators
-        GenericValidator validator = new GenericValidator(RefilingRequest.class, getRefilingRequestService());
-        binder.addValidators(validator);
+//        GenericValidator validator = new GenericValidator(RefilingRequest.class, getRefilingRequestService());
+//        binder.addValidators(validator);
     }
 
 
@@ -203,7 +211,12 @@ public class RefilingRequestsCollectionThymeleafController {
 
 
     @PostMapping(name = "create")
-    public ModelAndView create(@Valid @ModelAttribute RefilingRequest refilingRequest, BindingResult result, Model model) {
+    public ModelAndView create(@ModelAttribute RefilingRequest refilingRequest, BindingResult result, Model model, Authentication authentication) {
+        refilingRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
+        refilingRequest.setStatus(RequestStatus.OPEN);
+
+        validator.validate(refilingRequest, result);
+
         if (result.hasErrors()) {
             populateForm(model);
             return new ModelAndView("refilingrequests/create");

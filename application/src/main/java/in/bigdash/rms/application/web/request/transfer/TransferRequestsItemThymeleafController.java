@@ -11,6 +11,9 @@ import io.springlets.web.mvc.util.concurrency.ConcurrencyCallback;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyTemplate;
 import java.util.Locale;
 import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -38,6 +41,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/transferrequests/{transferRequest}", name = "TransferRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class TransferRequestsItemThymeleafController implements ConcurrencyManager<TransferRequest> {
 
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<TransferRequest> concurrencyTemplate = new ConcurrencyTemplate<TransferRequest>(this);
 

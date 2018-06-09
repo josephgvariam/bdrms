@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.request.pickup;
+import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.request.PickupRequest;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
@@ -30,11 +31,15 @@ import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.springframework.validation.Validator;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -44,6 +49,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,6 +71,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/pickuprequests", name = "PickupRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class PickupRequestsCollectionThymeleafController {
 
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private MethodLinkBuilderFactory<PickupRequestsItemThymeleafController> itemLink;
 
@@ -80,6 +87,8 @@ public class PickupRequestsCollectionThymeleafController {
 
     private MethodLinkBuilderFactory<PickupRequestsCollectionThymeleafController> collectionLink;
 
+    @Autowired
+    Validator validator;
 
     @Autowired
     public PickupRequestsCollectionThymeleafController(PickupRequestService pickupRequestService, ConversionService conversionService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
@@ -187,8 +196,8 @@ public class PickupRequestsCollectionThymeleafController {
     public void initPickupRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
         // Register validators
-        GenericValidator validator = new GenericValidator(PickupRequest.class, getPickupRequestService());
-        binder.addValidators(validator);
+//        GenericValidator validator = new GenericValidator(PickupRequest.class, getPickupRequestService());
+//        binder.addValidators(validator);
     }
 
 
@@ -205,11 +214,17 @@ public class PickupRequestsCollectionThymeleafController {
 
 
     @PostMapping(name = "create")
-    public ModelAndView create(@Valid @ModelAttribute PickupRequest pickupRequest, BindingResult result, Model model) {
+    public ModelAndView create( @ModelAttribute PickupRequest pickupRequest, BindingResult result, Model model, Authentication authentication) {
+        pickupRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
+        pickupRequest.setStatus(RequestStatus.OPEN);
+
+        validator.validate(pickupRequest, result);
+
         if (result.hasErrors()) {
             populateForm(model);
             return new ModelAndView("pickuprequests/create");
         }
+
         PickupRequest newPickupRequest = getPickupRequestService().save(pickupRequest);
         UriComponents showURI = getItemLink().to(PickupRequestsItemThymeleafLinkFactory.SHOW).with("pickupRequest", newPickupRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());

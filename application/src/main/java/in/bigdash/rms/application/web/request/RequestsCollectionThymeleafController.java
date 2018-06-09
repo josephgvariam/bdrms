@@ -35,6 +35,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -44,6 +46,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -64,6 +67,8 @@ import org.springframework.web.util.UriComponents;
 @Controller
 @RequestMapping(value = "/requests", name = "RequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RequestsCollectionThymeleafController {
+
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 
     private MethodLinkBuilderFactory<RequestsItemThymeleafController> itemLink;
@@ -206,11 +211,12 @@ public class RequestsCollectionThymeleafController {
 
 
     @PostMapping(name = "create")
-    public ModelAndView create(@Valid @ModelAttribute Request request, BindingResult result, Model model) {
+    public ModelAndView create(@Valid @ModelAttribute Request request, BindingResult result, Model model, Authentication authentication) {
         if (result.hasErrors()) {
             populateForm(model);
             return new ModelAndView("requests/create");
         }
+
         Request newRequest = getRequestService().save(request);
         UriComponents showURI = getItemLink().to(RequestsItemThymeleafLinkFactory.SHOW).with("request", newRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());

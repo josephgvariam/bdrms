@@ -18,12 +18,14 @@ public class JpaUserDetails implements UserDetails, CredentialsContainer {
     private String password;
     private boolean locked;
     private Collection<? extends GrantedAuthority> roles;
+    private User user;
 
     public JpaUserDetails(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.locked = user.getLocked();
+        this.user = user;
 
         if (user.getRoles() == null) {
             this.roles = Collections.emptySet();
@@ -35,6 +37,14 @@ public class JpaUserDetails implements UserDetails, CredentialsContainer {
             }
             this.roles = roleSet;
         }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getId() {

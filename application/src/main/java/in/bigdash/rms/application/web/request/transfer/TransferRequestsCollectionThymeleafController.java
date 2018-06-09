@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.request.transfer;
+import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.model.request.TransferRequest;
 
@@ -34,6 +35,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -43,9 +46,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +69,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/transferrequests", name = "TransferRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class TransferRequestsCollectionThymeleafController {
 
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private MethodLinkBuilderFactory<TransferRequestsItemThymeleafController> itemLink;
 
@@ -79,6 +85,8 @@ public class TransferRequestsCollectionThymeleafController {
 
     private TransferRequestService transferRequestService;
 
+    @Autowired
+    Validator validator;
 
     @Autowired
     public TransferRequestsCollectionThymeleafController(TransferRequestService transferRequestService, ConversionService conversionService, MessageSource messageSource, ControllerMethodLinkBuilderFactory linkBuilder) {
@@ -186,8 +194,8 @@ public class TransferRequestsCollectionThymeleafController {
     public void initTransferRequestBinder(WebDataBinder binder) {
         binder.setDisallowedFields("id");
         // Register validators
-        GenericValidator validator = new GenericValidator(TransferRequest.class, getTransferRequestService());
-        binder.addValidators(validator);
+//        GenericValidator validator = new GenericValidator(TransferRequest.class, getTransferRequestService());
+//        binder.addValidators(validator);
     }
 
 
@@ -203,7 +211,13 @@ public class TransferRequestsCollectionThymeleafController {
 
 
     @PostMapping(name = "create")
-    public ModelAndView create(@Valid @ModelAttribute TransferRequest transferRequest, BindingResult result, Model model) {
+    public ModelAndView create(@ModelAttribute TransferRequest transferRequest, BindingResult result, Model model, Authentication authentication) {
+        transferRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
+        transferRequest.setStatus(RequestStatus.OPEN);
+
+        validator.validate(transferRequest, result);
+
+
         if (result.hasErrors()) {
             populateForm(model);
             return new ModelAndView("transferrequests/create");
