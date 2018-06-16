@@ -52,20 +52,20 @@ public class Request {
 
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_CREATED_ID")
     @EntityFormat
     private User userCreated;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ASSIGNED_ID")
     @EntityFormat
     private User userAssigned;
 
     @NotNull
     @NotAudited
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "STORAGE_TYPE_ID")
     @EntityFormat
     private StorageType storageType;
@@ -81,7 +81,7 @@ public class Request {
     private String notes;
 
     @NotAudited
-    @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "requests")
+    @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.EAGER, mappedBy = "requests")
     private Set<InventoryItem> inventoryItems = new HashSet<InventoryItem>();
 
 

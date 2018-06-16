@@ -93,7 +93,7 @@ public class User {
     private Set<InventoryItem> inventoryItemsCreated = new HashSet<InventoryItem>();
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CLIENT_ID")
     @EntityFormat
     private Client client;

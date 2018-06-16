@@ -64,6 +64,9 @@ public class PickupRequestsCollectionThymeleafLinkFactory implements MethodLinkF
         if (methodName.equals(CREATEFORM)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).createForm(null)).buildAndExpand(pathVariables);
         }
+        if (methodName.equals("handlePickupRequest")) {
+            return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).workflow(null)).buildAndExpand(pathVariables);
+        }
         if (methodName.equals(DELETEBATCH)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).deleteBatch(null)).buildAndExpand(pathVariables);
         }

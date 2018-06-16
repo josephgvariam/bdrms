@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html lang="en" data-layout-decorate="~{layouts/default-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Pickup Request Workflow</title>
+
+    <!-- DateTimePicker -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.min.css" data-th-href="@{/webjars/datetimepicker/build/jquery.datetimepicker.min.css}" />
+
+</head>
+<body>
+
+<header role="banner">
+</header>
+
+<div class="container bg-container">
+    <section data-layout-fragment="content">
+        <div id="app"></div>
+    </section>
+</div>
+
+<footer class="container">
+</footer>
+
+
+<div data-layout-fragment="javascript">
+
+    <!-- DateTimePicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full.min.js" data-th-src="@{/webjars/datetimepicker/build/jquery.datetimepicker.full.min.js}"></script>
+    <script src="../../static/public/js/datetimepicker-defaults.js" data-th-src="@{/public/js/datetimepicker-defaults.js}"></script>
+
+    <!-- jquery.inputmask -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.1/jquery.inputmask.bundle.min.js" data-th-src="@{/webjars/jquery.inputmask/min/jquery.inputmask.bundle.min.js}"></script>
+    <script type="text/javascript" data-th-inline="javascript">
+        (function(jQuery) {
+            jQuery(document)
+                .ready(
+                    function() {
+                        Inputmask
+                            .extendAliases({
+                                'numeric' : {
+                                    'groupSeparator' : '.',
+                                    'radixPoint' : ','
+                                },
+                                'currency' : {
+                                    'prefix' : '',
+                                    'suffix' : ' ₹'
+                                }
+                            });
+                    });
+        })(jQuery);
+    </script>
+    <script src="../../static/public/js/inputmask-defaults.js" data-th-src="@{/public/js/inputmask-defaults.js}"></script>
+
+    <!-- JQuery Validation -->
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js" data-th-src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}">
+    </script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.min.js" data-th-src="@{/webjars/jquery-validation/dist/additional-methods.min.js}">
+    </script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/localization/messages_es.js" data-th-src="@{/webjars/jquery-validation/src/localization/messages_}+${#locale.language}+'.js'" data-th-if="${#locale.language} != 'en'">
+    </script>
+    <script src="../../static/public/js/validation-defaults.js" data-th-src="@{/public/js/validation-defaults.js}">
+    </script>
+
+    <script type="text/javascript" data-th-inline="javascript">
+        (function(jQuery) {
+            jQuery(document)
+                .ready(
+                    function() {
+                        jQuery
+                            .extend(
+                                jQuery.validator.messages,
+                                {
+                                    'dateformat' : /*[[#{error_invalid_date}]]*/'Please enter a correct date/time',
+                                    'inputmask' : /*[[#{error_invalid_maskValue}]]*/'Please enter a valid value',
+                                });
+                    });
+        })(jQuery);
+    </script>
+
+    <script type="text/javascript" >
+        $(document).ready(function() {
+            $("#storageType").select2({
+                minimumResultsForSearch: Infinity,
+                theme: 'bootstrap'
+            });
+
+        });
+    </script>
+
+    <script id="create-form-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('PickupRequestsCollectionThymeleafController')}">
+            <h1>Create Pickup Request</h1>
+            <form class="form-horizontal validate">
+                <fieldset id="containerFields">
+                    <legend class="sr-only">Pickup Request data</legend>
+                    <div class="form-group" data-z="cb5441fa" id="pickuprequest-storagetype-field">
+                        <label for="storageType" class="col-md-3 control-label">Storage Type</label>
+                        <div class="col-md-6">
+                            <select id="storageType" class="form-control dropdown-select-ajax" data-allow-clear="true" data-ajax--url="/storagetypes/s2u" data-ajax--cache="true" data-ajax--delay="250" data-ajax--data-type="json" data-placeholder="Select an option" name="storageType"></select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="pickuprequest-pickupdatetime-field" data-z="523f9a08">
+                        <label for="pickupDateTime" class="col-md-3 control-label">Pickup Date Time</label>
+                        <div class="col-md-3">
+                            <input id="pickupDateTime" name="pickupDateTime" value="" type="text" class="form-control datetimepicker" placeholder="Pickup Date Time" data-toggle="tooltip" data-dateformat="yyyy-MM-dd HH:mm a" />
+                        </div>
+                    </div>
+                    <div class="form-group" data-z="a67df6d6" id="pickuprequest-numberfiles-field">
+                        <label for="numberFiles" class="col-md-3 control-label">Number Files</label>
+                        <div class="col-md-3">
+                                <input id="numberFiles" name="numberFiles" value="" type="text" class="form-control inputmask" placeholder="Number Files" data-toggle="tooltip" aria-describedby="numberFilesStatus" data-inputmask-alias="numeric" data-inputmask-digits="0" min="0" />
+                        </div>
+                    </div>
+                    <div class="form-group" data-z="daec9868" id="pickuprequest-documenttype-field">
+                        <label for="documentType" class="col-md-3 control-label">Document Type</label>
+                        <div class="col-md-6">
+                            <input id="documentType" name="documentType" value="" type="text" class="form-control" placeholder="Document Type" data-toggle="tooltip" aria-describedby="documentTypeStatus" />
+                        </div>
+                    </div>
+                    <div class="form-group" data-z="ee9db9d6" id="pickuprequest-notes-field">
+                        <label for="notes" class="col-md-3 control-label">Notes</label>
+                        <div class="col-md-6">
+                            <input id="notes" name="notes" value="" type="text" class="form-control" placeholder="Notes" data-toggle="tooltip" aria-describedby="notesStatus" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <button id="save-button" type="submit" class="btn btn-primary">Save</button>
+                        <button id="cancel-button" type="reset" class="btn btn-default" data-th-onclick="'location.href=\'' + @{${collectionLink.to('list')}} + '\''" data-th-text="#{label_reset}">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </script>
+
+    <script src="/public/js/underscore.js"></script>
+    <script src="/public/js/backbone.js"></script>
+    <script src="/public/js/backbone.radio.js"></script>
+    <script src="/public/js/marionette.js"></script>
+    <script src="/public/js/workflow-pickup.js"></script>
+
+</div>
+
+
+
+</body>
+</html>

@@ -238,6 +238,13 @@ public class PickupRequestsCollectionThymeleafController {
         return new ModelAndView("pickuprequests/create");
     }
 
+    @GetMapping(value = "/workflow", name = "workflow")
+    public ModelAndView workflow(Model model) {
+        populateForm(model);
+        model.addAttribute("pickupRequest", new PickupRequest());
+        return new ModelAndView("pickuprequests/workflow");
+    }
+
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody

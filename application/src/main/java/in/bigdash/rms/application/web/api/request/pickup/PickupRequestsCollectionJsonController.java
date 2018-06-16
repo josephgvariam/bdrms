@@ -1,6 +1,8 @@
 package in.bigdash.rms.application.web.api.request.pickup;
+import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.request.PickupRequest;
 
+import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.PickupRequestService;
 import io.springlets.data.domain.GlobalSearch;
 import java.util.Collection;
@@ -11,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +34,9 @@ public class PickupRequestsCollectionJsonController {
 
 
     private PickupRequestService pickupRequestService;
+
+    @Autowired
+    Validator validator;
 
 
     @Autowired
@@ -61,7 +68,12 @@ public class PickupRequestsCollectionJsonController {
 
 
     @PostMapping(name = "create")
-    public ResponseEntity<?> create(@Valid @RequestBody PickupRequest pickupRequest, BindingResult result) {
+    public ResponseEntity<?> create(@RequestBody PickupRequest pickupRequest, BindingResult result, Authentication authentication) {
+        pickupRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
+        pickupRequest.setStatus(RequestStatus.OPEN);
+
+        validator.validate(pickupRequest, result);
+
         if (pickupRequest.getId() != null || pickupRequest.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -69,8 +81,11 @@ public class PickupRequestsCollectionJsonController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         PickupRequest newPickupRequest = getPickupRequestService().save(pickupRequest);
-        UriComponents showURI = PickupRequestsItemJsonController.showURI(newPickupRequest);
-        return ResponseEntity.created(showURI.toUri()).build();
+
+//        UriComponents showURI = PickupRequestsItemJsonController.showURI(newPickupRequest);
+//        return ResponseEntity.created(showURI.toUri()).build();
+
+        return ResponseEntity.ok(newPickupRequest);
     }
 
 

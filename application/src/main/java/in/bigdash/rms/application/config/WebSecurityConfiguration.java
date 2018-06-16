@@ -21,7 +21,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     boolean disableConcurrency = true;
 
     // Don't make final to allow test cases faking them
-    private static String DEFAULT_POLICY_DIRECTIVES = "script-src 'self' 'unsafe-inline' ";
+    private static String DEFAULT_POLICY_DIRECTIVES = "script-src 'self' 'unsafe-inline' 'unsafe-eval'";
 
     private static String CONTENT_SECURITY_POLICY_HEADER = "Content-Security-Policy";
 
@@ -53,12 +53,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .headers()
-                .addHeaderWriter(new StaticHeadersWriter(X_CONTENT_SECURITY_POLICY_HEADER,
-                        DEFAULT_POLICY_DIRECTIVES))
-                .addHeaderWriter(new StaticHeadersWriter(CONTENT_SECURITY_POLICY_HEADER,
-                        DEFAULT_POLICY_DIRECTIVES))
-                .addHeaderWriter(
-                        new StaticHeadersWriter(X_WEBKIT_CSP_POLICY_HEADER, DEFAULT_POLICY_DIRECTIVES));
+                .addHeaderWriter(new StaticHeadersWriter(X_CONTENT_SECURITY_POLICY_HEADER, DEFAULT_POLICY_DIRECTIVES))
+                .addHeaderWriter(new StaticHeadersWriter(CONTENT_SECURITY_POLICY_HEADER, DEFAULT_POLICY_DIRECTIVES))
+                .addHeaderWriter(new StaticHeadersWriter(X_WEBKIT_CSP_POLICY_HEADER, DEFAULT_POLICY_DIRECTIVES));
 
         // Authentication
 
@@ -76,7 +73,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll();
 
-
+        http.csrf().ignoringAntMatchers("/api/**");
 
     }
 
