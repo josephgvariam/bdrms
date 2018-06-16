@@ -36,7 +36,7 @@
                 'pickupDateTime': this.$('#pickupDateTime').val(),
                 'numberFiles': this.$('#numberFiles').val(),
                 'documentType': this.$('#documentType').val(),
-                'notes': this.$notes.val()
+                'notes': this.$('#notes').val()
             },
             {
                 success: this.handleSaveSuccess,
