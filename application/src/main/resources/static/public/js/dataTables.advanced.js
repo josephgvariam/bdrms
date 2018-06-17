@@ -995,6 +995,11 @@
         return processUrl(datatables, url, id);
     }
 
+    function getWorkflowUrl(datatables, id) {
+        var url = getDataValue(datatables, 'workflow-url');
+        return processUrl(datatables, url, id);
+    }
+
     /**
      * Returns the URL to remove an element of the Datatables.
      * The value is defined in the Datatables table tag with a
@@ -1361,6 +1366,12 @@
             buttons = buttons.concat('<a role="button" class="btn btn-action btn-sm" data-toggle="modal" data-target="#')
                 .concat(tableId).concat('DeleteConfirm" data-row-id="')
                 .concat(data).concat('"><span class="glyphicon glyphicon-trash"></span></a>');
+        }
+
+        var workflowUrl = getWorkflowUrl(datatables, rowId);
+        if (workflowUrl) {
+            buttons = buttons.concat('<a class="btn btn-action btn-sm" href="')
+                .concat(workflowUrl).concat('"><span class="glyphicon glyphicon-file"></span></a>');
         }
 
         buttons = buttons.concat('</div>');
