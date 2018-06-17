@@ -88,12 +88,11 @@
         });
     </script>
 
-    <script id="create-form-template" type="text/template">
+    <script id="create-request-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('PickupRequestsCollectionThymeleafController')}">
             <h1>Create Pickup Request</h1>
             <form class="form-horizontal validate">
                 <fieldset id="containerFields">
-                    <legend class="sr-only">Pickup Request data</legend>
                     <div class="form-group" data-z="cb5441fa" id="pickuprequest-storagetype-field">
                         <label for="storageType" class="col-md-3 control-label">Storage Type</label>
                         <div class="col-md-6">
@@ -134,6 +133,127 @@
             </form>
         </div>
     </script>
+
+    <script id="edit-request-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('PickupRequestsCollectionThymeleafController')}">
+            <h1>Edit Pickup Request</h1>
+            <form class="form-horizontal validate">
+                <fieldset id="containerFields">
+                    <div class="form-group" data-z="cb5441fa" id="pickuprequest-storagetype-field">
+                        <label for="storageType" class="col-md-3 control-label">Storage Type</label>
+                        <div class="col-md-6">
+                            <select id="storageType" class="form-control dropdown-select-ajax" data-allow-clear="true" data-ajax--url="/storagetypes/s2u" data-ajax--cache="true" data-ajax--delay="250" data-ajax--data-type="json" data-placeholder="Select an option" name="storageType"></select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="pickuprequest-pickupdatetime-field" data-z="523f9a08">
+                        <label for="pickupDateTime" class="col-md-3 control-label">Pickup Date Time</label>
+                        <div class="col-md-3">
+                            <input id="pickupDateTime" name="pickupDateTime" value="" type="text" class="form-control datetimepicker" placeholder="Pickup Date Time" data-toggle="tooltip" data-dateformat="yyyy-MM-dd HH:mm a" />
+                        </div>
+                    </div>
+                    <div class="form-group" data-z="a67df6d6" id="pickuprequest-numberfiles-field">
+                        <label for="numberFiles" class="col-md-3 control-label">Number Files</label>
+                        <div class="col-md-3">
+                            <input id="numberFiles" name="numberFiles" value="" type="text" class="form-control inputmask" placeholder="Number Files" data-toggle="tooltip" aria-describedby="numberFilesStatus" data-inputmask-alias="numeric" data-inputmask-digits="0" min="0" />
+                        </div>
+                    </div>
+                    <div class="form-group" data-z="daec9868" id="pickuprequest-documenttype-field">
+                        <label for="documentType" class="col-md-3 control-label">Document Type</label>
+                        <div class="col-md-6">
+                            <input id="documentType" name="documentType" value="" type="text" class="form-control" placeholder="Document Type" data-toggle="tooltip" aria-describedby="documentTypeStatus" />
+                        </div>
+                    </div>
+                    <div class="form-group" data-z="ee9db9d6" id="pickuprequest-notes-field">
+                        <label for="notes" class="col-md-3 control-label">Notes</label>
+                        <div class="col-md-6">
+                            <input id="notes" name="notes" value="" type="text" class="form-control" placeholder="Notes" data-toggle="tooltip" aria-describedby="notesStatus" />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <button id="save-button" type="submit" class="btn btn-primary">Save</button>
+                        <button id="cancel-button" type="reset" class="btn btn-default" data-th-onclick="'location.href=\'' + @{${collectionLink.to('list')}} + '\''" data-th-text="#{label_reset}">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </script>
+
+    <script id="show-request-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('PickupRequestsCollectionThymeleafController')}">
+            <h1 data-th-text="#{label_show_entity(#{label_pickuprequest})}">Show PickupRequest</h1>
+
+            <div id="mainEntityFieldSet">
+                <ul class="list-unstyled" id="containerFields">
+                    <li id="pickuprequest-client-field" data-z="e55d5768">
+                        <strong>Client</strong><span><%= client.name %></span>
+                    </li>
+                    <li id="pickuprequest-department-field" data-z="e55d5768">
+                        <strong>Department</strong><span><%= client.department %></span>
+                    </li>
+                    <li id="pickuprequest-storagetype-field" data-z="e55d5768">
+                        <strong>Storage Type</strong><span><%= storageType.name %></span>
+                    </li>
+                    <li id="pickuprequest-status-field" data-z="e55d5768">
+                        <strong>Status</strong><span><%= status %></span>
+                    </li>
+                    <li id="pickuprequest-notes-field" data-z="ee9db9d6">
+                        <strong>Notes</strong><span><%= notes %></span>
+                    </li>
+                    <li id="pickuprequest-documenttype-field" data-z="daec9868">
+                        <strong>Document Type</strong><span><%= documentType %></span>
+                    </li>
+                    <li id="pickuprequest-pickupdatetime-field" data-z="523f9a08">
+                        <strong>Pickup DateTime</strong><span><%= moment(pickupDateTime).format(moment.javaToMomentDateFormat('yyyy-MM-dd HH:mm a')) %></span>
+                    </li>
+                    <li id="pickuprequest-numberfiles-field" data-z="a67df6d6">
+                        <strong>Number Files</strong><span><%= numberFiles %></span>
+                    </li>
+                    <li id="pickuprequest-userassigned-field" data-z="d8541fe8">
+                        <strong>User Assigned</strong><% if (!_.isNull(userAssigned)) { %><span><%= userAssigned.username %></span><% } %>
+                    </li>
+                    <li id="pickuprequest-createddate-field" data-z="2a1ab216">
+                        <strong>Created Date</strong><span><%= moment(createdDate).format(moment.javaToMomentDateFormat('yyyy-MM-dd HH:mm:ss')) %></span>
+                    </li>
+                    <li id="pickuprequest-createdby-field" data-z="94b032b6">
+                        <strong>Created By</strong><span><%= createdBy %></span>
+                    </li>
+                    <li id="pickuprequest-modifieddate-field" data-z="8737bc28">
+                        <strong>Modified Date</strong><span><%= moment(modifiedDate).format(moment.javaToMomentDateFormat('yyyy-MM-dd HH:mm:ss')) %></span>
+                    </li>
+                    <li id="pickuprequest-modifiedby-field" data-z="274c9948">
+                        <strong>Modified By</strong><span><%= modifiedBy %></span>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="clearfix">
+                <div class="pull-right">
+                    <a id="PickupRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('PickupRequestsItemThymeleafController').to('editForm').with('pickupRequest', pickupRequest.id)}" data-th-text="#{label_edit}">Edit</a>
+                </div>
+            </div>
+
+
+            <div class="clearfix">
+                <div class="pull-left">
+                    <a id="PickupRequest_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('RequestsCollectionThymeleafController').to('list')}">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span data-th-text="#{label_back}">Back</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </script>
+
+    <script id="assign-user-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('PickupRequestsCollectionThymeleafController')}">
+            <h1>Assign User</h1>
+        </div>
+    </script>
+
 
     <script src="/public/js/underscore.js"></script>
     <script src="/public/js/backbone.js"></script>
