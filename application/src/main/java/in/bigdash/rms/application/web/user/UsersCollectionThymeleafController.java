@@ -181,6 +181,15 @@ public class UsersCollectionThymeleafController {
         return ResponseEntity.ok(select2Data);
     }
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2operators", value = "/s2o")
+    @ResponseBody
+    public ResponseEntity<Select2DataSupport<User>> select2operators(GlobalSearch search, Pageable pageable, Locale locale) {
+        Page<User> users = getUserService().findAllOperators(search, pageable);
+        String idExpression = "#{id}";
+        Select2DataSupport<User> select2Data = new Select2DataWithConversion<User>(users, idExpression, getConversionService());
+        return ResponseEntity.ok(select2Data);
+    }
+
 
     @InitBinder("user")
     public void initUserBinder(WebDataBinder binder) {

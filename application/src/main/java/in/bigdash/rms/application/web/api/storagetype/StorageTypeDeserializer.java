@@ -51,7 +51,7 @@ public class StorageTypeDeserializer extends JsonObjectDeserializer<StorageType>
 
 
     public StorageType deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
-        String idText = tree.asText();
+        String idText = tree.get("id").asText();
         Long id = conversionService.convert(idText, Long.class);
         StorageType storageType = storageTypeService.findOne(id);
         if (storageType == null) {

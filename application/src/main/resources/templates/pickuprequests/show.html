@@ -26,7 +26,7 @@
           <h1 data-th-text="#{label_show_entity(#{label_pickuprequest})}">Show PickupRequest</h1>
 
             <div id="mainEntityFieldSet">
-              <h2 data-th-text="#{label_data_entity(#{label_pickuprequest})}">PickupRequest data</h2>
+              <h2 data-th-text="'Request #' + *{id}">Request data</h2>
               <ul class="list-unstyled" id="containerFields">
                   <li id="pickuprequest-usercreated-field" data-z="3fdebcf6">
             	      <strong data-th-text="#{label_pickuprequest_usercreated}">userCreated</strong>
@@ -91,6 +91,7 @@
   	          </a>
             </div>
           </div>
+
         </div>
 
       </section>

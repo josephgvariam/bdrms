@@ -51,7 +51,7 @@ public class ClientDeserializer extends JsonObjectDeserializer<Client> {
 
 
     public Client deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
-        String idText = tree.asText();
+        String idText = tree.get("id").asText();
         Long id = conversionService.convert(idText, Long.class);
         Client client = clientService.findOne(id);
         if (client == null) {

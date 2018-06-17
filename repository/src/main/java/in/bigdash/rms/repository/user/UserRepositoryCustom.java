@@ -16,5 +16,10 @@ public interface UserRepositoryCustom {
     public abstract Page<User> findAll(GlobalSearch globalSearch, Pageable pageable);
 
 
+    public abstract Page<User> findAllByCurrentUserClient(GlobalSearch globalSearch, Pageable pageable);
+
+    public abstract Page<User> findAllOperators(GlobalSearch globalSearch, Pageable pageable);
+
+
     public abstract Page<User> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable);
 }

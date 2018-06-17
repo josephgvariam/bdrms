@@ -234,6 +234,14 @@ public class UserServiceImpl implements UserService {
         return getUserRepository().findAll(globalSearch, pageable);
     }
 
+    public Page<User> findAllByCurrentUserClient(GlobalSearch globalSearch, Pageable pageable) {
+        return getUserRepository().findAllByCurrentUserClient(globalSearch, pageable);
+    }
+
+    public Page<User> findAllOperators(GlobalSearch globalSearch, Pageable pageable) {
+        return getUserRepository().findAllOperators(globalSearch, pageable);
+    }
+
 
     public Page<User> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         return getUserRepository().findAllByIdsIn(ids, globalSearch, pageable);

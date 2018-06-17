@@ -2,6 +2,7 @@ package in.bigdash.rms.application.web.api.request.pickup;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import in.bigdash.rms.application.web.api.CustomDateTimeDeserializer;
 import in.bigdash.rms.application.web.api.inventory.InventoryItemDeserializer;
+import in.bigdash.rms.application.web.api.inventory.InventoryItemsDeserializer;
 import in.bigdash.rms.application.web.api.storagetype.StorageTypeDeserializer;
 import in.bigdash.rms.application.web.api.user.UserDeserializer;
 import in.bigdash.rms.model.StorageType;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 public abstract class PickupRequestJsonMixin {
 
-    @JsonDeserialize(using = InventoryItemDeserializer.class)
+    @JsonDeserialize(using = InventoryItemsDeserializer.class)
     private Set<InventoryItem> inventoryItems;
 
 

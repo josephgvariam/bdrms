@@ -72,8 +72,8 @@ public class PickupRequestsItemJsonController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         pickupRequest.setId(storedPickupRequest.getId());
-        getPickupRequestService().save(pickupRequest);
-        return ResponseEntity.ok().build();
+        PickupRequest updatedPickupRequest = getPickupRequestService().save(pickupRequest);
+        return ResponseEntity.ok(updatedPickupRequest);
     }
 
 

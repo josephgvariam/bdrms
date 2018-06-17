@@ -1,6 +1,7 @@
 package in.bigdash.rms.application.web.api.user;
 import in.bigdash.rms.model.User;
 import in.bigdash.rms.service.api.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -51,7 +52,17 @@ public class UserDeserializer extends JsonObjectDeserializer<User> {
 
 
     public User deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
-        String idText = tree.asText();
+
+        if(tree.get("id")==null){
+            return null;
+        }
+
+        String idText = tree.get("id").asText();
+
+        if(StringUtils.isBlank(idText) || idText.equals("null")){
+            return null;
+        }
+
         Long id = conversionService.convert(idText, Long.class);
         User user = userService.findOne(id);
         if (user == null) {

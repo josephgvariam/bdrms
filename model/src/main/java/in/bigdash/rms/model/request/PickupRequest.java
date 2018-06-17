@@ -25,7 +25,6 @@ public class PickupRequest extends Request {
 
     @NotNull
     @Column(name = "PICKUP_DATE_TIME")
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm a")
     private Calendar pickupDateTime;

@@ -19,19 +19,29 @@ public class CustomDateTimeDeserializer extends JsonDeserializer<Calendar> {
 
     @Override
     public Calendar deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        String dateAsString = jsonParser.getText();
+//        String dateAsString = jsonParser.getText();
+//
+//        if(StringUtils.isEmpty(dateAsString)){
+//            return null;
+//        }
+//
+//        try {
+//            Date date = formatter.parse(dateAsString);
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTime(date);
+//            return calendar;
+//        } catch (Exception e) {
+//            throw new IOException(e);
+//        }
 
+        String dateAsString = jsonParser.getText();
         if(StringUtils.isEmpty(dateAsString)){
             return null;
         }
 
-        try {
-            Date date = formatter.parse(dateAsString);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            return calendar;
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.parseLong(dateAsString));
+
+        return calendar;
     }
 }
