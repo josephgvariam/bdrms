@@ -15,7 +15,28 @@
 
 <div class="container bg-container">
     <section data-layout-fragment="content">
-        <div id="app"></div>
+        <div id="app">
+        </div>
+
+        <div id="loading"></div>
+
+        <div id="infoModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Info</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Do you want to save changes you made to document before closing?</p>
+                        <p class="text-warning"><small>If you don't save, your changes will be lost.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 
@@ -103,7 +124,6 @@
                     </div>
                 </div>
             </form>
-
         </div>
     </script>
 
@@ -112,6 +132,7 @@
     <script src="/public/js/backbone.js"></script>
     <script src="/public/js/backbone.radio.js"></script>
     <script src="/public/js/marionette.js"></script>
+    <script src="/public/js/spin.min.js"></script>
     <script src="/public/js/workflow-pickup.js"></script>
 
 </div>
