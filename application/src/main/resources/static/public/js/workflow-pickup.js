@@ -37,11 +37,28 @@
     });
 
     var Box = Backbone.Model.extend({
-        idAttribute: 'barcode'
     });
 
-    var File = Backbone.Model.extend({});
-    var Document = Backbone.Model.extend({});
+    var File = Backbone.Model.extend({
+    });
+
+    var Document = Backbone.Model.extend({
+    });
+
+    var BoxInventoryItem = Backbone.Model.extend({
+        defaults: {
+            ref1: '',
+            ref2: '',
+            ref3: '',
+            ref4: '',
+            ref5: '',
+            status: 'NOTSTORED'
+        }
+    });
+
+    var BoxInventoryItems = Backbone.Collection.extend({
+        model: BoxInventoryItem
+    });
 
     var Boxes = Backbone.Collection.extend({
         model: Box
@@ -55,7 +72,7 @@
         model: Box
     });
 
-
+//////////////////////// VIEWS
 
 
     var AddNewBoxInventoryRowView = Marionette.View.extend({
@@ -85,7 +102,7 @@
 
         initialize: function() {
             this.boxes = new Boxes();
-            this.boxCount = 1;
+            this.idCount = 1;
         },
 
         events: {
@@ -105,8 +122,9 @@
         },
 
         addBox: function(e) {
-            this.boxes.add(new Box({barcode: 'BC-' + this.boxCount}));
-            this.boxCount++;
+            var box = new Box({barcode: 'BC-' + this.idCount});
+            this.boxes.add(box);
+            this.idCount++;
         },
 
         deleteBox: function(e) {
@@ -114,7 +132,10 @@
 
             _.each(checked, function (box) {
                 barcode = $(box).data('barcode');
-                this.boxes.remove(barcode);
+
+                var box = this.boxes.findWhere({barcode: barcode})
+
+                this.boxes.remove(box);
             }, this);
 
             this.updateDeleteButtonEnabled();
@@ -133,7 +154,7 @@
             },
 
             onRender: function() {
-                this.showChildView('addNewInventory', new AddNewBoxInventoryTableView());
+                this.showChildView('addNewInventory', new AddNewBoxInventoryTableView({model: this.model}));
             }
         });
 
