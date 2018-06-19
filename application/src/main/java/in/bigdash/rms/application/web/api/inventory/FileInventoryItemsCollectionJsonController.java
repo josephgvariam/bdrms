@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.api.inventory;
+import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.inventory.FileInventoryItem;
 
 import in.bigdash.rms.service.api.FileInventoryItemService;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +33,10 @@ public class FileInventoryItemsCollectionJsonController {
 
 
     private FileInventoryItemService fileInventoryItemService;
+
+
+    @Autowired
+    Validator validator;
 
 
     @Autowired
@@ -61,7 +68,12 @@ public class FileInventoryItemsCollectionJsonController {
 
 
     @PostMapping(name = "create")
-    public ResponseEntity<?> create(@Valid @RequestBody FileInventoryItem fileInventoryItem, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody FileInventoryItem fileInventoryItem, BindingResult result, Authentication authentication) {
+
+        fileInventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
+
+        validator.validate(fileInventoryItem, result);
+
         if (fileInventoryItem.getId() != null || fileInventoryItem.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

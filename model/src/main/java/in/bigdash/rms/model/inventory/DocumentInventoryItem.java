@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class DocumentInventoryItem extends InventoryItem {
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOCUMENT_ID")
     @EntityFormat
     private Document document;

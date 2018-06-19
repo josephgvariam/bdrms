@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.api.inventory;
+import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.inventory.BoxInventoryItem;
 
 import in.bigdash.rms.service.api.BoxInventoryItemService;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +33,9 @@ public class BoxInventoryItemsCollectionJsonController {
 
 
     private BoxInventoryItemService boxInventoryItemService;
+
+    @Autowired
+    Validator validator;
 
 
     @Autowired
@@ -61,7 +67,12 @@ public class BoxInventoryItemsCollectionJsonController {
 
 
     @PostMapping(name = "create")
-    public ResponseEntity<?> create(@Valid @RequestBody BoxInventoryItem boxInventoryItem, BindingResult result) {
+    public ResponseEntity<?> create(@RequestBody BoxInventoryItem boxInventoryItem, BindingResult result, Authentication authentication) {
+
+        boxInventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
+
+        validator.validate(boxInventoryItem, result);
+
         if (boxInventoryItem.getId() != null || boxInventoryItem.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

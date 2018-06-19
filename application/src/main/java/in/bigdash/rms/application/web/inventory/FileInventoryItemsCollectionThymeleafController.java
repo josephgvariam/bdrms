@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.inventory;
+import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.inventory.FileInventoryItem;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
@@ -43,9 +44,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,6 +81,9 @@ public class FileInventoryItemsCollectionThymeleafController {
 
 
     private MethodLinkBuilderFactory<FileInventoryItemsCollectionThymeleafController> collectionLink;
+
+    @Autowired
+    Validator validator;
 
 
     @Autowired
@@ -203,7 +209,12 @@ public class FileInventoryItemsCollectionThymeleafController {
 
 
     @PostMapping(name = "create")
-    public ModelAndView create(@Valid @ModelAttribute FileInventoryItem fileInventoryItem, BindingResult result, Model model) {
+    public ModelAndView create(@ModelAttribute FileInventoryItem fileInventoryItem, BindingResult result, Model model, Authentication authentication) {
+
+        fileInventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
+
+        validator.validate(fileInventoryItem, result);
+
         if (result.hasErrors()) {
             populateForm(model);
             return new ModelAndView("fileinventoryitems/create");
