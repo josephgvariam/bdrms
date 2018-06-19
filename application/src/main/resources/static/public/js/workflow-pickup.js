@@ -34,8 +34,109 @@
         requestError: function(model, response, options){
             this.stopSpinner();
         }
-
     });
+
+    var Box = Backbone.Model.extend({
+        idAttribute: 'barcode'
+    });
+
+    var File = Backbone.Model.extend({});
+    var Document = Backbone.Model.extend({});
+
+    var Boxes = Backbone.Collection.extend({
+        model: Box
+    });
+
+    var Files = Backbone.Collection.extend({
+        model: Box
+    });
+
+    var Documents = Backbone.Collection.extend({
+        model: Box
+    });
+
+
+
+
+    var AddNewBoxInventoryRowView = Marionette.View.extend({
+        tagName: 'tr',
+        template: '#add-new-box-inventory-row-template',
+    });
+
+    var AddNewBoxInventoryEmptyView = Mn.View.extend({
+        template: _.template('No Boxes. Start adding boxes.')
+    });
+
+    var AddNewBoxInventoryTableBodyView = Marionette.CollectionView.extend({
+        tagName: 'tbody',
+        childView: AddNewBoxInventoryRowView,
+        emptyView: AddNewBoxInventoryEmptyView,
+    });
+
+    var AddNewBoxInventoryTableView = Marionette.View.extend({
+        template: '#add-new-box-inventory-table-template',
+
+        regions: {
+            body: {
+                el: 'tbody',
+                replaceElement: true
+            }
+        },
+
+        initialize: function() {
+            this.boxes = new Boxes();
+            this.boxCount = 1;
+        },
+
+        events: {
+            'click #addBoxButton': 'addBox',
+            'click #deleteBoxButton': 'deleteBox',
+            'click div.ckbox>input': 'updateDeleteButtonEnabled',
+            'click div.media': function(e){console.log(e)}
+        },
+
+        updateDeleteButtonEnabled: function() {
+            if($('div.ckbox>input:checked').length){
+                $('#deleteBoxButton').prop('disabled', false);
+            }
+            else{
+                $('#deleteBoxButton').prop('disabled', true);
+            }
+        },
+
+        addBox: function(e) {
+            this.boxes.add(new Box({barcode: 'BC-' + this.boxCount}));
+            this.boxCount++;
+        },
+
+        deleteBox: function(e) {
+            var checked = $('div.ckbox>input:checked');
+
+            _.each(checked, function (box) {
+                barcode = $(box).data('barcode');
+                this.boxes.remove(barcode);
+            }, this);
+
+            this.updateDeleteButtonEnabled();
+        },
+
+        onRender() {
+            this.showChildView('body', new AddNewBoxInventoryTableBodyView({collection: this.boxes}));
+        }
+    });
+
+        var AddNewInventoryView = Marionette.View.extend({
+            template: '#add-new-inventory-template',
+
+            regions: {
+                addNewInventory: {el: '#add-new-inventory', replaceElement: true}
+            },
+
+            onRender: function() {
+                this.showChildView('addNewInventory', new AddNewBoxInventoryTableView());
+            }
+        });
+
 
     var AssignUserView = Marionette.View.extend({
         template: '#assign-user-template',
@@ -82,11 +183,13 @@
         },
 
         handleSaveError: function(model, response){
-            //console.log('error', response.responseJSON.errors);
+            //console.log('error', response);
 
-            _.each(response.responseJSON.errors, function(val, key) {
-                this.showValidationErrors(key, val);
-            });
+            if(response.responseJSON) {
+                _.each(response.responseJSON.errors, function (val, key) {
+                    this.showValidationErrors(key, val);
+                });
+            }
         },
 
         showValidationErrors: function (key, val) {
@@ -106,6 +209,10 @@
 
         showAssignUserView: function (request) {
             this.showChildView('main', new AssignUserView({model: request, rootView: this}));
+        },
+
+        showAddNewInventoryView: function (request) {
+            this.showChildView('main', new AddNewInventoryView({model: request, rootView: this}));
         },
 
         showInfoModal: function(title, message, onHideFunction){
@@ -134,8 +241,13 @@
             var type = request.get('type');
             var status = request.get('status');
 
-            if(status === 'OPEN') {
-                rootView.showAssignUserView(request);
+            if(type === 'PICKUP'){
+                if(status === 'OPEN') {
+                    rootView.showAssignUserView(request);
+                }
+                else if (status === 'ASSIGNED'){
+                    rootView.showAddNewInventoryView(request);
+                }
             }
         }
 

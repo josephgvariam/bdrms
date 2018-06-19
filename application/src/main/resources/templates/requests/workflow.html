@@ -6,6 +6,7 @@
 
     <!-- DateTimePicker -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.min.css" data-th-href="@{/webjars/datetimepicker/build/jquery.datetimepicker.min.css}" />
+    <link href="/public/css/workflow.css" rel="stylesheet">
 
 </head>
 <body>
@@ -105,8 +106,8 @@
 
     <script id="assign-user-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
-            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request - Assign User</h1>
-            <div id="XFieldSet"><h2 class="border-bottom:1px solid #f1f1f1">Request #<%= id %></h2></div>
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Assign User</h1>
+            <br/>
 
             <form class="form-horizontal validate">
                 <fieldset id="containerFields">
@@ -127,6 +128,61 @@
         </div>
     </script>
 
+    <script id="add-new-inventory-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Add New Inventory</h1>
+            <br/>
+            <div id="add-new-inventory"></div>
+        </div>
+    </script>
+
+    <script id="add-new-box-inventory-table-template" type="text/template">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <p>
+                    <button id="addBoxButton" type="button" class="btn btn-primary">Add Box</button>
+                    <button id="deleteBoxButton" type="button" class="btn btn-primary" disabled="disabled" >Delete Box</button>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Boxes</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="boxTableRegion" class="table-container">
+                            <table class="table table-filter">
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="add-new-box-inventory-row-template" type="text/template">
+        <td>
+            <div class="ckbox">
+                <input type="checkbox" id="checkbox_<%= barcode %>" data-barcode="<%= barcode %>">
+                <label for="checkbox_<%= barcode %>"></label>
+            </div>
+        </td>
+        <td>
+            <div class="media" data-barcode="<%= barcode %>">
+                <a href="#" class="pull-left">
+                    <img src="/public/img/box.png" class="media-photo">
+                </a>
+                <div>
+                    <h4 class="title">Barcode: <%= barcode %></h4>
+                    <p class="summary">I'm a box</p>
+                </div>
+            </div>
+        </td>
+    </script>
 
     <script src="/public/js/underscore.js"></script>
     <script src="/public/js/backbone.js"></script>
