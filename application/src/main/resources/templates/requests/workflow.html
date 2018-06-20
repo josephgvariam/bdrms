@@ -128,15 +128,15 @@
         </div>
     </script>
 
-    <script id="add-new-inventory-template" type="text/template">
+    <script id="add-new-record-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
             <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Add New Inventory</h1>
             <br/>
-            <div id="add-new-inventory"></div>
+            <div id="add-new-record"></div>
         </div>
     </script>
 
-    <script id="add-new-box-inventory-table-template" type="text/template">
+    <script id="boxes-template" type="text/template">
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <p>
@@ -164,7 +164,7 @@
         </div>
     </script>
 
-    <script id="add-new-box-inventory-row-template" type="text/template">
+    <script id="box-row-template" type="text/template">
         <td>
             <div class="ckbox">
                 <input type="checkbox" id="checkbox_<%= barcode %>" data-barcode="<%= barcode %>">
@@ -172,16 +172,101 @@
             </div>
         </td>
         <td>
-            <div class="media" data-barcode="<%= barcode %>">
+            <div class="media">
                 <a href="#" class="pull-left">
                     <img src="/public/img/box.png" class="media-photo">
                 </a>
+                <a id='addFilesButton' class='btn btn-warning btn-xs pull-right' href='#'><span class="glyphicon glyphicon-plus"></span> Add Files</a>
+                <a id='editBoxButton' data-barcode="<%= barcode %>" class='btn btn-info btn-xs pull-right' style="margin-right: 3px;" href='#'><span class="glyphicon glyphicon-edit"></span> Edit</a>
                 <div>
                     <h4 class="title">Barcode: <%= barcode %></h4>
                     <p class="summary">I'm a box</p>
                 </div>
             </div>
         </td>
+    </script>
+
+    <script id="box-template" type="text/template">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <% if(barcode) { %>
+                        <h3 class="panel-title">Box barcode: <%= barcode %></h3>
+                        <% } else { %>
+                        <h3 class="panel-title">New Box</h3>
+                        <% } %>
+
+                    </div>
+                    <div class="panel-body">
+                        <div id="box-form">
+                            <form class="form-horizontal validate">
+                                <div class="form-group">
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <button id="ok-button" type="submit" class="btn btn-primary">OK</button>
+                                        <button id="cancel-button" type="reset" class="btn btn-default" >Cancel</button>
+                                    </div>
+                                </div>
+                                <fieldset id="containerFields">
+
+                                    <div class="form-group" data-z="146343be" id="box-barcode-field">
+                                        <label for="barcode" class="col-md-3 control-label">Barcode</label>
+                                        <div class="col-md-6">
+                                            <input id="barcode" name="barcode" value="<%= barcode %>" type="text" class="form-control" placeholder="Barcode" data-toggle="tooltip" aria-describedby="barcodeStatus" required="required" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" data-z="3c95e40" id="box-location-field">
+                                        <label for="location" class="col-md-3 control-label">Location</label>
+                                        <div class="col-md-6">
+                                            <input id="location" name="location" value="<%= location %>" type="text" class="form-control" placeholder="Location" data-toggle="tooltip" aria-describedby="locationStatus" />
+                                        </div>
+                                    </div>
+
+                                    <% if(storageType === 'BOX') { %>
+                                    <div class="form-group" data-z="da574cf" id="boxinventoryitem-ref1-field">
+                                        <label for="ref1" class="col-md-3 control-label">Ref1</label>
+                                        <div class="col-md-6">
+                                            <input id="ref1" name="ref1" value="<%= inventoryItem.attributes.ref1  %>" type="text" class="form-control" placeholder="Ref1" data-toggle="tooltip" aria-describedby="ref1Status" required="required" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-z="da578af" id="boxinventoryitem-ref2-field">
+                                        <label for="ref2" class="col-md-3 control-label">Ref2</label>
+                                        <div class="col-md-6">
+                                            <input id="ref2" name="ref2" value="<%= inventoryItem.attributes.ref2  %>" type="text" class="form-control" placeholder="Ref2" data-toggle="tooltip" aria-describedby="ref2Status" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-z="da57c8f" id="boxinventoryitem-ref3-field">
+                                        <label for="ref3" class="col-md-3 control-label">Ref3</label>
+                                        <div class="col-md-6">
+                                            <input id="ref3" name="ref3" value="<%= inventoryItem.attributes.ref3  %>" type="text" class="form-control" placeholder="Ref3" data-toggle="tooltip" aria-describedby="ref3Status" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-z="da5806f" id="boxinventoryitem-ref4-field">
+                                        <label for="ref4" class="col-md-3 control-label">Ref4</label>
+                                        <div class="col-md-6">
+                                            <input id="ref4" name="ref4" value="<%= inventoryItem.attributes.ref4  %>" type="text" class="form-control" placeholder="Ref4" data-toggle="tooltip" aria-describedby="ref4Status" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" data-z="da5844f" id="boxinventoryitem-ref5-field">
+                                        <label for="ref5" class="col-md-3 control-label">Ref5</label>
+                                        <div class="col-md-6">
+                                            <input id="ref5" name="ref5" value="<%= inventoryItem.attributes.ref5  %>" type="text" class="form-control" placeholder="Ref5" data-toggle="tooltip" aria-describedby="ref5Status" />
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                </fieldset>
+                            </form>
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
 
     <script src="/public/js/underscore.js"></script>

@@ -36,28 +36,50 @@
         }
     });
 
-    var Box = Backbone.Model.extend({
-    });
-
-    var File = Backbone.Model.extend({
-    });
-
-    var Document = Backbone.Model.extend({
-    });
-
-    var BoxInventoryItem = Backbone.Model.extend({
+    var InventoryItem = Backbone.Model.extend({
         defaults: {
             ref1: '',
             ref2: '',
             ref3: '',
             ref4: '',
             ref5: '',
-            status: 'NOTSTORED'
+            status: 'NOTSTORED',
+            type: null,
+            item: null
         }
     });
 
-    var BoxInventoryItems = Backbone.Collection.extend({
-        model: BoxInventoryItem
+    var InventoryItems = Backbone.Collection.extend({
+        model: InventoryItem
+    });
+
+    var Box = Backbone.Model.extend({
+        defaults: {
+            barcode: '',
+            inventoryItem: null,
+            storageType: '',
+            location: ''
+        }
+    });
+
+    var File = Backbone.Model.extend({
+        defaults: {
+            barcode: '',
+            inventoryItem: null,
+            box: null,
+            storageType: '',
+            location: ''
+        }
+    });
+
+    var Document = Backbone.Model.extend({
+        defaults: {
+            barcode: '',
+            inventoryItem: null,
+            file: null,
+            storageType: '',
+            location: ''
+        }
     });
 
     var Boxes = Backbone.Collection.extend({
@@ -75,23 +97,23 @@
 //////////////////////// VIEWS
 
 
-    var AddNewBoxInventoryRowView = Marionette.View.extend({
+    var BoxRowView = Marionette.View.extend({
         tagName: 'tr',
-        template: '#add-new-box-inventory-row-template',
+        template: '#box-row-template',
     });
 
-    var AddNewBoxInventoryEmptyView = Mn.View.extend({
+    var EmptyBoxRowView = Mn.View.extend({
         template: _.template('No Boxes. Start adding boxes.')
     });
 
-    var AddNewBoxInventoryTableBodyView = Marionette.CollectionView.extend({
+    var BoxesTableView = Marionette.CollectionView.extend({
         tagName: 'tbody',
-        childView: AddNewBoxInventoryRowView,
-        emptyView: AddNewBoxInventoryEmptyView,
+        childView: BoxRowView,
+        emptyView: EmptyBoxRowView,
     });
 
-    var AddNewBoxInventoryTableView = Marionette.View.extend({
-        template: '#add-new-box-inventory-table-template',
+    var BoxesView = Marionette.View.extend({
+        template: '#boxes-template',
 
         regions: {
             body: {
@@ -101,15 +123,15 @@
         },
 
         initialize: function() {
-            this.boxes = new Boxes();
-            this.idCount = 1;
+            // this.boxes = new Boxes();
+            // //this.idCount = 1;
         },
 
         events: {
             'click #addBoxButton': 'addBox',
             'click #deleteBoxButton': 'deleteBox',
             'click div.ckbox>input': 'updateDeleteButtonEnabled',
-            'click div.media': function(e){console.log(e)}
+            'click #editBoxButton': 'editBox'
         },
 
         updateDeleteButtonEnabled: function() {
@@ -121,42 +143,162 @@
             }
         },
 
+        editBox: function(e){
+            var barcode = String($(e.currentTarget).data('barcode'));
+            var box = this.collection.findWhere({barcode: barcode})
+            this.showBox(box);
+        },
+
+        showBox: function(box){
+            this.boxToShow = box;
+            this.triggerMethod('show:box', this);
+        },
+
         addBox: function(e) {
-            var box = new Box({barcode: 'BC-' + this.idCount});
-            this.boxes.add(box);
-            this.idCount++;
+            var storageType = this.options.request.get('storageType').name;
+            var box = new Box({storageType: storageType});
+
+            if(storageType === 'BOX'){
+                box.set('inventoryItem', new InventoryItem({type: 'BOX', item: box}));
+            }
+
+            this.showBox(box);
         },
 
         deleteBox: function(e) {
             var checked = $('div.ckbox>input:checked');
 
             _.each(checked, function (box) {
-                barcode = $(box).data('barcode');
+                var barcode = String($(box).data('barcode'));
 
-                var box = this.boxes.findWhere({barcode: barcode})
+                var box = this.collection.findWhere({barcode: barcode})
 
-                this.boxes.remove(box);
+                this.collection.remove(box);
             }, this);
 
             this.updateDeleteButtonEnabled();
         },
 
         onRender() {
-            this.showChildView('body', new AddNewBoxInventoryTableBodyView({collection: this.boxes}));
+            this.showChildView('body', new BoxesTableView({collection: this.collection}));
         }
     });
 
-        var AddNewInventoryView = Marionette.View.extend({
-            template: '#add-new-inventory-template',
+    var BoxView = Marionette.View.extend({
+        template: '#box-template',
 
-            regions: {
-                addNewInventory: {el: '#add-new-inventory', replaceElement: true}
-            },
+        initialize: function(){
+            this.isNewBox = this.model.get('barcode') === '';
+        },
 
-            onRender: function() {
-                this.showChildView('addNewInventory', new AddNewBoxInventoryTableView({model: this.model}));
+        events: {
+            'click #ok-button': 'handleOkButton',
+            'click #cancel-button': 'handleCancelButton',
+        },
+
+        handleOkButton: function(e){
+            e.preventDefault();
+
+            this.clearValidationErrors();
+
+            var barcode = this.$('#barcode').val();
+            var location = this.$('#location').val();
+
+            if(!barcode){
+                this.showValidationError('barcode', 'may not be empty');
+                return;
             }
-        });
+
+            if(this.isNewBox && this.collection.findWhere({barcode: barcode})){
+                this.showValidationError('barcode', 'barcode already exists');
+                return;
+            }
+
+            this.model.set({
+                'barcode': barcode,
+                'location': location,
+            });
+
+            if(this.model.get('storageType') === 'BOX'){
+
+                var inventoryItem = this.model.get('inventoryItem');
+                inventoryItem.set('ref1', this.$('#ref1').val());
+                inventoryItem.set('ref2', this.$('#ref2').val());
+                inventoryItem.set('ref3', this.$('#ref3').val());
+                inventoryItem.set('ref4', this.$('#ref4').val());
+                inventoryItem.set('ref5', this.$('#ref5').val());
+
+                this.model.set('inventoryItem', inventoryItem);
+
+            }
+
+            this.showBoxesView();
+        },
+
+        handleCancelButton: function(e){
+            e.preventDefault();
+
+            this.model = null;
+            this.showBoxesView();
+        },
+
+        showBoxesView: function() {
+            this.triggerMethod('show:boxes', this);
+        },
+
+        clearValidationErrors(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showValidationError: function (key, val) {
+            $key = this.$('#'+key);
+            $key.closest('.form-group').addClass('has-error has-feedback');
+            $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
+        },
+
+        onAttach: function(){
+            this.$('#barcode').focus();
+        }
+
+    });
+
+    var AddNewRecordsView = Marionette.View.extend({
+        template: '#add-new-record-template',
+
+        regions: {
+            body: {el: '#add-new-record', replaceElement: true}
+        },
+
+        initialize: function(){
+            this.boxes = new Boxes();
+            this.boxes.add(new Box({barcode: '123'}));
+            this.boxes.add(new Box({barcode: '456'}));
+            this.boxes.add(new Box({barcode: '789'}));
+        },
+
+        onRender: function() {
+            this.showBoxesView();
+        },
+
+        onChildviewShowBox: function(childView) {
+            this.showChildView('body', new BoxView({model: childView.boxToShow, collection: this.boxes}));
+        },
+
+        onChildviewShowBoxes: function(childView) {
+            if(childView.model){
+                this.boxes.add(childView.model, {merge: !childView.isNewBox});
+                console.log(this.boxes);
+            }
+
+            //console.log('boxes: ', this.boxes);
+            this.showBoxesView();
+        },
+
+        showBoxesView: function(){
+            this.showChildView('body', new BoxesView({collection: this.boxes, request: this.model}));
+        }
+    });
 
 
     var AssignUserView = Marionette.View.extend({
@@ -177,11 +319,8 @@
         handleSave: function(e){
             e.preventDefault();
 
-            this.$('.form-group').removeClass('has-error has-feedback');
-            this.$('.help-block').remove();
-
             if(!this.$('#userAssigned').val()){
-                this.showValidationErrors('userAssigned', 'may not be null');
+                this.showValidationError('userAssigned', 'may not be null');
                 return;
             }
 
@@ -208,12 +347,17 @@
 
             if(response.responseJSON) {
                 _.each(response.responseJSON.errors, function (val, key) {
-                    this.showValidationErrors(key, val);
+                    this.showValidationError(key, val);
                 });
             }
         },
 
-        showValidationErrors: function (key, val) {
+        clearValidationErrors(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showValidationError: function (key, val) {
             $key = this.$('#'+key);
             $key.closest('.form-group').addClass('has-error has-feedback');
             $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
@@ -232,8 +376,8 @@
             this.showChildView('main', new AssignUserView({model: request, rootView: this}));
         },
 
-        showAddNewInventoryView: function (request) {
-            this.showChildView('main', new AddNewInventoryView({model: request, rootView: this}));
+        showAddNewRecordView: function (request) {
+            this.showChildView('main', new AddNewRecordsView({model: request, rootView: this}));
         },
 
         showInfoModal: function(title, message, onHideFunction){
@@ -267,7 +411,7 @@
                     rootView.showAssignUserView(request);
                 }
                 else if (status === 'ASSIGNED'){
-                    rootView.showAddNewInventoryView(request);
+                    rootView.showAddNewRecordView(request);
                 }
             }
         }
