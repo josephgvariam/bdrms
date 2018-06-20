@@ -44,9 +44,9 @@
             ref4: '',
             ref5: '',
             status: 'NOTSTORED',
-            type: null,
-            item: null
-        }
+            type: null
+        },
+        urlRoot : '/inventoryitems'
     });
 
     var InventoryItems = Backbone.Collection.extend({
@@ -56,8 +56,6 @@
     var Box = Backbone.Model.extend({
         defaults: {
             barcode: '',
-            inventoryItem: null,
-            storageType: '',
             location: ''
         }
     });
@@ -65,9 +63,6 @@
     var File = Backbone.Model.extend({
         defaults: {
             barcode: '',
-            inventoryItem: null,
-            box: null,
-            storageType: '',
             location: ''
         }
     });
@@ -75,23 +70,23 @@
     var Document = Backbone.Model.extend({
         defaults: {
             barcode: '',
-            inventoryItem: null,
-            file: null,
-            storageType: '',
             location: ''
         }
     });
 
     var Boxes = Backbone.Collection.extend({
-        model: Box
+        model: Box,
+        url: '/api/boxes'
     });
 
     var Files = Backbone.Collection.extend({
-        model: Box
+        model: File,
+        url: '/api/files'
     });
 
     var Documents = Backbone.Collection.extend({
-        model: Box
+        model: Document,
+        url: '/api/documents'
     });
 
 //////////////////////// VIEWS
@@ -100,6 +95,11 @@
     var BoxRowView = Marionette.View.extend({
         tagName: 'tr',
         template: '#box-row-template',
+        templateContext: function() {
+            return {
+                storageType: this.model.storageType
+            };
+        }
     });
 
     var EmptyBoxRowView = Mn.View.extend({
@@ -123,8 +123,7 @@
         },
 
         initialize: function() {
-            // this.boxes = new Boxes();
-            // //this.idCount = 1;
+
         },
 
         events: {
@@ -132,7 +131,18 @@
             'click #deleteBoxButton': 'deleteBox',
             'click div.ckbox>input': 'updateDeleteButtonEnabled',
             'click #editBoxButton': 'editBox',
-            'click #addFilesButton': 'addFiles'
+            'click #showFilesButton': 'showFiles',
+            'click #saveRecordsButton': 'saveRecords'
+        },
+
+        saveRecords: function(e){
+            e.preventDefault();
+            //console.log(this.collection);
+            console.log(  JSON.stringify(this.collection.toJSON()) );
+            //this.collection.sync('create', this.collection, {});
+
+
+
         },
 
         updateDeleteButtonEnabled: function() {
@@ -144,38 +154,39 @@
             }
         },
 
-        addFiles: function(e){
+        showFiles: function(e){
             e.preventDefault();
+            var barcode = String($(e.currentTarget).data('barcode'));
+            var box = this.collection.findWhere({barcode: barcode})
+            this.triggerMethod('show:files', box);
         },
 
         editBox: function(e){
             e.preventDefault();
             var barcode = String($(e.currentTarget).data('barcode'));
-            var box = this.collection.findWhere({barcode: barcode})
-            this.showBox(box);
-        },
-
-        showBox: function(box){
-            this.boxToShow = box;
-            this.triggerMethod('show:box', this);
+            var box = this.collection.findWhere({barcode: barcode});
+            this.triggerMethod('show:box', box);
         },
 
         addBox: function(e) {
             var storageType = this.options.request.get('storageType').name;
-            var box = new Box({storageType: storageType});
+            var box = new Box();
+            box.storageType = storageType;
 
             if(storageType === 'BOX'){
-                box.set('inventoryItem', new InventoryItem({type: 'BOX', item: box}));
+                box.set('inventoryItem', new InventoryItem({type: 'BOX'}));
+            }else{
+                box.set('files', new Files());
             }
 
-            this.showBox(box);
+            this.triggerMethod('show:box', box);
         },
 
         deleteBox: function(e) {
             var checked = $('div.ckbox>input:checked');
 
-            _.each(checked, function (box) {
-                var barcode = String($(box).data('barcode'));
+            _.each(checked, function (b) {
+                var barcode = String($(b).data('barcode'));
 
                 var box = this.collection.findWhere({barcode: barcode})
 
@@ -192,6 +203,12 @@
 
     var BoxView = Marionette.View.extend({
         template: '#box-template',
+
+        templateContext: function() {
+            return {
+                storageType: this.model.storageType
+            };
+        },
 
         initialize: function(){
             this.isNewBox = this.model.get('barcode') === '';
@@ -215,7 +232,7 @@
                 return;
             }
 
-            if(this.isNewBox && this.collection.findWhere({barcode: barcode})){
+            if(this.isNewBox && this.options.boxes.findWhere({barcode: barcode})){
                 this.showValidationError('barcode', 'barcode already exists');
                 return;
             }
@@ -225,7 +242,7 @@
                 'location': location,
             });
 
-            if(this.model.get('storageType') === 'BOX'){
+            if(this.options.request.get('storageType').name === 'BOX'){
 
                 var inventoryItem = this.model.get('inventoryItem');
                 inventoryItem.set('ref1', this.$('#ref1').val());
@@ -249,7 +266,7 @@
         },
 
         showBoxesView: function() {
-            this.triggerMethod('show:boxes', this);
+            this.triggerMethod('show:boxes', this.model, this.isNewBox);
         },
 
         clearValidationErrors(){
@@ -264,10 +281,408 @@
         },
 
         onAttach: function(){
-            this.$('#barcode').focus();
+            if(this.isNewBox) {
+                this.$('#barcode').focus();
+            }else{
+                this.$('#barcode').prop('readonly', true);
+            }
+
+
         }
 
     });
+
+
+    var FileRowView = Marionette.View.extend({
+        tagName: 'tr',
+        template: '#file-row-template',
+        templateContext: function() {
+            return {
+                storageType: this.model.storageType
+            };
+        }
+    });
+
+    var EmptyFileRowView = Mn.View.extend({
+        template: _.template('No Files. Start adding files.')
+    });
+
+    var FilesTableView = Marionette.CollectionView.extend({
+        tagName: 'tbody',
+        childView: FileRowView,
+        emptyView: EmptyFileRowView,
+    });
+
+    var FilesView = Marionette.View.extend({
+        template: '#files-template',
+
+        regions: {
+            body: {
+                el: 'tbody',
+                replaceElement: true
+            }
+        },
+
+        initialize: function() {
+
+        },
+
+        events: {
+            'click #addFileButton': 'addFile',
+            'click #deleteFileButton': 'deleteFile',
+            'click div.ckbox>input': 'updateDeleteButtonEnabled',
+            'click #editFileButton': 'editFile',
+            'click #showDocsButton': 'showDocs',
+            'click #showBoxesButton': 'showBoxes'
+        },
+
+        showBoxes: function(e){
+          this.triggerMethod('show:boxes');
+        },
+
+        updateDeleteButtonEnabled: function() {
+            if($('div.ckbox>input:checked').length){
+                $('#deleteFileButton').prop('disabled', false);
+            }
+            else{
+                $('#deleteFileButton').prop('disabled', true);
+            }
+        },
+
+        showDocs: function(e){
+            e.preventDefault();
+            var barcode = String($(e.currentTarget).data('barcode'));
+
+            var file = this.collection.findWhere({barcode: barcode});
+
+            this.triggerMethod('show:documents', file, this.options.box);
+        },
+
+        editFile: function(e){
+            e.preventDefault();
+            var barcode = String($(e.currentTarget).data('barcode'));
+            var file = this.collection.findWhere({barcode: barcode})
+            this.triggerMethod('show:file', file, this.options.box);
+        },
+
+        addFile: function(e) {
+            var storageType = this.options.request.get('storageType').name;
+            var file = new File();
+            file.storageType = storageType;
+
+            if(storageType === 'FILE'){
+                file.set('inventoryItem', new InventoryItem({type: 'FILE'}));
+            }else{
+                file.set('documents', new Documents());
+            }
+
+            this.triggerMethod('show:file', file, this.options.box);
+        },
+
+        deleteFile: function(e) {
+            var checked = $('div.ckbox>input:checked');
+
+            _.each(checked, function (f) {
+                var barcode = String($(f).data('barcode'));
+
+                var file = this.collection.findWhere({barcode: barcode})
+
+                this.collection.remove(file);
+            }, this);
+
+            this.updateDeleteButtonEnabled();
+        },
+
+        onRender() {
+            this.$('#filesPanelTitle').text('BOX ' + this.options.box.get('barcode') + ' >> FILES');
+            this.showChildView('body', new FilesTableView({collection: this.collection}));
+        }
+    });
+
+    var FileView = Marionette.View.extend({
+        template: '#file-template',
+
+        templateContext: function() {
+            return {
+                storageType: this.model.storageType
+            };
+        },
+
+        initialize: function(){
+            this.isNewFile = this.model.get('barcode') === '';
+        },
+
+        events: {
+            'click #ok-button': 'handleOkButton',
+            'click #cancel-button': 'handleCancelButton',
+        },
+
+        handleOkButton: function(e){
+            e.preventDefault();
+
+            this.clearValidationErrors();
+
+            var barcode = this.$('#barcode').val();
+            var location = this.$('#location').val();
+
+            if(!barcode){
+                this.showValidationError('barcode', 'may not be empty');
+                return;
+            }
+
+            if(this.isNewFile && this.options.box.get('files').findWhere({barcode: barcode})){
+                this.showValidationError('barcode', 'barcode already exists');
+                return;
+            }
+
+            this.model.set({
+                'barcode': barcode,
+                'location': location,
+            });
+
+            if(this.options.request.get('storageType').name === 'FILE'){
+
+                var inventoryItem = this.model.get('inventoryItem');
+                inventoryItem.set('ref1', this.$('#ref1').val());
+                inventoryItem.set('ref2', this.$('#ref2').val());
+                inventoryItem.set('ref3', this.$('#ref3').val());
+                inventoryItem.set('ref4', this.$('#ref4').val());
+                inventoryItem.set('ref5', this.$('#ref5').val());
+
+                this.model.set('inventoryItem', inventoryItem);
+
+            }
+
+            this.options.box.get('files').add(this.model, {merge: !this.isNewFile});
+
+            //this.triggerMethod('show:files2', this.model, this.isNewFile, this.options.box);
+            this.triggerMethod('show:files', this.options.box);
+        },
+
+        handleCancelButton: function(e){
+            e.preventDefault();
+
+            this.model = null;
+            this.triggerMethod('show:files', this.options.box);
+        },
+
+        clearValidationErrors(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showValidationError: function (key, val) {
+            $key = this.$('#'+key);
+            $key.closest('.form-group').addClass('has-error has-feedback');
+            $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
+        },
+
+        onAttach: function(){
+            var boxBarcode = this.options.box.get('barcode');
+            var fileTitle = this.isNewFile ? 'NEW FILE' : 'FILE ' + this.model.get('barcode')
+            this.$('#filePanelTitle').text('BOX ' + boxBarcode + ' >> ' + fileTitle);
+
+            if(this.isNewFile) {
+                this.$('#barcode').focus();
+            }else{
+                this.$('#barcode').prop('readonly', true);
+            }
+
+        }
+
+    });
+
+
+    var DocumentRowView = Marionette.View.extend({
+        tagName: 'tr',
+        template: '#document-row-template',
+        templateContext: function() {
+            return {
+                storageType: this.model.storageType
+            };
+        }
+    });
+
+    var EmptyDocumentRowView = Mn.View.extend({
+        template: _.template('No Documents. Start adding documents.')
+    });
+
+    var DocumentsTableView = Marionette.CollectionView.extend({
+        tagName: 'tbody',
+        childView: DocumentRowView,
+        emptyView: EmptyDocumentRowView,
+    });
+
+    var DocumentsView = Marionette.View.extend({
+        template: '#documents-template',
+
+        regions: {
+            body: {
+                el: 'tbody',
+                replaceElement: true
+            }
+        },
+
+        initialize: function() {
+
+        },
+
+        events: {
+            'click #addDocumentButton': 'addDocument',
+            'click #deleteDocumentButton': 'deleteDocument',
+            'click div.ckbox>input': 'updateDeleteButtonEnabled',
+            'click #editDocumentButton': 'editDocument',
+            'click #showFilesButton': 'showFiles'
+        },
+
+        showFiles: function(e){
+            this.triggerMethod('show:files', this.options.box);
+        },
+
+        updateDeleteButtonEnabled: function() {
+            if($('div.ckbox>input:checked').length){
+                $('#deleteDocumentButton').prop('disabled', false);
+            }
+            else{
+                $('#deleteDocumentButton').prop('disabled', true);
+            }
+        },
+
+        editDocument: function(e){
+            e.preventDefault();
+            var barcode = String($(e.currentTarget).data('barcode'));
+            var document = this.collection.findWhere({barcode: barcode})
+            this.triggerMethod('show:document', document, this.options.file, this.options.box);
+        },
+
+        addDocument: function(e) {
+            var storageType = this.options.request.get('storageType').name;
+            var document = new Document();
+            doument.storageType = storageType;
+
+            if(storageType === 'DOCUMENT'){
+                document.set('inventoryItem', new InventoryItem({type: 'DOCUMENT'}));
+            }
+
+            this.triggerMethod('show:document', document, this.options.file, this.options.box);
+        },
+
+        deleteDocument: function(e) {
+            var checked = $('div.ckbox>input:checked');
+
+            _.each(checked, function (d) {
+                var barcode = String($(d).data('barcode'));
+
+                var document = this.collection.findWhere({barcode: barcode})
+
+                this.collection.remove(document);
+            }, this);
+
+            this.updateDeleteButtonEnabled();
+        },
+
+        onRender() {
+            var boxBarcode = this.options.box.get('barcode');
+            var fileBarcode = this.options.file.get('barcode');
+            this.$('#documentsPanelTitle').text('BOX ' + boxBarcode + ' >> FILE ' + fileBarcode + ' >> DOCUMENTS');
+            this.showChildView('body', new DocumentsTableView({collection: this.collection}));
+        }
+    });
+
+    var DocumentView = Marionette.View.extend({
+        template: '#document-template',
+
+        templateContext: function() {
+            return {
+                storageType: this.model.storageType
+            };
+        },
+
+        initialize: function(){
+            this.isNewDocument = this.model.get('barcode') === '';
+        },
+
+        events: {
+            'click #ok-button': 'handleOkButton',
+            'click #cancel-button': 'handleCancelButton',
+        },
+
+        handleOkButton: function(e){
+            e.preventDefault();
+
+            this.clearValidationErrors();
+
+            var barcode = this.$('#barcode').val();
+            var location = this.$('#location').val();
+
+            if(!barcode){
+                this.showValidationError('barcode', 'may not be empty');
+                return;
+            }
+
+            if(this.isNewDocument && this.options.file.get('documents').findWhere({barcode: barcode})){
+                this.showValidationError('barcode', 'barcode already exists');
+                return;
+            }
+
+            this.model.set({
+                'barcode': barcode,
+                'location': location,
+            });
+
+            if(this.options.request.get('storageType').name === 'DOCUMENT'){
+
+                var inventoryItem = this.model.get('inventoryItem');
+                inventoryItem.set('ref1', this.$('#ref1').val());
+                inventoryItem.set('ref2', this.$('#ref2').val());
+                inventoryItem.set('ref3', this.$('#ref3').val());
+                inventoryItem.set('ref4', this.$('#ref4').val());
+                inventoryItem.set('ref5', this.$('#ref5').val());
+
+                this.model.set('inventoryItem', inventoryItem);
+
+            }
+
+            this.options.file.get('documents').add(this.model, {merge: !this.isNewDocument});
+
+            this.triggerMethod('show:documents', this.options.file, this.options.box);
+        },
+
+        handleCancelButton: function(e){
+            e.preventDefault();
+
+            this.model = null;
+            this.triggerMethod('show:documents', this.options.file, this.options.box);
+        },
+
+        clearValidationErrors(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showValidationError: function (key, val) {
+            $key = this.$('#'+key);
+            $key.closest('.form-group').addClass('has-error has-feedback');
+            $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
+        },
+
+        onAttach: function(){
+            var boxBarcode = this.options.box.get('barcode');
+            var fileBarcode = this.options.file.get('barcode');
+            var documentTitle = this.isNewDocument ? 'NEW DOCUMENT' : 'DOCUMENT ' + this.model.get('barcode')
+            this.$('#documentPanelTitle').text('BOX ' + boxBarcode + ' >> FILE ' + fileBarcode + ' >> DOCUMENT ' + documentTitle);
+
+            if(this.isNewDocument) {
+                this.$('#barcode').focus();
+            }else{
+                this.$('#barcode').prop('readonly', true);
+            }
+
+        }
+
+    });
+
+
 
     var AddNewRecordsView = Marionette.View.extend({
         template: '#add-new-record-template',
@@ -276,31 +691,99 @@
             body: {el: '#add-new-record', replaceElement: true}
         },
 
+        getTestData: function(storageType){
+
+            var barcodeCount = 1;
+            var depth = 3;
+
+            var boxes = new Boxes();
+
+            for (var b = 1; b <= depth; b++) {
+                var box = new Box({barcode: 'BO-' + barcodeCount++});
+                box.storageType = storageType; //need in template, but not in attributes and its json
+
+                if(storageType === 'BOX'){
+                    box.set('inventoryItem', new InventoryItem({type: 'BOX'}));
+                }else{
+                    var files = new Files();
+
+                    for(var f = 1; f <= depth; f++ ){
+
+                        var file = new File({barcode: 'FL-' + barcodeCount++});
+                        file.storageType = storageType;
+
+                        if(storageType === 'FILE'){
+                            file.set('inventoryItem', new InventoryItem({type: 'FILE'}));
+                        }else{
+                            var docs = new Documents();
+
+                            for(var d = 1; d <= depth; d++ ){
+                                var doc = new Document({barcode: 'DO' + barcodeCount++});
+                                doc.storageType = storageType;
+                                doc.set('inventoryItem', new InventoryItem({type: 'DOCUMENT'}));
+                                docs.add(doc);
+                            }
+
+                            file.set('documents', docs);
+                        }
+
+                        files.add(file);
+                    }
+
+                    box.set('files', files);
+                }
+
+                boxes.add(box);
+            }
+
+            return boxes;
+        },
+
         initialize: function(){
-            this.boxes = new Boxes();
+            //this.boxes = new Boxes();
+            this.boxes = this.getTestData(this.model.get('storageType').name);
+
         },
 
         onRender: function() {
             this.showBoxesView();
         },
 
-        onChildviewShowBox: function(childView) {
-            this.showChildView('body', new BoxView({model: childView.boxToShow, collection: this.boxes}));
+        onChildviewShowBox: function(box) {
+            this.showChildView('body', new BoxView({model: box, boxes: this.boxes, request: this.model}));
         },
 
-        onChildviewShowBoxes: function(childView) {
-            if(childView.model){
-                this.boxes.add(childView.model, {merge: !childView.isNewBox});
-                console.log(this.boxes);
+        onChildviewShowBoxes: function(box, isNewBox) {
+            if(box){
+                this.boxes.add(box, {merge: !isNewBox});
             }
 
-            //console.log('boxes: ', this.boxes);
             this.showBoxesView();
         },
 
         showBoxesView: function(){
             this.showChildView('body', new BoxesView({collection: this.boxes, request: this.model}));
+        },
+
+//////
+
+        onChildviewShowFile: function(file, box) {
+            this.showChildView('body', new FileView({model: file, box: box, request: this.model}));
+        },
+
+        onChildviewShowFiles: function(box){
+            this.showChildView('body', new FilesView({collection: box.get('files'), box: box, request: this.model}));
+        },
+//////
+
+        onChildviewShowDocument: function(document, file, box) {
+            this.showChildView('body', new DocumentView({model: document, file: file, box: box, request: this.model}));
+        },
+
+        onChildviewShowDocuments: function(file, box){
+            this.showChildView('body', new DocumentsView({collection: file.get('documents'), file: file, box: box, request: this.model}));
         }
+
     });
 
 

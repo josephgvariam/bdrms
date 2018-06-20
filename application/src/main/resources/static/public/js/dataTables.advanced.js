@@ -1371,7 +1371,7 @@
         var workflowUrl = getWorkflowUrl(datatables, rowId);
         if (workflowUrl) {
             buttons = buttons.concat('<a class="btn btn-action btn-sm" href="')
-                .concat(workflowUrl).concat('"><span class="glyphicon glyphicon-file"></span></a>');
+                .concat(workflowUrl).concat('"><span class="glyphicon glyphicon-play-circle"></span></a>');
         }
 
         buttons = buttons.concat('</div>');
