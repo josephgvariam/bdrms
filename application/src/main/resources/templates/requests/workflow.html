@@ -176,7 +176,9 @@
                 <a href="#" class="pull-left">
                     <img src="/public/img/box.png" class="media-photo">
                 </a>
+                <% if(storageType !== 'BOX') { %>
                 <a id='addFilesButton' class='btn btn-warning btn-xs pull-right' href='#'><span class="glyphicon glyphicon-plus"></span> Add Files</a>
+                <% } %>
                 <a id='editBoxButton' data-barcode="<%= barcode %>" class='btn btn-info btn-xs pull-right' style="margin-right: 3px;" href='#'><span class="glyphicon glyphicon-edit"></span> Edit</a>
                 <div>
                     <h4 class="title">Barcode: <%= barcode %></h4>

@@ -131,7 +131,8 @@
             'click #addBoxButton': 'addBox',
             'click #deleteBoxButton': 'deleteBox',
             'click div.ckbox>input': 'updateDeleteButtonEnabled',
-            'click #editBoxButton': 'editBox'
+            'click #editBoxButton': 'editBox',
+            'click #addFilesButton': 'addFiles'
         },
 
         updateDeleteButtonEnabled: function() {
@@ -143,7 +144,12 @@
             }
         },
 
+        addFiles: function(e){
+            e.preventDefault();
+        },
+
         editBox: function(e){
+            e.preventDefault();
             var barcode = String($(e.currentTarget).data('barcode'));
             var box = this.collection.findWhere({barcode: barcode})
             this.showBox(box);
@@ -272,9 +278,6 @@
 
         initialize: function(){
             this.boxes = new Boxes();
-            this.boxes.add(new Box({barcode: '123'}));
-            this.boxes.add(new Box({barcode: '456'}));
-            this.boxes.add(new Box({barcode: '789'}));
         },
 
         onRender: function() {
