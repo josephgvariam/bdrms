@@ -69,6 +69,11 @@
              <a id="RefilingRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('RefilingRequestsItemThymeleafController').to('editForm').with('refilingRequest', refilingRequest.id)}" data-th-text="#{label_edit}">Edit</a>
             </div>
 
+
+              <div class="pull-right">
+                  <a id="Request_workflow" href="workflow" class="btn btn-primary" style="margin-right: 5px">Workflow</a>
+              </div>
+
               <div class="pull-left">
                   <a id="RefilingRequest_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('RequestsCollectionThymeleafController').to('list')}">
                       <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
