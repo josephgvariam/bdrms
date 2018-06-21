@@ -81,7 +81,7 @@ public class Request {
     private String notes;
 
     @NotAudited
-    @ManyToMany(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.EAGER, mappedBy = "requests")
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, mappedBy = "requests")
     private Set<InventoryItem> inventoryItems = new HashSet<InventoryItem>();
 
 

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class FileInventoryItem extends InventoryItem {
 
     @NotNull
-    @OneToOne(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.EAGER)
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST} , fetch = FetchType.EAGER)
     @JoinColumn(name = "FILE_ID")
     @EntityFormat
     private File file;
