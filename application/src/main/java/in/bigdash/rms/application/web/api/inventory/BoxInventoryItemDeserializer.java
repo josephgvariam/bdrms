@@ -1,4 +1,4 @@
-package in.bigdash.rms.application.web.api.box;
+package in.bigdash.rms.application.web.api.inventory;
 import in.bigdash.rms.model.inventory.BoxInventoryItem;
 import in.bigdash.rms.service.api.BoxInventoryItemService;
 import org.springframework.beans.factory.annotation.Autowired;
