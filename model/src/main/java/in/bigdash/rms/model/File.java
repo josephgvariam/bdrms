@@ -74,7 +74,7 @@ public class File {
     private FileInventoryItem inventoryItem;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY)
     @JoinColumn(name = "BOX_ID")
     @EntityFormat
     private Box box;

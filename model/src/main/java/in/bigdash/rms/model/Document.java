@@ -64,7 +64,7 @@ public class Document {
     private DocumentInventoryItem inventoryItem;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     @EntityFormat
     private File file;

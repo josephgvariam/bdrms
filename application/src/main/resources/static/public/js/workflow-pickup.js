@@ -118,8 +118,8 @@
             }
         },
 
-        initialize: function() {
-
+        initialize: function(){
+            _.bindAll(this, "handleRecordsSaveSuccess", "handleRecordsSaveError");
         },
 
         events: {
@@ -132,14 +132,73 @@
         },
 
         validateRecords: function(){
-            //todo
-            return true;
+
+            $('#workflowAlert').html('');
+
+            var storageType = this.options.request.get('storageType').name;
+            var errors = [];
+
+            if(this.collection.size() === 0){
+                errors.push('No boxes to save');
+            }
+
+            if(storageType === 'BOX'){
+
+            }
+            else if(storageType === 'FILE'){
+                this.collection.each(function (box) {
+                    if(box.get('files').size() === 0) {
+                        errors.push('Box ' + box.get('barcode') + ' does not have any files');
+                    }
+                });
+            }
+            else if(storageType === 'DOCUMENT'){
+                this.collection.each(function (box) {
+                    if(box.get('files').size() === 0) {
+                        errors.push('Box ' + box.get('barcode') + ' does not have any files');
+                    }
+                    else{
+                        box.get('files').each(function (file) {
+                            if(file.get('documents').size() === 0) {
+                                errors.push('Box ' + box.get('barcode') + ', File ' + file.get('barcode') + ' does not have any documents');
+                            }
+                        });
+                    }
+                });
+            }
+
+            //console.log(errors);
+
+            if(errors.length) {
+                this.showAlert(errors);
+            }
+
+            return errors.length === 0;
+
+        },
+
+        showAlert: function(errors){
+            var alertText = '';
+
+            if(errors.length === 1){
+                alertText = '<div id="workflowAlert" class="alert alert-danger alert-dismissible col-md-10 col-md-offset-1"><strong>Error saving records!</strong> '+ errors[0] +' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+            }
+            else{
+                alertText = '<div id="workflowAlert" class="alert alert-danger alert-dismissible col-md-10 col-md-offset-1"><strong>Error saving records!</strong> Please check the following: <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+
+                _.each(errors, function (e) {
+                    alertText = alertText + '<li>' + e + '</li>';
+                });
+
+                alertText = alertText + '</div>';
+            }
+
+            $('#alert').html(alertText);
         },
 
         saveRecords: function(e){
             e.preventDefault();
             if(this.validateRecords()){
-                //console.log(  JSON.stringify(this.collection.toJSON()) );
                 //console.log(this.collection);
 
                 var inventoryItems = new InventoryItems();
@@ -154,14 +213,61 @@
 
                         inventoryItems.add(i);
                     }
+                    else{
+                        box.get('files').each(function (file) {
+                            if(file.get('inventoryItem')){
+                                var f = file.clone();
+                                var b = box.clone();
+                                f.unset('inventoryItem');
+                                b.unset('files');
+                                f.set('box', b);
+
+                                var i = file.get('inventoryItem').clone();
+                                i.set('file', f)
+
+                                inventoryItems.add(i);
+                            }
+                            else{
+                                file.get('documents').each(function (doc) {
+                                    var d = doc.clone();
+                                    var f = file.clone();
+                                    var b = box.clone();
+                                    d.unset('inventoryItem');
+                                    f.unset('documents')
+                                    b.unset('files');
+                                    f.set('box', b);
+                                    d.set('file', f);
+
+                                    var i = doc.get('inventoryItem').clone();
+                                    i.set('document', d)
+
+                                    inventoryItems.add(i);
+                                });
+                            }
+                        });
+                    }
                 });
 
-                console.log(  JSON.stringify(inventoryItems.toJSON()) );
-
+                //console.log(  JSON.stringify(inventoryItems.toJSON()) );
                 this.options.request.set('inventoryItems', inventoryItems);
-                this.options.request.save();
+                this.options.request.save(null, {
+                    success: this.handleRecordsSaveSuccess,
+                    error: this.handleRecordsSaveError
+                });
             }
 
+        },
+
+        handleRecordsSaveSuccess: function(model, response, options){
+            //console.log('success', response);
+            this.options.rootView.showInfoModal('Info', 'Records saved successfully.', function(){window.location.href='/requests/' + response.id + '/workflow'});
+        },
+
+        handleRecordsSaveError: function(model, response, options){
+            //console.log('error', response.responseJSON);
+            if(response.responseJSON.message) {
+                this.showAlert([response.responseJSON.message]);
+            }
         },
 
         updateDeleteButtonEnabled: function() {
@@ -833,7 +939,7 @@
         },
 
         showBoxesView: function(){
-            this.showChildView('body', new BoxesView({collection: this.boxes, request: this.model}));
+            this.showChildView('body', new BoxesView({collection: this.boxes, request: this.model, rootView: this.options.rootView}));
         },
 
 //////
