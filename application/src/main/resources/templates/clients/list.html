@@ -31,6 +31,7 @@
                 <caption class="sr-only" data-th-text="#{label_list_entity(#{label_client_plural})}">Client List</caption>
                 <thead>
                   <tr>
+                      <th data-data="id" data-checkboxes="false">ID</th>
                     <th data-data="name" data-th-text="#{label_client_name}">name</th>
                     <th data-data="department" data-th-text="#{label_client_department}">department</th>
                     <th data-data="storageTypesString">Storage Types</th>
@@ -39,6 +40,7 @@
                 </thead>
                 <tbody data-th-remove="all">
                   <tr>
+                    <th>id</th>
                     <td>name</td>
                     <td>department</td>
                     <td>storageTypes</td>

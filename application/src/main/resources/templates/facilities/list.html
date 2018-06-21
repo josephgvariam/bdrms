@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en" data-layout-decorate="~{layouts/default-list-layout}">
 
   <head id="head">
@@ -31,6 +31,7 @@
                 <caption class="sr-only" data-th-text="#{label_list_entity(#{label_facility_plural})}">Facility List</caption>
                 <thead>
                   <tr>
+                    <th data-data="id" data-checkboxes="false">ID</th>
                     <th data-data="name" data-th-text="#{label_facility_name}">name</th>
                     <th data-data="address" data-th-text="#{label_facility_address}">address</th>
                     <th data-data="id" data-orderable="false" data-searchable="false" class="dttools" data-th-text="#{label_tools}">Tools</th>
@@ -38,6 +39,7 @@
                 </thead>
                 <tbody data-th-remove="all">
                   <tr>
+                    <th>id</th>
                     <td>name</td>
                     <td>address</td>
                     <td data-th-text="#{label_tools}">Tools</td>
