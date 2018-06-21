@@ -9,8 +9,7 @@ import in.bigdash.rms.model.*;
 import in.bigdash.rms.model.inventory.*;
 import in.bigdash.rms.model.request.Request;
 import in.bigdash.rms.model.request.RequestStatus;
-import in.bigdash.rms.service.api.InventoryItemService;
-import in.bigdash.rms.service.api.RequestService;
+import in.bigdash.rms.service.api.*;
 import io.springlets.web.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +31,35 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
 
     private InventoryItemService inventoryItemService;
     private RequestService requestService;
+    private BoxInventoryItemService boxInventoryItemService;
+    private FileInventoryItemService fileInventoryItemService;
+    private DocumentInventoryItemService documentInventoryItemService;
+    private BoxService boxService;
+    private FileService fileService;
+    private DocumentService documentService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public InventoryItemsDeserializer(@Lazy InventoryItemService inventoryItemService, @Lazy RequestService requestService, ConversionService conversionService) {
+    public InventoryItemsDeserializer(@Lazy InventoryItemService inventoryItemService,
+                                      @Lazy RequestService requestService,
+                                      @Lazy BoxInventoryItemService boxInventoryItemService,
+                                      @Lazy FileInventoryItemService fileInventoryItemService,
+                                      @Lazy DocumentInventoryItemService documentInventoryItemService,
+                                      @Lazy BoxService boxService,
+                                      @Lazy FileService fileService,
+                                      @Lazy DocumentService documentService,
+                                      ConversionService conversionService) {
         this.inventoryItemService = inventoryItemService;
         this.requestService = requestService;
+        this.boxInventoryItemService = boxInventoryItemService;
+        this.fileInventoryItemService = fileInventoryItemService;
+        this.documentInventoryItemService = documentInventoryItemService;
+        this.boxService = boxService;
+        this.fileService = fileService;
+        this.documentService = documentService;
         this.conversionService = conversionService;
     }
 
@@ -99,7 +118,7 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         return inventoryItems;
     }
 
-    private Long getId(JsonNode node){
+    private Long getLong(JsonNode node){
 
         if(node == null){
             return null;
@@ -116,84 +135,124 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
 
     private BoxInventoryItem getBoxInventoryItem(JsonNode node){
 
-        BoxInventoryItem boxInventoryItem = new BoxInventoryItem();
+        BoxInventoryItem boxInventoryItem;
 
-        boxInventoryItem.setId(getId(node.get("id")));
+        Long id = getLong(node.get("id"));
+        if(id != null){
+            boxInventoryItem = boxInventoryItemService.findOne(id);
+        }
+        else{
+            boxInventoryItem = new BoxInventoryItem();
+            boxInventoryItem.setBox(getBox(node.get("box")));
+        }
+
         boxInventoryItem.setRef1(node.get("ref1").asText());
         boxInventoryItem.setRef2(node.get("ref2").asText());
         boxInventoryItem.setRef3(node.get("ref3").asText());
         boxInventoryItem.setRef4(node.get("ref4").asText());
         boxInventoryItem.setRef5(node.get("ref5").asText());
         boxInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
-        boxInventoryItem.setBox(getBox(node.get("box")));
 
         return boxInventoryItem;
     }
 
     private FileInventoryItem getFileInventoryItem(JsonNode node){
 
-        FileInventoryItem fileInventoryItem = new FileInventoryItem();
+        FileInventoryItem fileInventoryItem;
 
-        fileInventoryItem.setId(getId(node.get("id")));
+        Long id = getLong(node.get("id"));
+        if(id != null){
+            fileInventoryItem = fileInventoryItemService.findOne(id);
+        }
+        else{
+            fileInventoryItem = new FileInventoryItem();
+            fileInventoryItem.setFile(getFile(node.get("file")));
+        }
+
         fileInventoryItem.setRef1(node.get("ref1").asText());
         fileInventoryItem.setRef2(node.get("ref2").asText());
         fileInventoryItem.setRef3(node.get("ref3").asText());
         fileInventoryItem.setRef4(node.get("ref4").asText());
         fileInventoryItem.setRef5(node.get("ref5").asText());
         fileInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
-        fileInventoryItem.setFile(getFile(node.get("file")));
 
         return fileInventoryItem;
     }
 
     private DocumentInventoryItem getDocumentInventoryItem(JsonNode node){
 
-        DocumentInventoryItem docInventoryItem = new DocumentInventoryItem();
+        DocumentInventoryItem docInventoryItem;
 
-        docInventoryItem.setId(getId(node.get("id")));
+        Long id = getLong(node.get("id"));
+        if(id != null){
+            docInventoryItem = documentInventoryItemService.findOne(id);
+        }
+        else{
+            docInventoryItem = new DocumentInventoryItem();
+            docInventoryItem.setDocument(getDocument(node.get("document")));
+        }
+
         docInventoryItem.setRef1(node.get("ref1").asText());
         docInventoryItem.setRef2(node.get("ref2").asText());
         docInventoryItem.setRef3(node.get("ref3").asText());
         docInventoryItem.setRef4(node.get("ref4").asText());
         docInventoryItem.setRef5(node.get("ref5").asText());
         docInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
-        docInventoryItem.setDocument(getDocument(node.get("document")));
 
         return docInventoryItem;
     }
 
 
     private Box getBox(JsonNode node) {
-        Box box = new Box();
+        Box box;
 
-        box.setId(getId(node.get("id")));
-        box.setBarcode(node.get("barcode").asText());
+        Long id = getLong(node.get("id"));
+        if(id != null){
+            box = boxService.findOne(id);
+        }
+        else{
+            box = new Box();
+            box.setBarcode(node.get("barcode").asText());
+        }
+
         box.setLocation(node.get("location").asText());
 
         return box;
     }
 
     private File getFile(JsonNode node) {
-        File file = new File();
+        File file;
 
-        file.setId(getId(node.get("id")));
-        file.setBarcode(node.get("barcode").asText());
+        Long id = getLong(node.get("id"));
+        if(id != null){
+            file = fileService.findOne(id);
+        }
+        else{
+            file = new File();
+            file.setBarcode(node.get("barcode").asText());
+            file.setBox(getBox(node.get("box")));
+        }
+
         file.setLocation(node.get("location").asText());
-
-        file.setBox(getBox(node.get("box")));
 
         return file;
     }
 
 
     private Document getDocument(JsonNode node) {
-        Document doc = new Document();
+        Document doc;
 
-        doc.setId(getId(node.get("id")));
-        doc.setBarcode(node.get("barcode").asText());
+        Long id = getLong(node.get("id"));
+        if(id != null){
+            doc = documentService.findOne(id);
+        }
+        else{
+            doc = new Document();
+            doc.setBarcode(node.get("barcode").asText());
+            doc.setFile(getFile(node.get("file")));
+        }
+
         doc.setLocation(node.get("location").asText());
-
-        doc.setFile(getFile(node.get("file")));
 
         return doc;
     }

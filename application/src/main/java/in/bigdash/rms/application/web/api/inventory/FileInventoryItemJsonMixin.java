@@ -27,4 +27,12 @@ public abstract class FileInventoryItemJsonMixin {
     public void setFile(File file) {
         this.file = file;
     }
+
+    public Set<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<Request> requests) {
+        this.requests = requests;
+    }
 }

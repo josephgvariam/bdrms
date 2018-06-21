@@ -922,28 +922,85 @@
             var storageType = this.model.get('storageType').name;
 
             _.each(inventoryItems, function (item) {
-                if(item.type === 'BOX'){
-                    var i = new InventoryItem({
-                        id: item.id,
-                        ref1: item.ref1,
-                        ref2: item.ref2,
-                        ref3: item.ref3,
-                        ref4: item.ref4,
-                        ref5: item.ref5,
-                        type: item.type,
-                        status: item.status
-                    });
+                var i = new InventoryItem({
+                    id: item.id,
+                    ref1: item.ref1,
+                    ref2: item.ref2,
+                    ref3: item.ref3,
+                    ref4: item.ref4,
+                    ref5: item.ref5,
+                    type: item.type,
+                    status: item.status
+                });
 
+                if(item.type === 'BOX'){
                     var b = new Box({
                         id: item.box.id,
                         barcode: item.box.barcode,
                         location: item.box.location,
                         inventoryItem: i
                     });
-
                     b.storageType = storageType;
 
                     boxes.add(b);
+                }
+                else if (item.type === 'FILE'){
+                    var f = new File({
+                        id: item.file.id,
+                        barcode: item.file.barcode,
+                        location: item.file.location,
+                        inventoryItem: i
+                    });
+                    f.storageType = storageType;
+
+                    var b = boxes.findWhere({barcode: item.file.box.barcode});
+                    if(!b) {
+                        b = new Box({
+                            id: item.file.box.id,
+                            barcode: item.file.box.barcode,
+                            location: item.file.box.location,
+                            files: new Files()
+                        });
+                        b.storageType = storageType;
+                        boxes.add(b);
+                    }
+                    b.get('files').add(f);
+                }
+                else if (item.type === 'DOCUMENT'){
+                    var d = new Document({
+                        id: item.document.id,
+                        barcode: item.document.barcode,
+                        location: item.document.location,
+                        inventoryItem: i
+                    });
+                    d.storageType = storageType;
+
+                    var b = boxes.findWhere({barcode: item.document.file.box.barcode});
+                    if(!b) {
+                        b = new Box({
+                            id: item.document.file.box.id,
+                            barcode: item.document.file.box.barcode,
+                            location: item.document.file.box.location,
+                            files: new Files()
+                        });
+                        b.storageType = storageType;
+                        boxes.add(b);
+                    }
+
+                    var f = b.get('files').findWhere({barcode: item.document.file.barcode});
+                    if(!f){
+                        f = new File({
+                            id: item.document.file.id,
+                            barcode: item.document.file.barcode,
+                            location: item.document.file.location,
+                            documents: new Documents()
+                        });
+                        f.storageType = storageType;
+                        b.get('files').add(f);
+                    }
+
+                    f.get('documents').add(d);
+
                 }
             });
 

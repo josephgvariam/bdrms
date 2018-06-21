@@ -14,7 +14,6 @@ public abstract class BoxInventoryItemJsonMixin {
     @JsonDeserialize(using = BoxDeserializer.class)
     private Box box;
 
-
     @JsonIgnore
     private Set<Request> requests;
 
@@ -26,5 +25,13 @@ public abstract class BoxInventoryItemJsonMixin {
 
     public void setBox(Box box) {
         this.box = box;
+    }
+
+    public Set<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<Request> requests) {
+        this.requests = requests;
     }
 }

@@ -1,17 +1,18 @@
 package in.bigdash.rms.application.web.api.file;
 import in.bigdash.rms.application.web.api.box.BoxDeserializer;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import in.bigdash.rms.model.Box;
 import in.bigdash.rms.model.Document;
+import in.bigdash.rms.model.inventory.FileInventoryItem;
+
 import java.util.Set;
 
 
-@JsonIdentityInfo(generator = PropertyGenerator.class, property = "id")
 public abstract class FileJsonMixin {
 
+    @JsonIgnore
+    private FileInventoryItem inventoryItem;
 
     @JsonIgnore
     private Set<Document> documents;
@@ -38,5 +39,13 @@ public abstract class FileJsonMixin {
 
     public void setBox(Box box) {
         this.box = box;
+    }
+
+    public FileInventoryItem getInventoryItem() {
+        return inventoryItem;
+    }
+
+    public void setInventoryItem(FileInventoryItem inventoryItem) {
+        this.inventoryItem = inventoryItem;
     }
 }

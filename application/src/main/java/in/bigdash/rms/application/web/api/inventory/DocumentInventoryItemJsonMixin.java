@@ -26,4 +26,12 @@ public abstract class DocumentInventoryItemJsonMixin {
     public void setDocument(Document document) {
         this.document = document;
     }
+
+    public Set<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<Request> requests) {
+        this.requests = requests;
+    }
 }
