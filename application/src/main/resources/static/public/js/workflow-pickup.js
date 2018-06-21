@@ -916,10 +916,44 @@
             return boxes;
         },
 
-        initialize: function(){
-            this.boxes = new Boxes();
-            //this.boxes = this.getTestData(this.model.get('storageType').name);
+        getBoxes: function(){
+            var boxes = new Boxes();
+            var inventoryItems = this.model.get('inventoryItems');
+            var storageType = this.model.get('storageType').name;
 
+            _.each(inventoryItems, function (item) {
+                if(item.type === 'BOX'){
+                    var i = new InventoryItem({
+                        id: item.id,
+                        ref1: item.ref1,
+                        ref2: item.ref2,
+                        ref3: item.ref3,
+                        ref4: item.ref4,
+                        ref5: item.ref5,
+                        type: item.type,
+                        status: item.status
+                    });
+
+                    var b = new Box({
+                        id: item.box.id,
+                        barcode: item.box.barcode,
+                        location: item.box.location,
+                        inventoryItem: i
+                    });
+
+                    b.storageType = storageType;
+
+                    boxes.add(b);
+                }
+            });
+
+            return boxes;
+        },
+
+        initialize: function(){
+            //this.boxes = new Boxes();
+            //this.boxes = this.getTestData(this.model.get('storageType').name);
+            this.boxes = this.getBoxes();
         },
 
         onRender: function() {

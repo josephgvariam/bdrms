@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import in.bigdash.rms.application.security.JpaUserDetails;
 import in.bigdash.rms.model.*;
 import in.bigdash.rms.model.inventory.*;
+import in.bigdash.rms.model.request.Request;
 import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.InventoryItemService;
+import in.bigdash.rms.service.api.RequestService;
 import io.springlets.web.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +31,16 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
 
 
     private InventoryItemService inventoryItemService;
+    private RequestService requestService;
 
 
     private ConversionService conversionService;
 
 
     @Autowired
-    public InventoryItemsDeserializer(@Lazy InventoryItemService inventoryItemService, ConversionService conversionService) {
+    public InventoryItemsDeserializer(@Lazy InventoryItemService inventoryItemService, @Lazy RequestService requestService, ConversionService conversionService) {
         this.inventoryItemService = inventoryItemService;
+        this.requestService = requestService;
         this.conversionService = conversionService;
     }
 
@@ -81,8 +85,15 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         }
 
         User user = getCurrentUser();
+        Set<Request> requests = new HashSet<>();
+
+        Long requestId = ((Request)jsonParser.getCurrentValue()).getId();
+
+        requests.add(requestService.findOne(requestId));
+
         for(InventoryItem i : inventoryItems){
             i.setUserCreated(user);
+            i.setRequests(requests);
         }
 
         return inventoryItems;
