@@ -882,7 +882,7 @@
     var Controller = Marionette.Object.extend({
         start: function(requestId) {
             var request = new Request({id: requestId});
-            this.listenTo(request, 'sync', this.workflow);
+            this.listenToOnce(request, 'sync', this.workflow);
             request.fetch();
         },
 
