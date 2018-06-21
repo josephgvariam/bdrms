@@ -851,6 +851,52 @@
 
     });
 
+    var BeforeProcessRequestView = Marionette.View.extend({
+        template: '#before-process-request-template',
+
+        templateContext: function() {
+            return {
+                msg: this.options.msg,
+                title: this.options.title
+            };
+        },
+
+        initialize: function(){
+            _.bindAll(this, "handleSaveSuccess", "handleSaveError");
+        },
+
+        events: {
+            'click #startProcessRequestButton': 'start',
+            'click #cancelProcessRequestButton': 'cancel'
+        },
+
+        start: function(e){
+            e.preventDefault();
+            this.model.save({'status': this.options.nextStatus}, {success: this.handleSaveSuccess, error: this.handleSaveError});
+        },
+
+        cancel: function(e){
+            e.preventDefault();
+            window.location.href='/requests/';
+        },
+
+        handleSaveSuccess: function(model, response)
+        {
+            Backbone.history.navigate(response.id + '/workflow/' + this.options.navText, {trigger: false});
+            this.options.nextViewFunction.apply(this.options.rootView, [this.model]);
+        },
+
+        handleSaveError: function(model, response)
+        {
+            console.log('error saving request', response);
+        },
+
+        onAttach: function(){
+
+        }
+
+    });
+
     var RootView = Marionette.View.extend({
         template: _.template('<div id="main"></div>'),
 
@@ -860,6 +906,10 @@
 
         showAssignUserView: function (request) {
             this.showChildView('main', new AssignUserView({model: request, rootView: this}));
+        },
+
+        showBeforeProcessRequestView: function(request, title, msg, nextStatus, nextViewFunction, navText){
+            this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, nextStatus: nextStatus, nextViewFunction: nextViewFunction, navText: navText}));
         },
 
         showAddNewRecordView: function (request) {
@@ -880,7 +930,7 @@
     });
 
     var Controller = Marionette.Object.extend({
-        start: function(requestId) {
+        start: function(requestId, splat) {
             var request = new Request({id: requestId});
             this.listenToOnce(request, 'sync', this.workflow);
             request.fetch();
@@ -897,6 +947,9 @@
                     rootView.showAssignUserView(request);
                 }
                 else if (status === 'ASSIGNED'){
+                    rootView.showBeforeProcessRequestView(request, 'Add Records','Proceed with adding records to this request?', 'INPROGRESS', rootView.showAddNewRecordView, 'addRecords');
+                }
+                else if (status === 'INPROGRESS'){
                     rootView.showAddNewRecordView(request);
                 }
             }
@@ -911,6 +964,7 @@
 
         appRoutes: {
             ':requestId/workflow': 'start',
+            ':requestId/workflow/*splat': 'start',
         }
     });
 

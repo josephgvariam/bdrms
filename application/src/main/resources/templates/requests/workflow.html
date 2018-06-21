@@ -102,11 +102,37 @@
         })(jQuery);
     </script>
 
+    <script id="before-process-request-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %></h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><%= title %></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <p class="lead"><%= msg %></p>
+                                <button id="startProcessRequestButton" type="button" class="btn btn-primary">Proceed</button>
+                                <button id="cancelProcessRequestButton" type="button" class="btn btn-default">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </script>
 
 
     <script id="assign-user-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
             <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Assign User</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
             <br/>
 
             <form class="form-horizontal validate">
@@ -131,7 +157,7 @@
     <script id="add-new-record-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
             <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Add Records</h1>
-            <h4>StorageType: <%= storageType.name %></h4>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
             <br/>
             <div id="add-new-record"></div>
         </div>

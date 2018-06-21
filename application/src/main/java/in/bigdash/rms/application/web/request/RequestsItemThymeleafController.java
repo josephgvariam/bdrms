@@ -195,7 +195,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId() + "/edit-form");
     }
 
-    @GetMapping(value = "/workflow", name = "workflow")
+    @GetMapping(value = "/workflow/**", name = "workflow")
     public ModelAndView workflow(@ModelAttribute Request request, Model model) {
         model.addAttribute("request", request);
         return new ModelAndView("requests/workflow");
