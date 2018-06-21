@@ -741,7 +741,7 @@
             var boxBarcode = this.options.box.get('barcode');
             var fileBarcode = this.options.file.get('barcode');
             var documentTitle = this.isNewDocument ? 'NEW DOCUMENT' : 'DOCUMENT ' + this.model.get('barcode')
-            this.$('#documentPanelTitle').text('BOX ' + boxBarcode + ' >> FILE ' + fileBarcode + ' >> DOCUMENT ' + documentTitle);
+            this.$('#documentPanelTitle').text('BOX ' + boxBarcode + ' >> FILE ' + fileBarcode + ' >>  ' + documentTitle);
 
             if(this.isNewDocument) {
                 this.$('#barcode').focus();

@@ -210,7 +210,9 @@
                 <a id='editBoxButton' data-barcode="<%= barcode %>" class='btn btn-info btn-xs pull-right' style="margin-right: 3px;" href='#'><span class="glyphicon glyphicon-edit"></span> Edit</a>
                 <div>
                     <h4 class="title">Barcode: <%= barcode %></h4>
-                    <p class="summary">I'm a box</p>
+                    <% if(storageType !== 'BOX') { %>
+                    <p class="summary"><%= files.size() %> Files</p>
+                    <% } %>
                 </div>
             </div>
         </td>
@@ -341,7 +343,9 @@
                 <a id='editFileButton' data-barcode="<%= barcode %>" class='btn btn-info btn-xs pull-right' style="margin-right: 3px;" href='#'><span class="glyphicon glyphicon-edit"></span> Edit</a>
                 <div>
                     <h4 class="title">Barcode: <%= barcode %></h4>
-                    <p class="summary">I'm a file</p>
+                    <% if(storageType !== 'FILE') { %>
+                    <p class="summary"><%= documents.size() %> Documents</p>
+                    <% } %>
                 </div>
             </div>
         </td>
@@ -465,7 +469,6 @@
                 <a id='editDocumentButton' data-barcode="<%= barcode %>" class='btn btn-info btn-xs pull-right' style="margin-right: 3px;" href='#'><span class="glyphicon glyphicon-edit"></span> Edit</a>
                 <div>
                     <h4 class="title">Barcode: <%= barcode %></h4>
-                    <p class="summary">I'm a document</p>
                 </div>
             </div>
         </td>
