@@ -238,18 +238,35 @@
             'click #cancel-button': 'handleCancelButton',
         },
 
-        handleOkButton: function(e){
-            e.preventDefault();
-
+        validate: function(){
             this.clearValidationErrors();
 
+            var valid = true;
             var barcode = this.$('#barcode').val();
             var location = this.$('#location').val();
+            var ref1 = this.$('#ref1').val();
 
             if(!barcode){
                 this.showValidationError('barcode', 'may not be empty');
+                valid = false;
+            }
+            if(this.options.request.get('storageType').name === 'BOX' && !ref1){
+                this.showValidationError('ref1', 'may not be empty');
+                valid = false;
+            }
+
+            return valid;
+        },
+
+        handleOkButton: function(e){
+            e.preventDefault();
+
+            if(!this.validate()){
                 return;
             }
+
+            var barcode = this.$('#barcode').val();
+            var location = this.$('#location').val();
 
             if(this.isNewBox && this.options.boxes.findWhere({barcode: barcode})){
                 this.showValidationError('barcode', 'barcode already exists');
@@ -436,18 +453,36 @@
             'click #cancel-button': 'handleCancelButton',
         },
 
+        validate: function(){
+            this.clearValidationErrors();
+
+            var valid = true;
+            var barcode = this.$('#barcode').val();
+            var location = this.$('#location').val();
+            var ref1 = this.$('#ref1').val();
+
+            if(!barcode){
+                this.showValidationError('barcode', 'may not be empty');
+                valid = false;
+            }
+            if(this.options.request.get('storageType').name === 'FILE' && !ref1){
+                this.showValidationError('ref1', 'may not be empty');
+                valid = false;
+            }
+
+            return valid;
+        },
+
         handleOkButton: function(e){
             e.preventDefault();
 
-            this.clearValidationErrors();
+            if(!this.validate()){
+                return;
+            }
 
             var barcode = this.$('#barcode').val();
             var location = this.$('#location').val();
 
-            if(!barcode){
-                this.showValidationError('barcode', 'may not be empty');
-                return;
-            }
 
             if(this.isNewFile && this.options.box.get('files').findWhere({barcode: barcode})){
                 this.showValidationError('barcode', 'barcode already exists');
@@ -577,7 +612,7 @@
         addDocument: function(e) {
             var storageType = this.options.request.get('storageType').name;
             var document = new Document();
-            doument.storageType = storageType;
+            document.storageType = storageType;
 
             if(storageType === 'DOCUMENT'){
                 document.set('inventoryItem', new InventoryItem({type: 'DOCUMENT'}));
@@ -626,18 +661,35 @@
             'click #cancel-button': 'handleCancelButton',
         },
 
-        handleOkButton: function(e){
-            e.preventDefault();
-
+        validate: function(){
             this.clearValidationErrors();
 
+            var valid = true;
             var barcode = this.$('#barcode').val();
             var location = this.$('#location').val();
+            var ref1 = this.$('#ref1').val();
 
             if(!barcode){
                 this.showValidationError('barcode', 'may not be empty');
+                valid = false;
+            }
+            if(this.options.request.get('storageType').name === 'DOCUMENT' && !ref1){
+                this.showValidationError('ref1', 'may not be empty');
+                valid = false;
+            }
+
+            return valid;
+        },
+
+        handleOkButton: function(e){
+            e.preventDefault();
+
+            if(!this.validate()){
                 return;
             }
+
+            var barcode = this.$('#barcode').val();
+            var location = this.$('#location').val();
 
             if(this.isNewDocument && this.options.file.get('documents').findWhere({barcode: barcode})){
                 this.showValidationError('barcode', 'barcode already exists');
