@@ -68,17 +68,15 @@
             <div class="pull-right">
              <a id="Document_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('DocumentsItemThymeleafController').to('editForm').with('document', document.id)}" data-th-text="#{label_edit}">Edit</a>
             </div>
+              <div class="pull-left">
+                  <a id="Document_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('DocumentsCollectionThymeleafController').to('list')}">
+                      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                      <span data-th-text="#{label_back}">Back</span>
+                  </a>
+              </div>
           </div>
 
 
-          <div class="clearfix">
-            <div class="pull-left">
-              <a id="Document_list" href="list.html" class="btn btn-default" data-th-title="#{label_goBack}" data-th-href="${@linkBuilder.of('DocumentsCollectionThymeleafController').to('list')}">
-  	             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-  	             <span data-th-text="#{label_back}">Back</span>
-  	          </a>
-            </div>
-          </div>
         </div>
 
       </section>
