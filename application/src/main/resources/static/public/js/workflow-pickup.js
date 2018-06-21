@@ -45,8 +45,7 @@
             ref5: '',
             status: 'NOTSTORED',
             type: null
-        },
-        urlRoot : '/inventoryitems'
+        }
     });
 
     var InventoryItems = Backbone.Collection.extend({
@@ -76,17 +75,14 @@
 
     var Boxes = Backbone.Collection.extend({
         model: Box,
-        url: '/api/boxes'
     });
 
     var Files = Backbone.Collection.extend({
         model: File,
-        url: '/api/files'
     });
 
     var Documents = Backbone.Collection.extend({
         model: Document,
-        url: '/api/documents'
     });
 
 //////////////////////// VIEWS
@@ -135,13 +131,36 @@
             'click #saveRecordsButton': 'saveRecords'
         },
 
+        validateRecords: function(){
+            //todo
+            return true;
+        },
+
         saveRecords: function(e){
             e.preventDefault();
-            //console.log(this.collection);
-            console.log(  JSON.stringify(this.collection.toJSON()) );
-            //this.collection.sync('create', this.collection, {});
+            if(this.validateRecords()){
+                //console.log(  JSON.stringify(this.collection.toJSON()) );
+                //console.log(this.collection);
 
+                var inventoryItems = new InventoryItems();
 
+                this.collection.each(function(box){
+                    if(box.get('inventoryItem')){
+                        var b = box.clone();
+                        b.unset('inventoryItem');
+
+                        var i = box.get('inventoryItem').clone();
+                        i.set('box', b);
+
+                        inventoryItems.add(i);
+                    }
+                });
+
+                console.log(  JSON.stringify(inventoryItems.toJSON()) );
+
+                this.options.request.set('inventoryItems', inventoryItems);
+                this.options.request.save();
+            }
 
         },
 
@@ -740,8 +759,8 @@
         },
 
         initialize: function(){
-            //this.boxes = new Boxes();
-            this.boxes = this.getTestData(this.model.get('storageType').name);
+            this.boxes = new Boxes();
+            //this.boxes = this.getTestData(this.model.get('storageType').name);
 
         },
 
