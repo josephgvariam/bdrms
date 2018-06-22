@@ -21,8 +21,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @JsonComponent
@@ -88,32 +87,41 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
     public Set<InventoryItem> deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode nodes) {
         Set<InventoryItem> inventoryItems = new HashSet<>();
 
+        Map<String, Box> boxMap = new HashMap<>();
+        Map<String, File> fileMap = new HashMap<>();
+        Map<String, Document> docMap = new HashMap<>();
+
+        Map<String, Map> xMap = new HashMap();
+        xMap.put("box", boxMap);
+        xMap.put("file", fileMap);
+        xMap.put("doc", docMap);
+
         for (JsonNode node : nodes) {
             if(node.get("type").asText().equals("BOX")) {
-                BoxInventoryItem item = getBoxInventoryItem(node);
+                BoxInventoryItem item = getBoxInventoryItem(node, xMap);
                 inventoryItems.add(item);
             }
             else if(node.get("type").asText().equals("FILE")){
-                FileInventoryItem item = getFileInventoryItem(node);
+                FileInventoryItem item = getFileInventoryItem(node, xMap);
                 inventoryItems.add(item);
             }
             else{
-                DocumentInventoryItem item = getDocumentInventoryItem(node);
+                DocumentInventoryItem item = getDocumentInventoryItem(node, xMap);
                 inventoryItems.add(item);
             }
         }
 
         User user = getCurrentUser();
-        Set<Request> requests = new HashSet<>();
-
-        Long requestId = ((Request)jsonParser.getCurrentValue()).getId();
-
-        requests.add(requestService.findOne(requestId));
-
         for(InventoryItem i : inventoryItems){
             i.setUserCreated(user);
-            i.setRequests(requests);
         }
+
+        //Request request = (Request) jsonParser.getCurrentValue();
+        Long requestId = ((Request)jsonParser.getCurrentValue()).getId();
+        Request request = requestService.findOne(requestId);
+        request.setInventoryItems(new HashSet<>());
+
+        request.addToInventoryItems(inventoryItems);
 
         return inventoryItems;
     }
@@ -133,7 +141,7 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         }
     }
 
-    private BoxInventoryItem getBoxInventoryItem(JsonNode node){
+    private BoxInventoryItem getBoxInventoryItem(JsonNode node, Map<String, Map> xMap){
 
         BoxInventoryItem boxInventoryItem;
 
@@ -143,7 +151,6 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         }
         else{
             boxInventoryItem = new BoxInventoryItem();
-            boxInventoryItem.setBox(getBox(node.get("box")));
         }
 
         boxInventoryItem.setRef1(node.get("ref1").asText());
@@ -153,10 +160,13 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         boxInventoryItem.setRef5(node.get("ref5").asText());
         boxInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
 
+        Box box = getBox(node.get("box"), xMap);
+        box.addToInventoryItem(boxInventoryItem);
+
         return boxInventoryItem;
     }
 
-    private FileInventoryItem getFileInventoryItem(JsonNode node){
+    private FileInventoryItem getFileInventoryItem(JsonNode node, Map<String, Map> xMap){
 
         FileInventoryItem fileInventoryItem;
 
@@ -166,7 +176,6 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         }
         else{
             fileInventoryItem = new FileInventoryItem();
-            fileInventoryItem.setFile(getFile(node.get("file")));
         }
 
         fileInventoryItem.setRef1(node.get("ref1").asText());
@@ -176,10 +185,13 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         fileInventoryItem.setRef5(node.get("ref5").asText());
         fileInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
 
+        File file = getFile(node.get("file"), xMap);
+        file.addToInventoryItem(fileInventoryItem);
+
         return fileInventoryItem;
     }
 
-    private DocumentInventoryItem getDocumentInventoryItem(JsonNode node){
+    private DocumentInventoryItem getDocumentInventoryItem(JsonNode node, Map<String, Map> xMap){
 
         DocumentInventoryItem docInventoryItem;
 
@@ -189,7 +201,6 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         }
         else{
             docInventoryItem = new DocumentInventoryItem();
-            docInventoryItem.setDocument(getDocument(node.get("document")));
         }
 
         docInventoryItem.setRef1(node.get("ref1").asText());
@@ -199,48 +210,69 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         docInventoryItem.setRef5(node.get("ref5").asText());
         docInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
 
+        Document document = getDocument(node.get("document"), xMap);
+        document.addToInventoryItem(docInventoryItem);
+
         return docInventoryItem;
     }
 
 
-    private Box getBox(JsonNode node) {
-        Box box;
+    private Box getBox(JsonNode node, Map<String, Map> xMap) {
+
+        Box box = (Box) xMap.get("box").get(node.get("barcode").asText());
+        if(box != null){
+            return box;
+        }
 
         Long id = getLong(node.get("id"));
         if(id != null){
             box = boxService.findOne(id);
+            box.setFiles(new HashSet<>());
         }
         else{
             box = new Box();
-            box.setBarcode(node.get("barcode").asText());
         }
 
+        box.setBarcode(node.get("barcode").asText());
         box.setLocation(node.get("location").asText());
+
+        xMap.get("box").put(box.getBarcode(), box);
 
         return box;
     }
 
-    private File getFile(JsonNode node) {
-        File file;
+    private File getFile(JsonNode node, Map<String, Map> xMap) {
+        File file = (File) xMap.get("file").get(node.get("barcode").asText());
+        if(file != null){
+            return file;
+        }
 
         Long id = getLong(node.get("id"));
         if(id != null){
             file = fileService.findOne(id);
+            file.setDocuments(new HashSet<>());
         }
         else{
             file = new File();
-            file.setBarcode(node.get("barcode").asText());
-            file.setBox(getBox(node.get("box")));
         }
 
+        file.setBarcode(node.get("barcode").asText());
         file.setLocation(node.get("location").asText());
+
+        Box box = getBox(node.get("box"), xMap);
+        box.addToFiles(Collections.singleton(file));
+
+        xMap.get("file").put(file.getBarcode(), file);
 
         return file;
     }
 
 
-    private Document getDocument(JsonNode node) {
-        Document doc;
+    private Document getDocument(JsonNode node, Map<String, Map> xMap) {
+        Document doc = (Document) xMap.get("doc").get(node.get("barcode").asText());
+        if(doc != null){
+            return doc;
+        }
 
         Long id = getLong(node.get("id"));
         if(id != null){
@@ -248,11 +280,15 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         }
         else{
             doc = new Document();
-            doc.setBarcode(node.get("barcode").asText());
-            doc.setFile(getFile(node.get("file")));
         }
 
+        doc.setBarcode(node.get("barcode").asText());
         doc.setLocation(node.get("location").asText());
+
+        File file = getFile(node.get("file"), xMap);
+        file.addToDocuments(Collections.singleton(doc));
+
+        xMap.get("doc").put(doc.getBarcode(), doc);
 
         return doc;
     }

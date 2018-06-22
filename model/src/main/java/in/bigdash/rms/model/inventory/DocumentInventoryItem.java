@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class DocumentInventoryItem extends InventoryItem {
 
     @NotNull
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "DOCUMENT_ID")
     @EntityFormat
     private Document document;

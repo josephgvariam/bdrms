@@ -169,8 +169,8 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <p>
-                    <button id="addBoxButton" type="button" class="btn btn-primary">Add Box</button>
-                    <button id="deleteBoxButton" type="button" class="btn btn-primary" disabled="disabled" >Delete Box</button>
+                    <button id="addBoxButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add Box</button>
+                    <button id="deleteBoxButton" type="button" class="btn btn-primary" disabled="disabled" ><span class="glyphicon glyphicon-remove"></span> Delete Box</button>
                     <button id="saveRecordsButton" type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-download"></span> Save Records</button>
                 </p>
             </div>
@@ -232,9 +232,11 @@
                         <% } %>
 
                     </div>
+                    <a href="#" class="pull-right"><img src="/public/img/box.png" class="media-photo"></a>
                     <div class="panel-body">
                         <div id="box-form">
                             <form class="form-horizontal validate">
+                                <div></div>
                                 <div class="form-group">
                                     <div class="col-md-9 col-md-offset-3">
                                         <button id="ok-button" type="submit" class="btn btn-primary">OK</button>
@@ -244,7 +246,7 @@
                                 <fieldset id="containerFields">
 
                                     <div class="form-group" data-z="146343be" id="box-barcode-field">
-                                        <label for="barcode" class="col-md-3 control-label">Barcode</label>
+                                        <label for="barcode" class="col-md-3 control-label">Box Barcode</label>
                                         <div class="col-md-6">
                                             <input id="barcode" name="barcode" value="<%= barcode %>" type="text" class="form-control" placeholder="Barcode" data-toggle="tooltip" aria-describedby="barcodeStatus" required="required" />
                                         </div>
@@ -302,8 +304,8 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <p>
-                    <button id="addFileButton" type="button" class="btn btn-primary">Add File</button>
-                    <button id="deleteFileButton" type="button" class="btn btn-primary" disabled="disabled" >Delete File</button>
+                    <button id="addFileButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add File</button>
+                    <button id="deleteFileButton" type="button" class="btn btn-primary" disabled="disabled" ><span class="glyphicon glyphicon-remove"></span> Delete File</button>
                     <button id="showBoxesButton" type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-chevron-left"></span>Boxes</button>
                 </p>
             </div>
@@ -360,6 +362,7 @@
                     <div class="panel-heading">
                         <h3 id="filePanelTitle" class="panel-title"></h3>
                     </div>
+                    <a href="#" class="pull-right"><img src="/public/img/file.png" class="media-photo"></a>
                     <div class="panel-body">
                         <div id="file-form">
                             <form class="form-horizontal validate">
@@ -372,7 +375,7 @@
                                 <fieldset id="containerFields">
 
                                     <div class="form-group" data-z="146343be" id="file-barcode-field">
-                                        <label for="barcode" class="col-md-3 control-label">Barcode</label>
+                                        <label for="barcode" class="col-md-3 control-label">File Barcode</label>
                                         <div class="col-md-6">
                                             <input id="barcode" name="barcode" value="<%= barcode %>" type="text" class="form-control" placeholder="Barcode" data-toggle="tooltip" aria-describedby="barcodeStatus" required="required" />
                                         </div>
@@ -430,8 +433,8 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <p>
-                    <button id="addDocumentButton" type="button" class="btn btn-primary">Add Document</button>
-                    <button id="deleteDocumentButton" type="button" class="btn btn-primary" disabled="disabled" >Delete Document</button>
+                    <button id="addDocumentButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add Document</button>
+                    <button id="deleteDocumentButton" type="button" class="btn btn-primary" disabled="disabled" ><span class="glyphicon glyphicon-remove"></span> Delete Document</button>
                     <button id="showFilesButton" type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-chevron-left"></span>Files</button>
                 </p>
             </div>
@@ -483,6 +486,7 @@
                     <div class="panel-heading">
                         <h3 id="documentPanelTitle" class="panel-title"></h3>
                     </div>
+                    <a href="#" class="pull-right"><img src="/public/img/doc.png" class="media-photo"></a>
                     <div class="panel-body">
                         <div id="document-form">
                             <form class="form-horizontal validate">
@@ -495,7 +499,7 @@
                                 <fieldset id="containerFields">
 
                                     <div class="form-group" data-z="146343be" id="document-barcode-field">
-                                        <label for="barcode" class="col-md-3 control-label">Barcode</label>
+                                        <label for="barcode" class="col-md-3 control-label">Document Barcode</label>
                                         <div class="col-md-6">
                                             <input id="barcode" name="barcode" value="<%= barcode %>" type="text" class="form-control" placeholder="Barcode" data-toggle="tooltip" aria-describedby="barcodeStatus" required="required" />
                                         </div>

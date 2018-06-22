@@ -70,8 +70,7 @@ public class InventoryItem {
     private User userCreated;
 
     @NotAudited
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "bd_request_inventory_item", joinColumns = { @JoinColumn(name = "inventory_item_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "request_id", referencedColumnName = "id") })
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "inventoryItems")
     private Set<Request> requests = new HashSet<Request>();
 
 

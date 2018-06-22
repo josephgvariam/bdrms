@@ -81,7 +81,8 @@ public class Request {
     private String notes;
 
     @NotAudited
-    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, mappedBy = "requests")
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST},  fetch = FetchType.EAGER)
+    @JoinTable(name = "bd_request_inventory_item", joinColumns = { @JoinColumn(name = "request_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "inventory_item_id", referencedColumnName = "id") })
     private Set<InventoryItem> inventoryItems = new HashSet<InventoryItem>();
 
 

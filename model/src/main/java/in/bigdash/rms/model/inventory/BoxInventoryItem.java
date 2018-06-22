@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class BoxInventoryItem extends InventoryItem {
 
     @NotNull
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "BOX_ID")
     @EntityFormat
     private Box box;
