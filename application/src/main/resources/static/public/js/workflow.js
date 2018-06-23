@@ -1,5 +1,141 @@
 (function() {
 
+
+    var util = (function () {
+        return {
+            showInfoModal: function(title, message, onHideFunction){
+                var modal = $('#infoModal');
+                modal.find('.modal-title').text(title);
+                modal.find('.modal-body').html('<p>' + message + '</p>');
+
+                if(onHideFunction) {
+                    modal.on('hidden.bs.modal', onHideFunction);
+                }
+
+                modal.modal();
+            }
+        };
+    })();
+
+    var storage = (function () {
+
+        BdrmsStorageItem = Backbone.Model.extend();
+
+        BdrmsStorage = Backbone.Collection.extend({
+            model: BdrmsStorageItem,
+            localStorage: new Backbone.LocalStorage("in.bigdash.rms.app.storage"),
+        });
+
+        bdrmsStorage = new BdrmsStorage();
+
+        return {
+
+            storeBox: function( box, request ) {
+                bdrmsStorage.create({
+                    id: box.get('barcode'),
+                    location: box.get('location'),
+                    requestId: request.get('id'),
+                    storageType: request.get('storageType').name,
+                    type: 'BOX',
+                });
+            },
+
+            storeFile: function( file, box, request ) {
+                bdrmsStorage.create({
+                    id: file.get('barcode'),
+                    location: file.get('location'),
+                    parentId: box.get('barcode'),
+                    requestId: request.get('id'),
+                    storageType: request.get('storageType').name,
+                    type: 'FILE',
+                });
+            },
+
+            storeDocument: function( doc, file, request ) {
+                bdrmsStorage.create({
+                    id: doc.get('barcode'),
+                    location: doc.get('location'),
+                    parentId: file.get('barcode'),
+                    requestId: request.get('id'),
+                    storageType: request.get('storageType').name,
+                    type: 'DOCUMENT',
+                });
+            },
+
+            remove: function( record ) {
+                var r = bdrmsStorage.get( record.get('barcode') );
+                r.destroy();
+            },
+
+            fetchRecords: function( request ) {
+                bdrmsStorage.fetch();
+
+                var records = bdrmsStorage.where( {requestId: request.get('id')} );
+
+                var boxes = new Boxes();
+                var files = new Files();
+                var docs = new Documents();
+
+                _.each(records, function( record ){
+                    var type = record.get('type');
+
+                    if(type === 'BOX'){
+                        var b = new Box({
+                            barcode: record.get('id'),
+                            location: record.get('location')
+                        });
+                        b.storageType = record.get('storageType');
+
+                        if(b.storageType !== 'BOX'){
+                            b.set('files', new Files());
+                        }
+
+                        boxes.add(b);
+                    }
+                    else if(type === 'FILE'){
+                        var f = new File({
+                            barcode: record.get('id'),
+                            location: record.get('location')
+                        });
+                        f.storageType = record.get('storageType');
+                        f.parentBarcode = record.get('parentId');
+
+                        if(f.storageType !== 'FILE'){
+                            f.set('documents', new Documents());
+                        }
+
+                        files.add(f);
+                    }
+                    else if(type === 'DOCUMENT'){
+                        var d = new Document({
+                            barcode: record.get('id'),
+                            location: record.get('location')
+                        });
+                        d.storageType = record.get('storageType');
+                        d.parentBarcode = record.get('parentId');
+
+                        docs.add(d);
+                    }
+                });
+
+                console.log(boxes, files, docs)
+
+                docs.each(function(doc){
+                    var file = files.findWhere({barcode: doc.parentBarcode});
+                    file.get('documents').add(doc);
+                });
+
+                files.each(function(file){
+                    var box = boxes.findWhere({barcode: file.parentBarcode});
+                    box.get('files').add(file);
+                });
+
+                return boxes;
+            }
+        };
+
+    })();
+
     var Request = Backbone.Model.extend({
         urlRoot: function (){
             if(this.get('type')){
@@ -259,12 +395,10 @@
         },
 
         handleRecordsSaveSuccess: function(model, response, options){
-            //console.log('success', response);
-            this.options.rootView.showInfoModal('Info', 'Records saved successfully.', function(){window.location.href='/requests/' + response.id + '/workflow'});
+            util.showInfoModal('Info', 'Records saved successfully.', function(){window.location.href='/requests/' + response.id + '/workflow'});
         },
 
         handleRecordsSaveError: function(model, response, options){
-            //console.log('error', response.responseJSON);
             if(response.responseJSON.message) {
                 this.showAlert([response.responseJSON.message]);
             }
@@ -310,13 +444,25 @@
         deleteBox: function(e) {
             var checked = $('div.ckbox>input:checked');
 
+            var skipped = [];
+
             _.each(checked, function (b) {
                 var barcode = String($(b).data('barcode'));
 
-                var box = this.collection.findWhere({barcode: barcode})
+                var box = this.collection.findWhere({barcode: barcode});
+
+                if(box.get('files') && box.get('files').size()){
+                    skipped.push(box.get('barcode'));
+                    return;
+                }
 
                 this.collection.remove(box);
+                storage.remove(box);
             }, this);
+
+            if(skipped) {
+                util.showInfoModal('Delete', 'Cannot delete non empty records! Skipped boxes: ' + skipped.join(", "));
+            }
 
             this.updateDeleteButtonEnabled();
         },
@@ -524,13 +670,25 @@
         deleteFile: function(e) {
             var checked = $('div.ckbox>input:checked');
 
+            var skipped = [];
+
             _.each(checked, function (f) {
                 var barcode = String($(f).data('barcode'));
 
                 var file = this.collection.findWhere({barcode: barcode})
 
+                if(file.get('documents') && file.get('documents').size()){
+                    skipped.push(file.get('barcode'));
+                    return;
+                }
+
                 this.collection.remove(file);
+                storage.remove(file);
             }, this);
+
+            if(skipped) {
+                util.showInfoModal('Delete', 'Cannot delete non empty records! Skipped files: ' + skipped.join(", "));
+            }
 
             this.updateDeleteButtonEnabled();
         },
@@ -614,6 +772,7 @@
             }
 
             this.options.box.get('files').add(this.model, {merge: !this.isNewFile});
+            storage.storeFile(this.model, this.options.box, this.options.request);
 
             //this.triggerMethod('show:files2', this.model, this.isNewFile, this.options.box);
             this.triggerMethod('show:files', this.options.box);
@@ -730,12 +889,15 @@
         deleteDocument: function(e) {
             var checked = $('div.ckbox>input:checked');
 
+            var skipped = [];
+
             _.each(checked, function (d) {
                 var barcode = String($(d).data('barcode'));
 
                 var document = this.collection.findWhere({barcode: barcode})
 
                 this.collection.remove(document);
+                storage.remove(document);
             }, this);
 
             this.updateDeleteButtonEnabled();
@@ -821,6 +983,7 @@
             }
 
             this.options.file.get('documents').add(this.model, {merge: !this.isNewDocument});
+            storage.storeDocument(this.model, this.options.file, this.options.request);
 
             this.triggerMethod('show:documents', this.options.file, this.options.box);
         },
@@ -917,100 +1080,106 @@
         },
 
         getBoxes: function(){
-            var boxes = new Boxes();
-            var inventoryItems = this.model.get('inventoryItems');
-            var storageType = this.model.get('storageType').name;
+            var boxes = storage.fetchRecords(this.model);
 
-            _.each(inventoryItems, function (item) {
-                var i = new InventoryItem({
-                    id: item.id,
-                    ref1: item.ref1,
-                    ref2: item.ref2,
-                    ref3: item.ref3,
-                    ref4: item.ref4,
-                    ref5: item.ref5,
-                    type: item.type,
-                    status: item.status
-                });
+            if(boxes.size() == 0) {
+                boxes = new Boxes();
+                var inventoryItems = this.model.get('inventoryItems');
+                var storageType = this.model.get('storageType').name;
 
-                if(item.type === 'BOX'){
-                    var b = new Box({
-                        id: item.box.id,
-                        barcode: item.box.barcode,
-                        location: item.box.location,
-                        inventoryItem: i
+                _.each(inventoryItems, function (item) {
+                    var i = new InventoryItem({
+                        id: item.id,
+                        ref1: item.ref1,
+                        ref2: item.ref2,
+                        ref3: item.ref3,
+                        ref4: item.ref4,
+                        ref5: item.ref5,
+                        type: item.type,
+                        status: item.status
                     });
-                    b.storageType = storageType;
 
-                    boxes.add(b);
-                }
-                else if (item.type === 'FILE'){
-                    var f = new File({
-                        id: item.file.id,
-                        barcode: item.file.barcode,
-                        location: item.file.location,
-                        inventoryItem: i
-                    });
-                    f.storageType = storageType;
-
-                    var b = boxes.findWhere({barcode: item.file.box.barcode});
-                    if(!b) {
-                        b = new Box({
-                            id: item.file.box.id,
-                            barcode: item.file.box.barcode,
-                            location: item.file.box.location,
-                            files: new Files()
+                    if (item.type === 'BOX') {
+                        var b = new Box({
+                            id: item.box.id,
+                            barcode: item.box.barcode,
+                            location: item.box.location,
+                            inventoryItem: i
                         });
                         b.storageType = storageType;
+
                         boxes.add(b);
                     }
-                    b.get('files').add(f);
-                }
-                else if (item.type === 'DOCUMENT'){
-                    var d = new Document({
-                        id: item.document.id,
-                        barcode: item.document.barcode,
-                        location: item.document.location,
-                        inventoryItem: i
-                    });
-                    d.storageType = storageType;
-
-                    var b = boxes.findWhere({barcode: item.document.file.box.barcode});
-                    if(!b) {
-                        b = new Box({
-                            id: item.document.file.box.id,
-                            barcode: item.document.file.box.barcode,
-                            location: item.document.file.box.location,
-                            files: new Files()
-                        });
-                        b.storageType = storageType;
-                        boxes.add(b);
-                    }
-
-                    var f = b.get('files').findWhere({barcode: item.document.file.barcode});
-                    if(!f){
-                        f = new File({
-                            id: item.document.file.id,
-                            barcode: item.document.file.barcode,
-                            location: item.document.file.location,
-                            documents: new Documents()
+                    else if (item.type === 'FILE') {
+                        var f = new File({
+                            id: item.file.id,
+                            barcode: item.file.barcode,
+                            location: item.file.location,
+                            inventoryItem: i
                         });
                         f.storageType = storageType;
+
+                        var b = boxes.findWhere({barcode: item.file.box.barcode});
+                        if (!b) {
+                            b = new Box({
+                                id: item.file.box.id,
+                                barcode: item.file.box.barcode,
+                                location: item.file.box.location,
+                                files: new Files()
+                            });
+                            b.storageType = storageType;
+                            boxes.add(b);
+                        }
                         b.get('files').add(f);
                     }
+                    else if (item.type === 'DOCUMENT') {
+                        var d = new Document({
+                            id: item.document.id,
+                            barcode: item.document.barcode,
+                            location: item.document.location,
+                            inventoryItem: i
+                        });
+                        d.storageType = storageType;
 
-                    f.get('documents').add(d);
+                        var b = boxes.findWhere({barcode: item.document.file.box.barcode});
+                        if (!b) {
+                            b = new Box({
+                                id: item.document.file.box.id,
+                                barcode: item.document.file.box.barcode,
+                                location: item.document.file.box.location,
+                                files: new Files()
+                            });
+                            b.storageType = storageType;
+                            boxes.add(b);
+                        }
 
-                }
-            });
+                        var f = b.get('files').findWhere({barcode: item.document.file.barcode});
+                        if (!f) {
+                            f = new File({
+                                id: item.document.file.id,
+                                barcode: item.document.file.barcode,
+                                location: item.document.file.location,
+                                documents: new Documents()
+                            });
+                            f.storageType = storageType;
+                            b.get('files').add(f);
+                        }
 
+                        f.get('documents').add(d);
+
+                    }
+                });
+            }
             return boxes;
         },
 
         initialize: function(){
             //this.boxes = new Boxes();
+
             //this.boxes = this.getTestData(this.model.get('storageType').name);
             this.boxes = this.getBoxes();
+
+
         },
 
         onRender: function() {
@@ -1024,6 +1193,7 @@
         onChildviewShowBoxes: function(box, isNewBox) {
             if(box){
                 this.boxes.add(box, {merge: !isNewBox});
+                storage.storeBox(box, this.model);
             }
 
             this.showBoxesView();
@@ -1091,9 +1261,7 @@
 
         handleSaveSuccess: function(model, response)
         {
-            //console.log('success', response);
-            //Backbone.history.navigate("/" + response.id, {trigger: true});
-            this.options.rootView.showInfoModal('Info', 'User has been assigned successfully.', function(){window.location.href='/requests/' + response.id});
+            util.showInfoModal('Info', 'User has been assigned successfully.', function(){window.location.href='/requests/' + response.id});
         },
 
         handleSaveError: function(model, response){
@@ -1184,17 +1352,6 @@
             this.showChildView('main', new AddNewRecordsView({model: request, rootView: this}));
         },
 
-        showInfoModal: function(title, message, onHideFunction){
-            var modal = $('#infoModal');
-            modal.find('.modal-title').text(title);
-            modal.find('.modal-body').html('<p>' + message + '</p>');
-
-            if(onHideFunction) {
-                modal.on('hidden.bs.modal', onHideFunction);
-            }
-
-            modal.modal();
-        }
     });
 
     var Controller = Marionette.Object.extend({
