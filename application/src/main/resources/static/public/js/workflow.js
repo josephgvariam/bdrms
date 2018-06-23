@@ -31,35 +31,80 @@
         return {
 
             storeBox: function( box, request ) {
-                bdrmsStorage.create({
+                var record = new Box({
                     id: box.get('barcode'),
                     location: box.get('location'),
                     requestId: request.get('id'),
                     storageType: request.get('storageType').name,
-                    type: 'BOX',
+                    type: 'BOX'
                 });
+
+                if(request.get('storageType').name === 'BOX'){
+                    record.set({
+                        ref1: box.get('inventoryItem').get('ref1'),
+                        ref2: box.get('inventoryItem').get('ref2'),
+                        ref3: box.get('inventoryItem').get('ref3'),
+                        ref4: box.get('inventoryItem').get('ref4'),
+                        ref5: box.get('inventoryItem').get('ref5'),
+                        type: box.get('inventoryItem').get('type'),
+                        status: box.get('inventoryItem').get('status')
+                    });
+                }
+
+                bdrmsStorage.add(record);
+                record.save();
             },
 
             storeFile: function( file, box, request ) {
-                bdrmsStorage.create({
+                var record = new File({
                     id: file.get('barcode'),
                     location: file.get('location'),
                     parentId: box.get('barcode'),
                     requestId: request.get('id'),
                     storageType: request.get('storageType').name,
-                    type: 'FILE',
+                    type: 'FILE'
                 });
+
+                if(request.get('storageType').name === 'FILE'){
+                    record.set({
+                        ref1: file.get('inventoryItem').get('ref1'),
+                        ref2: file.get('inventoryItem').get('ref2'),
+                        ref3: file.get('inventoryItem').get('ref3'),
+                        ref4: file.get('inventoryItem').get('ref4'),
+                        ref5: file.get('inventoryItem').get('ref5'),
+                        type: file.get('inventoryItem').get('type'),
+                        status: file.get('inventoryItem').get('status')
+                    });
+                }
+
+                bdrmsStorage.add(record);
+                record.save();
             },
 
             storeDocument: function( doc, file, request ) {
-                bdrmsStorage.create({
+                var record = new Document({
                     id: doc.get('barcode'),
                     location: doc.get('location'),
                     parentId: file.get('barcode'),
                     requestId: request.get('id'),
                     storageType: request.get('storageType').name,
-                    type: 'DOCUMENT',
+                    type: 'DOCUMENT'
                 });
+
+                if(request.get('storageType').name === 'DOCUMENT'){
+                    record.set({
+                        ref1: doc.get('inventoryItem').get('ref1'),
+                        ref2: doc.get('inventoryItem').get('ref2'),
+                        ref3: doc.get('inventoryItem').get('ref3'),
+                        ref4: doc.get('inventoryItem').get('ref4'),
+                        ref5: doc.get('inventoryItem').get('ref5'),
+                        type: doc.get('inventoryItem').get('type'),
+                        status: doc.get('inventoryItem').get('status')
+                    });
+                }
+
+                bdrmsStorage.add(record);
+                record.save();
             },
 
             remove: function( record ) {
@@ -86,7 +131,20 @@
                         });
                         b.storageType = record.get('storageType');
 
-                        if(b.storageType !== 'BOX'){
+                        if(b.storageType === 'BOX'){
+                            var i = new InventoryItem({
+                                ref1: record.get('ref1'),
+                                ref2: record.get('ref2'),
+                                ref3: record.get('ref3'),
+                                ref4: record.get('ref4'),
+                                ref5: record.get('ref5'),
+                                type: record.get('type'),
+                                status: record.get('status')
+                            });
+
+                            b.set('inventoryItem', i);
+                        }
+                        else{
                             b.set('files', new Files());
                         }
 
@@ -100,7 +158,20 @@
                         f.storageType = record.get('storageType');
                         f.parentBarcode = record.get('parentId');
 
-                        if(f.storageType !== 'FILE'){
+                        if(f.storageType === 'FILE'){
+                            var i = new InventoryItem({
+                                ref1: record.get('ref1'),
+                                ref2: record.get('ref2'),
+                                ref3: record.get('ref3'),
+                                ref4: record.get('ref4'),
+                                ref5: record.get('ref5'),
+                                type: record.get('type'),
+                                status: record.get('status')
+                            });
+
+                            f.set('inventoryItem', i);
+                        }
+                        else{
                             f.set('documents', new Documents());
                         }
 
@@ -113,6 +184,18 @@
                         });
                         d.storageType = record.get('storageType');
                         d.parentBarcode = record.get('parentId');
+
+                        var i = new InventoryItem({
+                            ref1: record.get('ref1'),
+                            ref2: record.get('ref2'),
+                            ref3: record.get('ref3'),
+                            ref4: record.get('ref4'),
+                            ref5: record.get('ref5'),
+                            type: record.get('type'),
+                            status: record.get('status')
+                        });
+
+                        d.set('inventoryItem', i);
 
                         docs.add(d);
                     }
