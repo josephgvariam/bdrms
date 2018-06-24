@@ -201,8 +201,6 @@
                     }
                 });
 
-                console.log(boxes, files, docs)
-
                 docs.each(function(doc){
                     var file = files.findWhere({barcode: doc.parentBarcode});
                     file.get('documents').add(doc);
@@ -214,9 +212,15 @@
                 });
 
                 return boxes;
+            },
+
+            clearRecords: function(request){
+                var records = bdrmsStorage.where( {requestId: request.get('id')} );
+                _.each(records, function( record ){
+                    record.destroy();
+                });
             }
         };
-
     })();
 
     var Request = Backbone.Model.extend({
@@ -467,9 +471,11 @@
                     }
                 });
 
-                //console.log(  JSON.stringify(inventoryItems.toJSON()) );
-                this.options.request.set('inventoryItems', inventoryItems);
-                this.options.request.save(null, {
+                this.options.request.save({
+                    inventoryItems: inventoryItems,
+                    status: 'PACKED'
+                }, {
+                    wait: true,
                     success: this.handleRecordsSaveSuccess,
                     error: this.handleRecordsSaveError
                 });
@@ -478,6 +484,7 @@
         },
 
         handleRecordsSaveSuccess: function(model, response, options){
+            storage.clearRecords(this.options.request);
             util.showInfoModal('Info', 'Records saved successfully.', function(){window.location.href='/requests/' + response.id + '/workflow'});
         },
 
@@ -543,7 +550,7 @@
                 storage.remove(box);
             }, this);
 
-            if(skipped) {
+            if(skipped.length > 0) {
                 util.showInfoModal('Delete', 'Cannot delete non empty records! Skipped boxes: ' + skipped.join(", "));
             }
 
@@ -769,7 +776,7 @@
                 storage.remove(file);
             }, this);
 
-            if(skipped) {
+            if(skipped.length > 0) {
                 util.showInfoModal('Delete', 'Cannot delete non empty records! Skipped files: ' + skipped.join(", "));
             }
 
@@ -971,8 +978,6 @@
 
         deleteDocument: function(e) {
             var checked = $('div.ckbox>input:checked');
-
-            var skipped = [];
 
             _.each(checked, function (d) {
                 var barcode = String($(d).data('barcode'));
@@ -1336,6 +1341,7 @@
                     status: 'ASSIGNED'
                 },
                 {
+                    wait: true,
                     success: this.handleSaveSuccess,
                     error: this.handleSaveError
                 });
@@ -1391,7 +1397,7 @@
 
         start: function(e){
             e.preventDefault();
-            this.model.save({'status': this.options.nextStatus}, {success: this.handleSaveSuccess, error: this.handleSaveError});
+            this.model.save({'status': this.options.nextStatus}, {wait: true, success: this.handleSaveSuccess, error: this.handleSaveError});
         },
 
         cancel: function(e){
