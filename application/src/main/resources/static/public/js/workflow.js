@@ -13,7 +13,107 @@
                 }
 
                 modal.modal();
-            }
+            },
+
+            getBoxes: function(request, isFromStorage){
+                var boxes;
+
+                if(isFromStorage){
+                    boxes = storage.fetchRecords(request)
+                }else{
+                    boxes = new Boxes();
+                }
+
+                if(boxes.size() === 0) {
+                    var inventoryItems = request.get('inventoryItems');
+                    var storageType = request.get('storageType').name;
+
+                    _.each(inventoryItems, function (item) {
+                        var i = new InventoryItem({
+                            id: item.id,
+                            ref1: item.ref1,
+                            ref2: item.ref2,
+                            ref3: item.ref3,
+                            ref4: item.ref4,
+                            ref5: item.ref5,
+                            type: item.type,
+                            status: item.status
+                        });
+
+                        if (item.type === 'BOX') {
+                            var b = new Box({
+                                id: item.box.id,
+                                barcode: item.box.barcode,
+                                location: item.box.location,
+                                inventoryItem: i
+                            });
+                            b.storageType = storageType;
+
+                            boxes.add(b);
+                        }
+                        else if (item.type === 'FILE') {
+                            var f = new File({
+                                id: item.file.id,
+                                barcode: item.file.barcode,
+                                location: item.file.location,
+                                inventoryItem: i
+                            });
+                            f.storageType = storageType;
+
+                            var b = boxes.findWhere({barcode: item.file.box.barcode});
+                            if (!b) {
+                                b = new Box({
+                                    id: item.file.box.id,
+                                    barcode: item.file.box.barcode,
+                                    location: item.file.box.location,
+                                    files: new Files()
+                                });
+                                b.storageType = storageType;
+                                boxes.add(b);
+                            }
+                            b.get('files').add(f);
+                        }
+                        else if (item.type === 'DOCUMENT') {
+                            var d = new Document({
+                                id: item.document.id,
+                                barcode: item.document.barcode,
+                                location: item.document.location,
+                                inventoryItem: i
+                            });
+                            d.storageType = storageType;
+
+                            var b = boxes.findWhere({barcode: item.document.file.box.barcode});
+                            if (!b) {
+                                b = new Box({
+                                    id: item.document.file.box.id,
+                                    barcode: item.document.file.box.barcode,
+                                    location: item.document.file.box.location,
+                                    files: new Files()
+                                });
+                                b.storageType = storageType;
+                                boxes.add(b);
+                            }
+
+                            var f = b.get('files').findWhere({barcode: item.document.file.barcode});
+                            if (!f) {
+                                f = new File({
+                                    id: item.document.file.id,
+                                    barcode: item.document.file.barcode,
+                                    location: item.document.file.location,
+                                    documents: new Documents()
+                                });
+                                f.storageType = storageType;
+                                b.get('files').add(f);
+                            }
+
+                            f.get('documents').add(d);
+
+                        }
+                    });
+                }
+                return boxes;
+            },
+
         };
     })();
 
@@ -1112,160 +1212,20 @@
 
 
 
-    var AddNewRecordsView = Marionette.View.extend({
-        template: '#add-new-record-template',
+    var AddRecordsView = Marionette.View.extend({
+        template: '#add-records-template',
 
         regions: {
-            body: {el: '#add-new-record', replaceElement: true}
+            body: {el: '#add-records', replaceElement: true}
         },
 
-        getTestData: function(storageType){
 
-            var barcodeCount = 1;
-            var depth = 3;
-
-            var boxes = new Boxes();
-
-            for (var b = 1; b <= depth; b++) {
-                var box = new Box({barcode: 'BO-' + barcodeCount++});
-                box.storageType = storageType; //need in template, but not in attributes and its json
-
-                if(storageType === 'BOX'){
-                    box.set('inventoryItem', new InventoryItem({type: 'BOX'}));
-                }else{
-                    var files = new Files();
-
-                    for(var f = 1; f <= depth; f++ ){
-
-                        var file = new File({barcode: 'FL-' + barcodeCount++});
-                        file.storageType = storageType;
-
-                        if(storageType === 'FILE'){
-                            file.set('inventoryItem', new InventoryItem({type: 'FILE'}));
-                        }else{
-                            var docs = new Documents();
-
-                            for(var d = 1; d <= depth; d++ ){
-                                var doc = new Document({barcode: 'DO' + barcodeCount++});
-                                doc.storageType = storageType;
-                                doc.set('inventoryItem', new InventoryItem({type: 'DOCUMENT'}));
-                                docs.add(doc);
-                            }
-
-                            file.set('documents', docs);
-                        }
-
-                        files.add(file);
-                    }
-
-                    box.set('files', files);
-                }
-
-                boxes.add(box);
-            }
-
-            return boxes;
-        },
-
-        getBoxes: function(){
-            var boxes = storage.fetchRecords(this.model);
-
-            if(boxes.size() == 0) {
-                boxes = new Boxes();
-                var inventoryItems = this.model.get('inventoryItems');
-                var storageType = this.model.get('storageType').name;
-
-                _.each(inventoryItems, function (item) {
-                    var i = new InventoryItem({
-                        id: item.id,
-                        ref1: item.ref1,
-                        ref2: item.ref2,
-                        ref3: item.ref3,
-                        ref4: item.ref4,
-                        ref5: item.ref5,
-                        type: item.type,
-                        status: item.status
-                    });
-
-                    if (item.type === 'BOX') {
-                        var b = new Box({
-                            id: item.box.id,
-                            barcode: item.box.barcode,
-                            location: item.box.location,
-                            inventoryItem: i
-                        });
-                        b.storageType = storageType;
-
-                        boxes.add(b);
-                    }
-                    else if (item.type === 'FILE') {
-                        var f = new File({
-                            id: item.file.id,
-                            barcode: item.file.barcode,
-                            location: item.file.location,
-                            inventoryItem: i
-                        });
-                        f.storageType = storageType;
-
-                        var b = boxes.findWhere({barcode: item.file.box.barcode});
-                        if (!b) {
-                            b = new Box({
-                                id: item.file.box.id,
-                                barcode: item.file.box.barcode,
-                                location: item.file.box.location,
-                                files: new Files()
-                            });
-                            b.storageType = storageType;
-                            boxes.add(b);
-                        }
-                        b.get('files').add(f);
-                    }
-                    else if (item.type === 'DOCUMENT') {
-                        var d = new Document({
-                            id: item.document.id,
-                            barcode: item.document.barcode,
-                            location: item.document.location,
-                            inventoryItem: i
-                        });
-                        d.storageType = storageType;
-
-                        var b = boxes.findWhere({barcode: item.document.file.box.barcode});
-                        if (!b) {
-                            b = new Box({
-                                id: item.document.file.box.id,
-                                barcode: item.document.file.box.barcode,
-                                location: item.document.file.box.location,
-                                files: new Files()
-                            });
-                            b.storageType = storageType;
-                            boxes.add(b);
-                        }
-
-                        var f = b.get('files').findWhere({barcode: item.document.file.barcode});
-                        if (!f) {
-                            f = new File({
-                                id: item.document.file.id,
-                                barcode: item.document.file.barcode,
-                                location: item.document.file.location,
-                                documents: new Documents()
-                            });
-                            f.storageType = storageType;
-                            b.get('files').add(f);
-                        }
-
-                        f.get('documents').add(d);
-
-                    }
-                });
-            }
-            return boxes;
-        },
 
         initialize: function(){
             //this.boxes = new Boxes();
 
             //this.boxes = this.getTestData(this.model.get('storageType').name);
-            this.boxes = this.getBoxes();
+            this.boxes = util.getBoxes(this.model, true);
 
 
         },
@@ -1422,6 +1382,22 @@
 
     });
 
+    var ViewRecordsView = Marionette.View.extend({
+        template: '#view-records-template',
+
+        regions: {
+            body: {el: '#view-records', replaceElement: true}
+        },
+
+        initialize: function(){
+            //_.bindAll(this, "handleSaveSuccess", "handleSaveError");
+        },
+
+        events: {
+            //'click #save-button': 'handleSave'
+        },
+    });
+
     var RootView = Marionette.View.extend({
         template: _.template('<div id="main"></div>'),
 
@@ -1437,8 +1413,12 @@
             this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, nextStatus: nextStatus, nextViewFunction: nextViewFunction, navText: navText}));
         },
 
-        showAddNewRecordView: function (request) {
-            this.showChildView('main', new AddNewRecordsView({model: request, rootView: this}));
+        showAddRecordsView: function (request) {
+            this.showChildView('main', new AddRecordsView({model: request, rootView: this}));
+        },
+
+        showViewRecordsView: function (request) {
+            this.showChildView('main', new ViewRecordsView({model: request, rootView: this}));
         },
 
     });
@@ -1461,10 +1441,13 @@
                     rootView.showAssignUserView(request);
                 }
                 else if (status === 'ASSIGNED'){
-                    rootView.showBeforeProcessRequestView(request, 'Add Records','Proceed with adding records to this request?', 'INPROGRESS', rootView.showAddNewRecordView, 'addRecords');
+                    rootView.showBeforeProcessRequestView(request, 'Add Records','Proceed with adding records to this request?', 'INPROGRESS', rootView.showAddRecordsView, 'addRecords');
                 }
                 else if (status === 'INPROGRESS'){
-                    rootView.showAddNewRecordView(request);
+                    rootView.showAddRecordsView(request);
+                }
+                else if (status === 'PACKED' || status === 'TRANSIT'){
+                    rootView.showViewRecordsView(request);
                 }
             }
         }

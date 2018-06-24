@@ -155,12 +155,21 @@
         </div>
     </script>
 
-    <script id="add-new-record-template" type="text/template">
+    <script id="view-records-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - View Records</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+            <div id="view-records"></div>
+        </div>
+    </script>
+
+    <script id="add-records-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
             <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Add Records</h1>
             <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
             <br/>
-            <div id="add-new-record"></div>
+            <div id="add-records"></div>
         </div>
     </script>
 
