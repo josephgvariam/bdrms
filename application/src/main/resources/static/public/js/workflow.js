@@ -1407,7 +1407,9 @@
 
         handleSaveError: function(model, response)
         {
-            console.log('error saving request', response);
+            if(response.responseJSON.message) {
+                this.showAlert([response.responseJSON.message], 'danger');
+            }
         },
 
         onAttach: function(){
@@ -1424,12 +1426,63 @@
         },
 
         initialize: function(){
+            _.bindAll(this, "handleSaveSuccess", "handleSaveError");
+        },
+
+        events: {
+            'click #startTransitButton': 'startTransit'
+        },
+
+        startTransit: function(e){
+            e.preventDefault();
+
+            this.model.save({
+                    status: 'TRANSIT'
+                },
+                {
+                    wait: true,
+                    success: this.handleSaveSuccess,
+                    error: this.handleSaveError
+                });
+
+        },
+
+        handleSaveSuccess: function(model, response)
+        {
+            swal({
+                title: 'Request Updated!',
+                text: 'Records are now in transit.',
+                type: 'success'
+
+            },function(){
+                window.location.href='/requests/' + response.id
+            });
+        },
+
+        handleSaveError: function(model, response){
+            if(response.responseJSON.message) {
+                this.showAlert([response.responseJSON.message], 'danger');
+            }
+        }
+
+
+    });
+
+    var VerifyRecordsView = Marionette.View.extend({
+        template: '#verify-records-template',
+
+        regions: {
+            body: {el: '#verify-records', replaceElement: true}
+        },
+
+        initialize: function(){
             //_.bindAll(this, "handleSaveSuccess", "handleSaveError");
         },
 
         events: {
-            //'click #save-button': 'handleSave'
-        }
+            //
+        },
+
     });
 
     var RootView = Marionette.View.extend({
@@ -1453,7 +1506,12 @@
 
         showViewRecordsView: function (request) {
             this.showChildView('main', new ViewRecordsView({model: request, rootView: this}));
+        },
+
+        showVerifyRecordsView: function (request) {
+            this.showChildView('main', new VerifyRecordsView({model: request, rootView: this}));
         }
+
 
     });
 
@@ -1475,13 +1533,19 @@
                     rootView.showAssignUserView(request);
                 }
                 else if (status === 'ASSIGNED'){
-                    rootView.showBeforeProcessRequestView(request, 'Add Records','Proceed with adding records to this request?', 'INPROGRESS', rootView.showAddRecordsView, 'addRecords');
+                    rootView.showBeforeProcessRequestView(request, 'Add Records', 'Proceed with adding records to this request?', 'INPROGRESS', rootView.showAddRecordsView, 'addRecords');
                 }
                 else if (status === 'INPROGRESS'){
                     rootView.showAddRecordsView(request);
                 }
-                else if (status === 'PACKED' || status === 'TRANSIT'){
+                else if (status === 'PACKED'){
                     rootView.showViewRecordsView(request);
+                }
+                else if (status === 'TRANSIT'){
+                    rootView.showBeforeProcessRequestView(request, 'Verify Records', 'Proceed with verifying the incoming records for this request?', 'INCOMING', rootView.showVerifyRecordsView, 'verifyRecords');
+                }
+                else if (status === 'INCOMING'){
+                    rootView.showVerifyRecordsView(request);
                 }
             }
         }

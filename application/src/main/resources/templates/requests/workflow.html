@@ -156,12 +156,85 @@
         </div>
     </script>
 
+    <script id="verify-records-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Verify Records</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+            <div id="verify-records">
+            </div>
+        </div>
+    </script>
+
+
+
     <script id="view-records-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
             <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - View Records</h1>
             <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
             <br/>
-            <div id="view-records"></div>
+            <div id="view-records">
+                <div class="row">
+                    <div class="col-md-10">
+                        <p>
+                            <button id="loadChartButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt" style="margin-right: 3px;"></span> Load Chart</button>
+                            <button id="startTransitButton" type="button" class="btn btn-primary" ><span class="glyphicon glyphicon-send" style="margin-right: 3px;"></span> Start Transit</button>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <table id="recordsTable" class="table table-bordered table-striped table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Status</th>
+                                <th>Location</th>
+
+                                <% if (storageType.name === 'DOCUMENT') { %>
+                                <th>Doc Barcode</th>
+                                <% } %>
+
+                                <% if (storageType.name === 'DOCUMENT' || storageType.name === 'FILE') { %>
+                                <th>File Barcode</th>
+                                <% } %>
+
+                                <th>Box Barcode</th>
+
+                                <th>Ref1</th>
+                                <th>Ref2</th>
+                                <th>Ref3</th>
+                                <th>Ref4</th>
+                                <th>Ref5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% _.each(inventoryItems, function(item, i) { %>
+                            <tr>
+                                <td><%= i+1 %></td>
+                                <td><%= item.status %></td>
+                                <td><%= item.location %></td>
+
+                                <% if (item.type === 'DOCUMENT') { %>
+                                <td><%= item.documentBarcode %></td>
+                                <% } %>
+
+                                <% if (item.type === 'DOCUMENT' || item.type === 'FILE') { %>
+                                <td><%= item.fileBarcode %></td>
+                                <% } %>
+
+                                <td><%= item.boxBarcode %></td>
+
+                                <td><%= item.ref1 %></td>
+                                <td><%= item.ref2 %></td>
+                                <td><%= item.ref3 %></td>
+                                <td><%= item.ref4 %></td>
+                                <td><%= item.ref5 %></td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </script>
 
