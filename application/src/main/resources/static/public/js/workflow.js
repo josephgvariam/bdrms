@@ -1,6 +1,5 @@
 (function() {
 
-
     var util = (function () {
         return {
             showInfoModal: function(title, message, onHideFunction){
@@ -13,6 +12,11 @@
                 }
 
                 modal.modal();
+            },
+
+            showAlert: function(title, text, type){
+                var alertText = '<div id="workflowAlert" class="alert alert-'+type+' alert-dismissible col-md-10 col-md-offset-1"><strong>' + title + '</strong> ' + text + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                $('#alert').html(alertText);
             },
 
             getBoxes: function(request, isFromStorage){
@@ -112,21 +116,21 @@
                     });
                 }
                 return boxes;
-            },
+            }
 
         };
     })();
 
     var storage = (function () {
 
-        BdrmsStorageItem = Backbone.Model.extend();
+        var BdrmsStorageItem = Backbone.Model.extend();
 
-        BdrmsStorage = Backbone.Collection.extend({
+        var BdrmsStorage = Backbone.Collection.extend({
             model: BdrmsStorageItem,
-            localStorage: new Backbone.LocalStorage("in.bigdash.rms.app.storage"),
+            localStorage: new Backbone.LocalStorage("in.bigdash.rms.app.storage")
         });
 
-        bdrmsStorage = new BdrmsStorage();
+        var bdrmsStorage = new BdrmsStorage();
 
         return {
 
@@ -397,15 +401,15 @@
     });
 
     var Boxes = Backbone.Collection.extend({
-        model: Box,
+        model: Box
     });
 
     var Files = Backbone.Collection.extend({
-        model: File,
+        model: File
     });
 
     var Documents = Backbone.Collection.extend({
-        model: Document,
+        model: Document
     });
 
 //////////////////////// VIEWS
@@ -428,7 +432,7 @@
     var BoxesTableView = Marionette.CollectionView.extend({
         tagName: 'tbody',
         childView: BoxRowView,
-        emptyView: EmptyBoxRowView,
+        emptyView: EmptyBoxRowView
     });
 
     var BoxesView = Marionette.View.extend({
@@ -442,7 +446,7 @@
         },
 
         initialize: function(){
-            _.bindAll(this, "handleRecordsSaveSuccess", "handleRecordsSaveError");
+            _.bindAll(this, "handleRecordsSaveSuccess", "handleRecordsSaveError", "doSaveRecords");
         },
 
         events: {
@@ -455,8 +459,6 @@
         },
 
         validateRecords: function(){
-
-            $('#workflowAlert').html('');
 
             var storageType = this.options.request.get('storageType').name;
             var errors = [];
@@ -493,104 +495,128 @@
             //console.log(errors);
 
             if(errors.length) {
-                this.showAlert(errors);
+                swal.close();
+                this.showAlert(errors, 'warning');
             }
 
             return errors.length === 0;
 
         },
 
-        showAlert: function(errors){
+        showAlert: function(errors, type){
             var alertText = '';
 
             if(errors.length === 1){
-                alertText = '<div id="workflowAlert" class="alert alert-danger alert-dismissible col-md-10 col-md-offset-1"><strong>Error saving records!</strong> '+ errors[0] +' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                alertText = errors[0];
             }
             else{
-                alertText = '<div id="workflowAlert" class="alert alert-danger alert-dismissible col-md-10 col-md-offset-1"><strong>Error saving records!</strong> Please check the following: <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                alertText = 'Please check the following: ';
 
                 _.each(errors, function (e) {
                     alertText = alertText + '<li>' + e + '</li>';
                 });
-
-                alertText = alertText + '</div>';
             }
 
-            $('#alert').html(alertText);
+            util.showAlert('Error saving records!', alertText, type);
         },
+
 
         saveRecords: function(e){
             e.preventDefault();
+            $('#alert').html('');
+
             if(this.validateRecords()){
-                //console.log(this.collection);
+                swal({
+                        title: "Are you sure?",
+                        text: "You will not be able to modify records after saving!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, Save it!",
+                        closeOnConfirm: false,
+                        showLoaderOnConfirm: true
+                    },
+                    this.doSaveRecords);
+            }
+        },
 
-                var inventoryItems = new InventoryItems();
+        doSaveRecords: function(){
+            var inventoryItems = new InventoryItems();
 
-                this.collection.each(function(box){
-                    if(box.get('inventoryItem')){
-                        var b = box.clone();
-                        b.unset('inventoryItem');
+            this.collection.each(function(box){
+                if(box.get('inventoryItem')){
+                    var b = box.clone();
+                    b.unset('inventoryItem');
 
-                        var i = box.get('inventoryItem').clone();
-                        i.set('box', b);
+                    var i = box.get('inventoryItem').clone();
+                    i.set('box', b);
 
-                        inventoryItems.add(i);
-                    }
-                    else{
-                        box.get('files').each(function (file) {
-                            if(file.get('inventoryItem')){
+                    inventoryItems.add(i);
+                }
+                else{
+                    box.get('files').each(function (file) {
+                        if(file.get('inventoryItem')){
+                            var f = file.clone();
+                            var b = box.clone();
+                            f.unset('inventoryItem');
+                            b.unset('files');
+                            f.set('box', b);
+
+                            var i = file.get('inventoryItem').clone();
+                            i.set('file', f);
+
+                            inventoryItems.add(i);
+                        }
+                        else{
+                            file.get('documents').each(function (doc) {
+                                var d = doc.clone();
                                 var f = file.clone();
                                 var b = box.clone();
-                                f.unset('inventoryItem');
+                                d.unset('inventoryItem');
+                                f.unset('documents');
                                 b.unset('files');
                                 f.set('box', b);
+                                d.set('file', f);
 
-                                var i = file.get('inventoryItem').clone();
-                                i.set('file', f)
+                                var i = doc.get('inventoryItem').clone();
+                                i.set('document', d);
 
                                 inventoryItems.add(i);
-                            }
-                            else{
-                                file.get('documents').each(function (doc) {
-                                    var d = doc.clone();
-                                    var f = file.clone();
-                                    var b = box.clone();
-                                    d.unset('inventoryItem');
-                                    f.unset('documents')
-                                    b.unset('files');
-                                    f.set('box', b);
-                                    d.set('file', f);
+                            });
+                        }
+                    });
+                }
+            });
 
-                                    var i = doc.get('inventoryItem').clone();
-                                    i.set('document', d)
-
-                                    inventoryItems.add(i);
-                                });
-                            }
-                        });
-                    }
-                });
-
-                this.options.request.save({
-                    inventoryItems: inventoryItems,
-                    status: 'PACKED'
-                }, {
-                    wait: true,
-                    success: this.handleRecordsSaveSuccess,
-                    error: this.handleRecordsSaveError
-                });
-            }
+            this.options.request.save({
+                inventoryItems: inventoryItems,
+                status: 'PACKED'
+            }, {
+                wait: true,
+                success: this.handleRecordsSaveSuccess,
+                error: this.handleRecordsSaveError
+            });
 
         },
 
         handleRecordsSaveSuccess: function(model, response, options){
             storage.clearRecords(this.options.request);
-            util.showInfoModal('Info', 'Records saved successfully.', function(){window.location.href='/requests/' + response.id + '/workflow'});
+            //util.showInfoModal('Info', 'Records saved successfully.', function(){window.location.href='/requests/' + response.id + '/workflow'});
+
+            swal({
+                    title: 'Request Updated!',
+                    text: 'Records have been saved.',
+                    type: "success"
+                },
+                function(){
+                    window.location.href='/requests/' + response.id + '/workflow'
+                });
         },
 
         handleRecordsSaveError: function(model, response, options){
             if(response.responseJSON.message) {
-                this.showAlert([response.responseJSON.message]);
+                swal.close();
+                this.showAlert([response.responseJSON.message], 'danger');
             }
         },
 
@@ -606,7 +632,7 @@
         showFiles: function(e){
             e.preventDefault();
             var barcode = String($(e.currentTarget).data('barcode'));
-            var box = this.collection.findWhere({barcode: barcode})
+            var box = this.collection.findWhere({barcode: barcode});
             this.triggerMethod('show:files', box);
         },
 
@@ -651,7 +677,7 @@
             }, this);
 
             if(skipped.length > 0) {
-                util.showInfoModal('Delete', 'Cannot delete non empty records! Skipped boxes: ' + skipped.join(", "));
+                util.showAlert('', 'Cannot delete non empty records! Skipped boxes: ' + skipped.join(", "), 'warning');
             }
 
             this.updateDeleteButtonEnabled();
@@ -677,7 +703,7 @@
 
         events: {
             'click #ok-button': 'handleOkButton',
-            'click #cancel-button': 'handleCancelButton',
+            'click #cancel-button': 'handleCancelButton'
         },
 
         validate: function(){
@@ -717,7 +743,7 @@
 
             this.model.set({
                 'barcode': barcode,
-                'location': location,
+                'location': location
             });
 
             if(this.options.request.get('storageType').name === 'BOX'){
@@ -753,7 +779,7 @@
         },
 
         showValidationError: function (key, val) {
-            $key = this.$('#'+key);
+            var $key = this.$('#'+key);
             $key.closest('.form-group').addClass('has-error has-feedback');
             $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
         },
@@ -788,7 +814,7 @@
     var FilesTableView = Marionette.CollectionView.extend({
         tagName: 'tbody',
         childView: FileRowView,
-        emptyView: EmptyFileRowView,
+        emptyView: EmptyFileRowView
     });
 
     var FilesView = Marionette.View.extend({
@@ -839,7 +865,7 @@
         editFile: function(e){
             e.preventDefault();
             var barcode = String($(e.currentTarget).data('barcode'));
-            var file = this.collection.findWhere({barcode: barcode})
+            var file = this.collection.findWhere({barcode: barcode});
             this.triggerMethod('show:file', file, this.options.box);
         },
 
@@ -865,7 +891,7 @@
             _.each(checked, function (f) {
                 var barcode = String($(f).data('barcode'));
 
-                var file = this.collection.findWhere({barcode: barcode})
+                var file = this.collection.findWhere({barcode: barcode});
 
                 if(file.get('documents') && file.get('documents').size()){
                     skipped.push(file.get('barcode'));
@@ -877,7 +903,7 @@
             }, this);
 
             if(skipped.length > 0) {
-                util.showInfoModal('Delete', 'Cannot delete non empty records! Skipped files: ' + skipped.join(", "));
+                util.showAlert('', 'Cannot delete non empty records! Skipped files: ' + skipped.join(", "), 'warning');
             }
 
             this.updateDeleteButtonEnabled();
@@ -904,7 +930,7 @@
 
         events: {
             'click #ok-button': 'handleOkButton',
-            'click #cancel-button': 'handleCancelButton',
+            'click #cancel-button': 'handleCancelButton'
         },
 
         validate: function(){
@@ -945,7 +971,7 @@
 
             this.model.set({
                 'barcode': barcode,
-                'location': location,
+                'location': location
             });
 
             if(this.options.request.get('storageType').name === 'FILE'){
@@ -981,14 +1007,14 @@
         },
 
         showValidationError: function (key, val) {
-            $key = this.$('#'+key);
+            var $key = this.$('#'+key);
             $key.closest('.form-group').addClass('has-error has-feedback');
             $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
         },
 
         onAttach: function(){
             var boxBarcode = this.options.box.get('barcode');
-            var fileTitle = this.isNewFile ? 'NEW FILE' : 'FILE ' + this.model.get('barcode')
+            var fileTitle = this.isNewFile ? 'NEW FILE' : 'FILE ' + this.model.get('barcode');
             this.$('#filePanelTitle').text('BOX ' + boxBarcode + ' >> ' + fileTitle);
 
             if(this.isNewFile) {
@@ -1019,7 +1045,7 @@
     var DocumentsTableView = Marionette.CollectionView.extend({
         tagName: 'tbody',
         childView: DocumentRowView,
-        emptyView: EmptyDocumentRowView,
+        emptyView: EmptyDocumentRowView
     });
 
     var DocumentsView = Marionette.View.extend({
@@ -1060,7 +1086,7 @@
         editDocument: function(e){
             e.preventDefault();
             var barcode = String($(e.currentTarget).data('barcode'));
-            var document = this.collection.findWhere({barcode: barcode})
+            var document = this.collection.findWhere({barcode: barcode});
             this.triggerMethod('show:document', document, this.options.file, this.options.box);
         },
 
@@ -1082,7 +1108,7 @@
             _.each(checked, function (d) {
                 var barcode = String($(d).data('barcode'));
 
-                var document = this.collection.findWhere({barcode: barcode})
+                var document = this.collection.findWhere({barcode: barcode});
 
                 this.collection.remove(document);
                 storage.remove(document);
@@ -1114,7 +1140,7 @@
 
         events: {
             'click #ok-button': 'handleOkButton',
-            'click #cancel-button': 'handleCancelButton',
+            'click #cancel-button': 'handleCancelButton'
         },
 
         validate: function(){
@@ -1154,7 +1180,7 @@
 
             this.model.set({
                 'barcode': barcode,
-                'location': location,
+                'location': location
             });
 
             if(this.options.request.get('storageType').name === 'DOCUMENT'){
@@ -1189,7 +1215,7 @@
         },
 
         showValidationError: function (key, val) {
-            $key = this.$('#'+key);
+            var $key = this.$('#'+key);
             $key.closest('.form-group').addClass('has-error has-feedback');
             $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
         },
@@ -1197,7 +1223,7 @@
         onAttach: function(){
             var boxBarcode = this.options.box.get('barcode');
             var fileBarcode = this.options.file.get('barcode');
-            var documentTitle = this.isNewDocument ? 'NEW DOCUMENT' : 'DOCUMENT ' + this.model.get('barcode')
+            var documentTitle = this.isNewDocument ? 'NEW DOCUMENT' : 'DOCUMENT ' + this.model.get('barcode');
             this.$('#documentPanelTitle').text('BOX ' + boxBarcode + ' >> FILE ' + fileBarcode + ' >>  ' + documentTitle);
 
             if(this.isNewDocument) {
@@ -1285,7 +1311,7 @@
         },
 
         onRender: function(){
-            this.$('.dropdown-select-ajax').select2({debug : false, theme : 'bootstrap', allowClear : true,});
+            this.$('.dropdown-select-ajax').select2({debug : false, theme : 'bootstrap', allowClear : true});
         },
 
         handleSave: function(e){
@@ -1310,7 +1336,15 @@
 
         handleSaveSuccess: function(model, response)
         {
-            util.showInfoModal('Info', 'User has been assigned successfully.', function(){window.location.href='/requests/' + response.id});
+            //util.showInfoModal('Info', 'User has been assigned successfully.', function(){window.location.href='/requests/' + response.id});
+            swal({
+                title: 'Request Updated!',
+                text: 'User has been assigned successfully.',
+                type: 'success'
+
+            },function(){
+                window.location.href='/requests/' + response.id
+            });
         },
 
         handleSaveError: function(model, response){
@@ -1329,7 +1363,7 @@
         },
 
         showValidationError: function (key, val) {
-            $key = this.$('#'+key);
+            var $key = this.$('#'+key);
             $key.closest('.form-group').addClass('has-error has-feedback');
             $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
         }
@@ -1395,7 +1429,7 @@
 
         events: {
             //'click #save-button': 'handleSave'
-        },
+        }
     });
 
     var RootView = Marionette.View.extend({
@@ -1419,7 +1453,7 @@
 
         showViewRecordsView: function (request) {
             this.showChildView('main', new ViewRecordsView({model: request, rootView: this}));
-        },
+        }
 
     });
 
@@ -1461,7 +1495,7 @@
 
         appRoutes: {
             ':requestId/workflow': 'start',
-            ':requestId/workflow/*splat': 'start',
+            ':requestId/workflow/*splat': 'start'
         }
     });
 
