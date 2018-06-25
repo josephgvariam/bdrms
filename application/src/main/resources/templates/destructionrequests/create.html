@@ -29,7 +29,7 @@
           <h1 data-th-text="#{label_create_entity(#{label_destructionrequest})}">Create DestructionRequest</h1>
 
           <!-- FORM -->
-          <form class="form-horizontal validate" method="POST" data-th-object="${destructionRequest}" data-th-action="${collectionLink.to('create').with('destructionRequest', destructionRequest.id)}">
+          <form class="form-horizontal validate" method="POST" data-th-object="${destructionRequest}" data-th-action="${collectionLink.to('create').with('destructionRequest', destructionRequest.id)}" autocomplete="off">
 
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_destructionrequest})}">DestructionRequest data </legend>

@@ -29,7 +29,7 @@
           <h1 data-th-text="#{label_create_entity(#{label_pickuprequest})}">Create PickupRequest</h1>
 
           <!-- FORM -->
-          <form class="form-horizontal validate" method="POST" data-th-object="${pickupRequest}" data-th-action="${collectionLink.to('create').with('pickupRequest', pickupRequest.id)}">
+          <form class="form-horizontal validate" method="POST" data-th-object="${pickupRequest}" data-th-action="${collectionLink.to('create').with('pickupRequest', pickupRequest.id)}" autocomplete="off">
 
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_pickuprequest})}">PickupRequest data </legend>

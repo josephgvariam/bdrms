@@ -29,7 +29,7 @@
           <h1 data-th-text="#{label_create_entity(#{label_insertionrequest})}">Create InsertionRequest</h1>
 
           <!-- FORM -->
-          <form class="form-horizontal validate" method="POST" data-th-object="${insertionRequest}" data-th-action="${collectionLink.to('create').with('insertionRequest', insertionRequest.id)}">
+          <form class="form-horizontal validate" method="POST" data-th-object="${insertionRequest}" data-th-action="${collectionLink.to('create').with('insertionRequest', insertionRequest.id)}" autocomplete="off">
 
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_insertionrequest})}">InsertionRequest data </legend>

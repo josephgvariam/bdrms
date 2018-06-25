@@ -29,7 +29,7 @@
           <h1 data-th-text="#{label_create_entity(#{label_retrievalrequest})}">Create RetrievalRequest</h1>
 
           <!-- FORM -->
-          <form class="form-horizontal validate" method="POST" data-th-object="${retrievalRequest}" data-th-action="${collectionLink.to('create').with('retrievalRequest', retrievalRequest.id)}">
+          <form class="form-horizontal validate" method="POST" data-th-object="${retrievalRequest}" data-th-action="${collectionLink.to('create').with('retrievalRequest', retrievalRequest.id)}" autocomplete="off">
 
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_retrievalrequest})}">RetrievalRequest data </legend>

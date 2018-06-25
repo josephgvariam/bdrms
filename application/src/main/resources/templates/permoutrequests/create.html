@@ -29,7 +29,7 @@
           <h1 data-th-text="#{label_create_entity(#{label_permoutrequest})}">Create PermoutRequest</h1>
 
           <!-- FORM -->
-          <form class="form-horizontal validate" method="POST" data-th-object="${permoutRequest}" data-th-action="${collectionLink.to('create').with('permoutRequest', permoutRequest.id)}">
+          <form class="form-horizontal validate" method="POST" data-th-object="${permoutRequest}" data-th-action="${collectionLink.to('create').with('permoutRequest', permoutRequest.id)}" autocomplete="off">
 
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_permoutrequest})}">PermoutRequest data </legend>

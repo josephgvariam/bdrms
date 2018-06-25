@@ -29,7 +29,7 @@
           <h1 data-th-text="#{label_create_entity(#{label_refilingrequest})}">Create RefilingRequest</h1>
 
           <!-- FORM -->
-          <form class="form-horizontal validate" method="POST" data-th-object="${refilingRequest}" data-th-action="${collectionLink.to('create').with('refilingRequest', refilingRequest.id)}">
+          <form class="form-horizontal validate" method="POST" data-th-object="${refilingRequest}" data-th-action="${collectionLink.to('create').with('refilingRequest', refilingRequest.id)}" autocomplete="off">
 
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_refilingrequest})}">RefilingRequest data </legend>
