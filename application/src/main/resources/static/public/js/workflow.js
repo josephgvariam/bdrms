@@ -155,7 +155,7 @@
                     });
                 }
 
-                bdrmsStorage.add(record);
+                record = bdrmsStorage.add(record, {merge: true});
                 record.save();
             },
 
@@ -181,7 +181,7 @@
                     });
                 }
 
-                bdrmsStorage.add(record);
+                record = bdrmsStorage.add(record, {merge: true});
                 record.save();
             },
 
@@ -207,7 +207,7 @@
                     });
                 }
 
-                bdrmsStorage.add(record);
+                record = bdrmsStorage.add(record, {merge: true});
                 record.save();
             },
 
