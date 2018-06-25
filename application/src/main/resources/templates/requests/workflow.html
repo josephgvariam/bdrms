@@ -162,11 +162,46 @@
             <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
             <br/>
             <div id="verify-records">
+                <div class="row" style="display:flex; align-items:center;">
+                    <div class="col-md-6 form-group">
+                        <input id="incomingBoxBarcode" type="text" class="form-control"  placeholder="Incoming Box Barcode" autofocus>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress">
+                            <div class="progress-bar" id="verifyProgressbar">80%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">Incoming Boxes</h3>
+                            </div>
+                            <ul id="incomingBoxesRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">System Boxes</h3>
+                            </div>
+                            <ul id="systemBoxesRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </script>
 
-
+    <script id="verify-records-row-template" type="text/template">
+        <%= id %><% if (!isSystemBoxesView){ %><i class="fa fa-remove fa-2x pull-right deleteIncomingBox" style="color: red;"></i><%}%>
+    </script>
 
     <script id="view-records-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">

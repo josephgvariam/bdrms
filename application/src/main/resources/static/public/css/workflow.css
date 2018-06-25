@@ -112,3 +112,15 @@
 .table-filter .media .summary {
     font-size: 14px;
 }
+
+
+
+.verifyboxlist {
+    height: 500px;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+#verifyProgressbar {
+    min-width: 2em;
+}

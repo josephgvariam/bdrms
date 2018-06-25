@@ -412,6 +412,16 @@
         model: Document
     });
 
+    var VerifyBox = Backbone.Model.extend({
+        defaults: {
+            verified: false
+        }
+    });
+
+    var VerifyBoxes = Backbone.Collection.extend({
+        model: VerifyBox
+    });
+
 //////////////////////// VIEWS
 
 
@@ -710,8 +720,8 @@
             this.clearValidationErrors();
 
             var valid = true;
-            var barcode = this.$('#barcode').val();
-            var location = this.$('#location').val();
+            var barcode = this.$('#barcode').val().trim().toUpperCase();
+            var location = this.$('#location').val().trim();
             var ref1 = this.$('#ref1').val();
 
             if(!barcode){
@@ -733,8 +743,8 @@
                 return;
             }
 
-            var barcode = this.$('#barcode').val();
-            var location = this.$('#location').val();
+            var barcode = this.$('#barcode').val().trim().toUpperCase();
+            var location = this.$('#location').val().trim();
 
             if(this.isNewBox && this.options.boxes.findWhere({barcode: barcode})){
                 this.showValidationError('barcode', 'barcode already exists');
@@ -749,11 +759,11 @@
             if(this.options.request.get('storageType').name === 'BOX'){
 
                 var inventoryItem = this.model.get('inventoryItem');
-                inventoryItem.set('ref1', this.$('#ref1').val());
-                inventoryItem.set('ref2', this.$('#ref2').val());
-                inventoryItem.set('ref3', this.$('#ref3').val());
-                inventoryItem.set('ref4', this.$('#ref4').val());
-                inventoryItem.set('ref5', this.$('#ref5').val());
+                inventoryItem.set('ref1', this.$('#ref1').val().trim());
+                inventoryItem.set('ref2', this.$('#ref2').val().trim());
+                inventoryItem.set('ref3', this.$('#ref3').val().trim());
+                inventoryItem.set('ref4', this.$('#ref4').val().trim());
+                inventoryItem.set('ref5', this.$('#ref5').val().trim());
 
                 this.model.set('inventoryItem', inventoryItem);
 
@@ -937,8 +947,8 @@
             this.clearValidationErrors();
 
             var valid = true;
-            var barcode = this.$('#barcode').val();
-            var location = this.$('#location').val();
+            var barcode = this.$('#barcode').val().trim().toUpperCase();
+            var location = this.$('#location').val().trim();
             var ref1 = this.$('#ref1').val();
 
             if(!barcode){
@@ -960,8 +970,8 @@
                 return;
             }
 
-            var barcode = this.$('#barcode').val();
-            var location = this.$('#location').val();
+            var barcode = this.$('#barcode').val().trim().toUpperCase();
+            var location = this.$('#location').val().trim();
 
 
             if(this.isNewFile && this.options.box.get('files').findWhere({barcode: barcode})){
@@ -977,11 +987,11 @@
             if(this.options.request.get('storageType').name === 'FILE'){
 
                 var inventoryItem = this.model.get('inventoryItem');
-                inventoryItem.set('ref1', this.$('#ref1').val());
-                inventoryItem.set('ref2', this.$('#ref2').val());
-                inventoryItem.set('ref3', this.$('#ref3').val());
-                inventoryItem.set('ref4', this.$('#ref4').val());
-                inventoryItem.set('ref5', this.$('#ref5').val());
+                inventoryItem.set('ref1', this.$('#ref1').val().trim());
+                inventoryItem.set('ref2', this.$('#ref2').val().trim());
+                inventoryItem.set('ref3', this.$('#ref3').val().trim());
+                inventoryItem.set('ref4', this.$('#ref4').val().trim());
+                inventoryItem.set('ref5', this.$('#ref5').val().trim());
 
                 this.model.set('inventoryItem', inventoryItem);
 
@@ -1147,8 +1157,8 @@
             this.clearValidationErrors();
 
             var valid = true;
-            var barcode = this.$('#barcode').val();
-            var location = this.$('#location').val();
+            var barcode = this.$('#barcode').val().trim().toUpperCase();
+            var location = this.$('#location').val().trim();
             var ref1 = this.$('#ref1').val();
 
             if(!barcode){
@@ -1170,8 +1180,8 @@
                 return;
             }
 
-            var barcode = this.$('#barcode').val();
-            var location = this.$('#location').val();
+            var barcode = this.$('#barcode').val().trim().toUpperCase();
+            var location = this.$('#location').val().trim();
 
             if(this.isNewDocument && this.options.file.get('documents').findWhere({barcode: barcode})){
                 this.showValidationError('barcode', 'barcode already exists');
@@ -1186,11 +1196,11 @@
             if(this.options.request.get('storageType').name === 'DOCUMENT'){
 
                 var inventoryItem = this.model.get('inventoryItem');
-                inventoryItem.set('ref1', this.$('#ref1').val());
-                inventoryItem.set('ref2', this.$('#ref2').val());
-                inventoryItem.set('ref3', this.$('#ref3').val());
-                inventoryItem.set('ref4', this.$('#ref4').val());
-                inventoryItem.set('ref5', this.$('#ref5').val());
+                inventoryItem.set('ref1', this.$('#ref1').val().trim());
+                inventoryItem.set('ref2', this.$('#ref2').val().trim());
+                inventoryItem.set('ref3', this.$('#ref3').val().trim());
+                inventoryItem.set('ref4', this.$('#ref4').val().trim());
+                inventoryItem.set('ref5', this.$('#ref5').val().trim());
 
                 this.model.set('inventoryItem', inventoryItem);
 
@@ -1317,13 +1327,13 @@
         handleSave: function(e){
             e.preventDefault();
 
-            if(!this.$('#userAssigned').val()){
+            if(!this.$('#userAssigned').val().trim()){
                 this.showValidationError('userAssigned', 'may not be null');
                 return;
             }
 
             this.model.save({
-                    userAssigned: {id: this.$('#userAssigned').val()},
+                    userAssigned: {id: this.$('#userAssigned').val().trim()},
                     status: 'ASSIGNED'
                 },
                 {
@@ -1468,22 +1478,151 @@
 
     });
 
+    var VerifyRecordsRowView = Marionette.View.extend({
+        tagName: 'li',
+        className: function(){
+            return 'list-group-item list-group-item-' + (this.model.get('verified') ? 'success' : 'danger');
+        },
+        template:'#verify-records-row-template',
+
+        templateContext: function(){
+            return {
+                isSystemBoxesView: this.isSystemBoxesView
+            }
+        },
+
+        initialize: function(options){
+            this.isSystemBoxesView = options.isSystemBoxesView;
+        },
+
+        triggers: {
+            'click .deleteIncomingBox': 'delete:incoming:box'
+        }
+
+    });
+
+    var EmptyVerifyRecordsRowView = Mn.View.extend({
+        template: _.template('No Boxes. Start scanning boxes.')
+    });
+
+    var VerifyRecordsListView = Marionette.CollectionView.extend({
+        tagName: 'ul',
+        className: 'list-group verifyboxlist',
+        childView: VerifyRecordsRowView,
+        emptyView: EmptyVerifyRecordsRowView,
+
+        childViewOptions: function(){
+            return {
+                isSystemBoxesView: this.options.isSystemBoxesView
+            }
+        },
+
+        onChildviewDeleteIncomingBox: function(childView) {
+            this.triggerMethod('delete:incoming:box', childView.model);
+        }
+
+
+    });
+
     var VerifyRecordsView = Marionette.View.extend({
         template: '#verify-records-template',
 
+        events: {
+            'keyup #incomingBoxBarcode' : 'addIncomingBox'
+        },
+
         regions: {
-            body: {el: '#verify-records', replaceElement: true}
+            incomingBoxesRegion: {el: '#incomingBoxesRegion', replaceElement: true},
+            systemBoxesRegion: {el: '#systemBoxesRegion', replaceElement: true}
         },
 
         initialize: function(){
             //_.bindAll(this, "handleSaveSuccess", "handleSaveError");
+            this.systemBoxes = new VerifyBoxes();
+
+            _.each(this.model.get('inventoryItems'), function(inventoryItem){
+                var vBox = new VerifyBox({
+                    id: inventoryItem.boxBarcode
+                });
+
+                this.systemBoxes.add(vBox);
+            }, this);
+
+            this.incomingBoxes = new VerifyBoxes();
         },
 
-        events: {
-            //
+        addIncomingBox: function(e){
+            if(event.keyCode == 13){
+                var barcode = this.$('#incomingBoxBarcode').val().trim().toUpperCase();
+                this.$('#incomingBoxBarcode').val('');
+                if(barcode) {
+
+                    var sysBox = this.systemBoxes.get(barcode);
+                    var verified = typeof sysBox !== 'undefined';
+
+                    if (verified === true) {
+                        sysBox.set('verified', true);
+
+                        //this.systemBoxes.set(sysBox, {remove: false});
+                        this.systemBoxes.add(sysBox);
+                        this.systemBoxes.trigger('reset');
+
+                    }
+
+                    var inBox = new VerifyBox({id: barcode, verified: verified});
+                    this.incomingBoxes.add(inBox);
+
+                    this.updateVerifyProgress();
+                }
+
+            }
         },
+
+        updateVerifyProgress(){
+            var sysVerified = this.systemBoxes.where({verified: true});
+            var sysSize = this.systemBoxes.size();
+
+            var inVerified = this.incomingBoxes.where({verified: true});
+            var inSize = this.incomingBoxes.size();
+
+            var p = parseInt((sysVerified.length / sysSize) * 100);
+
+            var pb = this.$('#verifyProgressbar');
+            pb.width(p + '%');
+            pb.text(p + '%');
+
+
+            if(sysVerified.length === sysSize && inVerified.length === inSize && sysSize === inSize){
+                swal({
+                    title: 'All Records Verified!',
+                    text: '',
+                    type: "success"
+                });
+            }
+        },
+
+        onRender() {
+            this.updateVerifyProgress();
+            this.showChildView('incomingBoxesRegion', new VerifyRecordsListView({collection: this.incomingBoxes, isSystemBoxesView: false}));
+            this.showChildView('systemBoxesRegion', new VerifyRecordsListView({collection: this.systemBoxes, isSystemBoxesView: true}));
+        },
+
+        onChildviewDeleteIncomingBox: function(inBox) {
+            var barcode = inBox.id;
+            this.incomingBoxes.remove(inBox);
+
+            var sysBox = this.systemBoxes.get(barcode);
+
+            if (typeof sysBox !== 'undefined') {
+                sysBox.set('verified', false);
+
+                this.systemBoxes.trigger('reset');
+                this.updateVerifyProgress();
+            }
+        }
 
     });
+
 
     var RootView = Marionette.View.extend({
         template: _.template('<div id="main"></div>'),
