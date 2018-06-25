@@ -15,7 +15,7 @@
             },
 
             showAlert: function(title, text, type){
-                var alertText = '<div id="workflowAlert" class="alert alert-'+type+' alert-dismissible col-md-10 col-md-offset-1"><strong>' + title + '</strong> ' + text + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
+                var alertText = '<div id="workflowAlert" class="alert alert-'+type+' alert-dismissible col-md-10 col-md-offset-1"><strong><button type="button" class="close" data-dismiss="alert" ><span>&times;</span></button>' + title + '</strong> ' + text + '</div>';
                 $('#alert').html(alertText);
             },
 
