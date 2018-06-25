@@ -1625,7 +1625,8 @@
                 swal({
                     title: 'All Records Verified!',
                     text: '',
-                    type: "success"
+                    type: "success",
+                    closeOnConfirm: false
                 },
                 this.updateRequest);
             }
