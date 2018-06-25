@@ -1537,7 +1537,8 @@
         },
 
         initialize: function(){
-            //_.bindAll(this, "handleSaveSuccess", "handleSaveError");
+            _.bindAll(this, "handleSaveSuccess", "handleSaveError", "updateRequest");
+
             this.systemBoxes = new VerifyBoxes();
 
             _.each(this.model.get('inventoryItems'), function(inventoryItem){
@@ -1578,6 +1579,34 @@
             }
         },
 
+        updateRequest: function(){
+            this.model.save({
+                status: 'VALIDATED'
+            }, {
+                wait: true,
+                success: this.handleSaveSuccess,
+                error: this.handleSaveError
+            });
+        },
+
+        handleSaveSuccess: function(model, response){
+            swal({
+                    title: 'Request Updated!',
+                    text: 'Records are now validated.',
+                    type: "success"
+                },
+                function(){
+                    window.location.href='/requests/' + response.id + '/workflow'
+                });
+        },
+
+        handleSaveError: function(model, response, options){
+            if(response.responseJSON.message) {
+                swal.close();
+                this.showAlert([response.responseJSON.message], 'danger');
+            }
+        },
+
         updateVerifyProgress(){
             var sysVerified = this.systemBoxes.where({verified: true});
             var sysSize = this.systemBoxes.size();
@@ -1597,7 +1626,8 @@
                     title: 'All Records Verified!',
                     text: '',
                     type: "success"
-                });
+                },
+                this.updateRequest);
             }
         },
 
@@ -1617,10 +1647,10 @@
                 sysBox.set('verified', false);
 
                 this.systemBoxes.trigger('reset');
-                this.updateVerifyProgress();
             }
-        }
 
+            this.updateVerifyProgress();
+        }
     });
 
 
