@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import io.springlets.format.EntityFormat;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.NotAudited;
 
 import java.util.Objects;
@@ -27,8 +28,8 @@ public class Role {
 
 
     @Id
-    @SequenceGenerator(name = "roleGen", sequenceName = "BD_ROLE_ID_SEQ", initialValue = 50, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roleGen")
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "ID")
     private Long id;
 

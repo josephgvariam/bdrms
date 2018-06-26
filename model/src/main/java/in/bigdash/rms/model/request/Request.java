@@ -13,6 +13,7 @@ import java.util.Set;
 
 import java.util.Calendar;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedBy;
@@ -37,8 +38,8 @@ public class Request {
 
 
     @Id
-    @SequenceGenerator(name = "requestGen", sequenceName = "BD_REQUEST_ID_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requestGen")
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "ID")
     private Long id;
 

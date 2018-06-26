@@ -12,4 +12,13 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 
 6. remove @CreatedDate annotation for Box/File/Doc and set it in form to persist real creation times
 
-6. figure the cache added by roo
+7. figure out the cache added by roo
+
+24 JUNE TODOS:
+- retention start and dates on inventory items
+- possibility to add rules/constraints to shelves when storing boxes (eg: only allow 16 boxes per shelf)
+- generate load chart with total number of boxes and files (just a summary)
+- generic barcode search to give entity details (like when boxes mixed up so find its request number)
+- fix verify barcode
+- automated tests
+- implicit barcode format (u can tell what kind of barcode it is by just looking at it eg: its a box barcode)

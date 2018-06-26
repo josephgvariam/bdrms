@@ -377,15 +377,16 @@
             <source>${java.version}</source>
           </configuration>
         </plugin>
-      <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <configuration>
-        <mainClass>${start-class}</mainClass>
-        <classifier>exec</classifier>
-        <excludeDevtools>true</excludeDevtools>
-      </configuration>
-                </plugin>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <mainClass>${start-class}</mainClass>
+                <classifier>exec</classifier>
+                <excludeDevtools>true</excludeDevtools>
+                <executable>true</executable>
+            </configuration>
+        </plugin>
             <plugin>
                     <groupId>com.querydsl</groupId>
                     <artifactId>querydsl-maven-plugin</artifactId>

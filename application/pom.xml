@@ -69,6 +69,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>5.1.3</version>
+        </dependency>
     <dependency>
             <groupId>io.springlets</groupId>
             <artifactId>springlets-data-jpa</artifactId>

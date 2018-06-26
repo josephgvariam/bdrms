@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.springlets.format.EntityFormat;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -25,8 +26,8 @@ public class InventoryItem {
 
 
     @Id
-    @SequenceGenerator(name = "inventoryItemGen", sequenceName = "BD_INVENTORY_ITEM_ID_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inventoryItemGen")
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "ID")
     private Long id;
 

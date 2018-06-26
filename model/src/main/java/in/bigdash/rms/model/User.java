@@ -8,6 +8,7 @@ import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.model.request.Request;
 import io.springlets.format.EntityFormat;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedBy;
@@ -29,8 +30,8 @@ public class User {
 
 
     @Id
-    @SequenceGenerator(name = "userGen", sequenceName = "BD_USER_ID_SEQ", initialValue = 50, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userGen")
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "ID")
     private Long id;
 

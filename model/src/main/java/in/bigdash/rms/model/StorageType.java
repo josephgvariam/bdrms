@@ -20,6 +20,7 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.util.Assert;
@@ -32,8 +33,8 @@ public class StorageType {
 
 
     @Id
-    @SequenceGenerator(name = "storageTypeGen", sequenceName = "BD_STORAGE_TYPE_ID_SEQ", initialValue = 50, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storageTypeGen")
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "ID")
     private Long id;
 

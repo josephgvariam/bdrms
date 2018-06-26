@@ -20,6 +20,7 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.util.Assert;
@@ -33,8 +34,8 @@ public class Shelf {
 
 
     @Id
-    @SequenceGenerator(name = "shelfGen", sequenceName = "BD_SHELF_ID_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shelfGen")
+    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "ID")
     private Long id;
 
