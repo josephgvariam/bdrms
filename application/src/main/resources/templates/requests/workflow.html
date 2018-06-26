@@ -156,6 +156,54 @@
         </div>
     </script>
 
+    <script id="store-records-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Store Records</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+            <div id="store-records">
+                <div id="alert"></div>
+                <div class="row" style="display:flex; align-items:center;">
+                    <div class="col-md-6 form-group">
+                        <input id="validatedBoxBarcode" type="text" class="form-control"  placeholder="Validated Box Barcode" autofocus>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress">
+                            <div class="progress-bar boxProgressbar" id="storeProgressbar">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">Validated Boxes</h3>
+                            </div>
+                            <ul id="validatedBoxesRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">Stored Boxes</h3>
+                            </div>
+                            <ul id="storedBoxesRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="store-records-row-template" type="text/template">
+        <%= id %><% if (isStoredBoxesView){ %><i class="fa fa-remove fa-2x pull-right deleteStoredBox" style="color: red;"></i><%}%>
+    </script>
+
     <script id="verify-records-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
             <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Verify Records</h1>
@@ -169,7 +217,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="progress">
-                            <div class="progress-bar" id="verifyProgressbar">80%</div>
+                            <div class="progress-bar boxProgressbar" id="boxProgressbar">0%</div>
                         </div>
                     </div>
                 </div>

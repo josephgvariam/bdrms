@@ -115,12 +115,12 @@
 
 
 
-.verifyboxlist {
+.boxlist {
     height: 500px;
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
 }
 
-#verifyProgressbar {
+.boxProgressbar {
     min-width: 2em;
 }

@@ -422,6 +422,16 @@
         model: VerifyBox
     });
 
+    var StoreBox = Backbone.Model.extend({
+        defaults: {
+            verified: false
+        }
+    });
+
+    var StoreBoxes = Backbone.Collection.extend({
+        model: StoreBox
+    });
+
 //////////////////////// VIEWS
 
 
@@ -1507,7 +1517,7 @@
 
     var VerifyRecordsListView = Marionette.CollectionView.extend({
         tagName: 'ul',
-        className: 'list-group verifyboxlist',
+        className: 'list-group boxlist',
         childView: VerifyRecordsRowView,
         emptyView: EmptyVerifyRecordsRowView,
 
@@ -1654,6 +1664,171 @@
         }
     });
 
+    var StoreRecordsRowView = Marionette.View.extend({
+        tagName: 'li',
+        className: 'list-group-item list-group-item-info',
+        template:'#store-records-row-template',
+
+        templateContext: function(){
+            return {
+                isStoredBoxesView: this.isStoredBoxesView
+            }
+        },
+
+        initialize: function(options){
+            this.isStoredBoxesView = options.isStoredBoxesView;
+        },
+
+        triggers: {
+            'click .deleteStoredBox': 'delete:stored:box'
+        }
+    });
+
+    var EmptyStoreRecordsRowView = Mn.View.extend({
+        template: _.template('No Boxes. Start scanning boxes & shelves.')
+    });
+
+    var StoreRecordsListView = Marionette.CollectionView.extend({
+        tagName: 'ul',
+        className: 'list-group boxlist',
+        childView: StoreRecordsRowView,
+        emptyView: EmptyStoreRecordsRowView,
+
+        childViewOptions: function(){
+            return {
+                isStoredBoxesView: this.options.isStoredBoxesView
+            }
+        },
+
+        onChildviewDeleteStoredBox: function(childView) {
+            this.triggerMethod('delete:stored:box', childView.model);
+        }
+
+
+    });
+
+    var StoreRecordsView = Marionette.View.extend({
+        template: '#store-records-template',
+
+        events: {
+            'keyup #validatedBoxBarcode' : 'storeBox'
+        },
+
+        regions: {
+            validatedBoxesRegion: {el: '#validatedBoxesRegion', replaceElement: true},
+            storedBoxesRegion: {el: '#storedBoxesRegion', replaceElement: true}
+        },
+
+        initialize: function(){
+            _.bindAll(this, "handleSaveSuccess", "handleSaveError", "updateRequest");
+
+            this.validatedBoxes = new StoreBoxes();
+
+            _.each(this.model.get('inventoryItems'), function(inventoryItem){
+                var sBox = new StoreBox({
+                    id: inventoryItem.boxBarcode
+                });
+
+                this.validatedBoxes.add(sBox);
+            }, this);
+
+            this.storedBoxes = new StoreBoxes();
+        },
+
+        storeBox: function(e){
+            if(event.keyCode == 13){
+                var barcode = this.$('#validatedBoxBarcode').val().trim().toUpperCase();
+                this.$('#validatedBoxBarcode').val('');
+
+                if(barcode) {
+                    var validatedBox = this.validatedBoxes.get(barcode);
+
+                    if (typeof validatedBox !== 'undefined') {
+                        this.storedBoxes.add(validatedBox);
+                        this.validatedBoxes.remove(validatedBox);
+                    }
+                    else{
+                        swal({
+                            title: 'Not a valid box!',
+                            text: 'Barcode is not part of this request.',
+                            type: 'error'
+                        });
+                    }
+
+                    this.updateVerifyProgress();
+                }
+
+            }
+        },
+
+        updateVerifyProgress(){
+
+            var validatedBoxesSize = this.validatedBoxes.size();
+            var storedBoxesSize = this.storedBoxes.size();
+
+            var p = parseInt((storedBoxesSize / (validatedBoxesSize + storedBoxesSize)) * 100);
+
+            var pb = this.$('#storeProgressbar');
+            pb.width(p + '%');
+            pb.text(p + '%');
+
+
+            if(validatedBoxesSize === 0){
+                swal({
+                        title: 'All Records Stored!',
+                        text: '',
+                        type: "success",
+                        closeOnConfirm: false
+                    },
+                    this.updateRequest);
+            }
+        },
+
+        updateRequest: function(){
+            this.model.save({
+                status: 'STORED'
+            }, {
+                wait: true,
+                success: this.handleSaveSuccess,
+                error: this.handleSaveError
+            });
+        },
+
+        handleSaveSuccess: function(model, response){
+            swal({
+                    title: 'Request Updated!',
+                    text: 'Records are now stored.',
+                    type: "success"
+                },
+                function(){
+                    window.location.href='/requests/' + response.id + '/workflow'
+                });
+        },
+
+        handleSaveError: function(model, response, options){
+            if(response.responseJSON.message) {
+                swal.close();
+                this.showAlert([response.responseJSON.message], 'danger');
+            }
+        },
+
+        onChildviewDeleteStoredBox: function(sBox) {
+            this.storedBoxes.remove(sBox);
+            this.validatedBoxes.add(sBox);
+
+            this.updateVerifyProgress();
+        },
+
+
+        onRender() {
+            this.updateVerifyProgress();
+            this.showChildView('validatedBoxesRegion', new StoreRecordsListView({collection: this.validatedBoxes, isStoredBoxesView: false}));
+            this.showChildView('storedBoxesRegion', new StoreRecordsListView({collection: this.storedBoxes, isStoredBoxesView: true}));
+        },
+
+    });
+
+
 
     var RootView = Marionette.View.extend({
         template: _.template('<div id="main"></div>'),
@@ -1680,6 +1855,10 @@
 
         showVerifyRecordsView: function (request) {
             this.showChildView('main', new VerifyRecordsView({model: request, rootView: this}));
+        },
+
+        showStoreRecordsView: function (request) {
+            this.showChildView('main', new StoreRecordsView({model: request, rootView: this}));
         }
 
 
@@ -1716,6 +1895,9 @@
                 }
                 else if (status === 'INCOMING'){
                     rootView.showVerifyRecordsView(request);
+                }
+                else if (status === 'VALIDATED' || status === 'STORED' ){
+                    rootView.showStoreRecordsView(request);
                 }
             }
         }
