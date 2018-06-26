@@ -1422,7 +1422,10 @@
         handleSaveSuccess: function(model, response)
         {
             Backbone.history.navigate(response.id + '/workflow/' + this.options.navText, {trigger: false});
-            this.options.nextViewFunction.apply(this.options.rootView, [this.model]);
+
+            if(this.options.nextViewFunction) {
+                this.options.nextViewFunction.apply(this.options.rootView, [this.model]);
+            }
         },
 
         handleSaveError: function(model, response)
@@ -1431,10 +1434,6 @@
                 this.showAlert([response.responseJSON.message], 'danger');
             }
         },
-
-        onAttach: function(){
-
-        }
 
     });
 
@@ -1606,7 +1605,7 @@
                     type: "success"
                 },
                 function(){
-                    window.location.href='/requests/' + response.id + '/workflow'
+                    window.location.href='/requests/' + response.id ;
                 });
         },
 
@@ -1755,13 +1754,13 @@
                         });
                     }
 
-                    this.updateVerifyProgress();
+                    this.updateCloseProgress();
                 }
 
             }
         },
 
-        updateVerifyProgress(){
+        updateCloseProgress(){
 
             var validatedBoxesSize = this.validatedBoxes.size();
             var storedBoxesSize = this.storedBoxes.size();
@@ -1801,7 +1800,7 @@
                     type: "success"
                 },
                 function(){
-                    window.location.href='/requests/' + response.id + '/workflow'
+                    window.location.href='/requests/' + response.id ;
                 });
         },
 
@@ -1816,16 +1815,29 @@
             this.storedBoxes.remove(sBox);
             this.validatedBoxes.add(sBox);
 
-            this.updateVerifyProgress();
+            this.updateCloseProgress();
         },
 
 
         onRender() {
-            this.updateVerifyProgress();
+            this.updateCloseProgress();
             this.showChildView('validatedBoxesRegion', new StoreRecordsListView({collection: this.validatedBoxes, isStoredBoxesView: false}));
             this.showChildView('storedBoxesRegion', new StoreRecordsListView({collection: this.storedBoxes, isStoredBoxesView: true}));
         },
 
+    });
+
+    var CloseRequestView = Marionette.View.extend({
+        template: '#close-request-template',
+
+        events: {
+            'click #cancelButton': 'cancel'
+        },
+
+        cancel: function(e){
+            e.preventDefault();
+            window.location.href='/requests/';
+        },
     });
 
 
@@ -1859,6 +1871,10 @@
 
         showStoreRecordsView: function (request) {
             this.showChildView('main', new StoreRecordsView({model: request, rootView: this}));
+        },
+
+        showCloseRequestView: function (request) {
+            this.showChildView('main', new CloseRequestView({model: request, rootView: this}));
         }
 
 
@@ -1896,8 +1912,14 @@
                 else if (status === 'INCOMING'){
                     rootView.showVerifyRecordsView(request);
                 }
-                else if (status === 'VALIDATED' || status === 'STORED' ){
+                else if (status === 'VALIDATED' ){
                     rootView.showStoreRecordsView(request);
+                }
+                else if (status === 'STORED' ){
+                    rootView.showBeforeProcessRequestView(request, 'Close Request', 'Proceed with closing this request?', 'CLOSED', rootView.showCloseRequestView, '');
+                }
+                else if (status === 'CLOSED' ){
+                    rootView.showCloseRequestView(request);
                 }
             }
         }
