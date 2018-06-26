@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
-            files: ['static/public/js/workflow.js'],
+            files: ['src/main/resources/static/public/js/workflow.js'],
             options: {
                 globals: {
                     jQuery: true,
@@ -15,8 +15,8 @@ module.exports = function(grunt) {
         },
         uglify: {
             build: {
-                src: 'static/public/js/workflow.js',
-                dest: 'static/public/js/workflow.min.js'
+                src: 'src/main/resources/static/public/js/workflow.js',
+                dest: 'src/main/resources/static/public/js/workflow.min.js'
             }
         }
     });
