@@ -23,7 +23,7 @@
                 var boxes;
 
                 if(isFromStorage){
-                    boxes = storage.fetchRecords(request)
+                    boxes = storage.fetchRecords(request);
                 }else{
                     boxes = new Boxes();
                 }
@@ -45,37 +45,37 @@
                         });
 
                         if (item.type === 'BOX') {
-                            var b = new Box({
+                            var b1 = new Box({
                                 id: item.box.id,
                                 barcode: item.box.barcode,
                                 location: item.box.location,
                                 inventoryItem: i
                             });
-                            b.storageType = storageType;
+                            b1.storageType = storageType;
 
-                            boxes.add(b);
+                            boxes.add(b1);
                         }
                         else if (item.type === 'FILE') {
-                            var f = new File({
+                            var f1 = new File({
                                 id: item.file.id,
                                 barcode: item.file.barcode,
                                 location: item.file.location,
                                 inventoryItem: i
                             });
-                            f.storageType = storageType;
+                            f1.storageType = storageType;
 
-                            var b = boxes.findWhere({barcode: item.file.box.barcode});
-                            if (!b) {
-                                b = new Box({
+                            var b2 = boxes.findWhere({barcode: item.file.box.barcode});
+                            if (!b2) {
+                                b2 = new Box({
                                     id: item.file.box.id,
                                     barcode: item.file.box.barcode,
                                     location: item.file.box.location,
                                     files: new Files()
                                 });
-                                b.storageType = storageType;
-                                boxes.add(b);
+                                b2.storageType = storageType;
+                                boxes.add(b2);
                             }
-                            b.get('files').add(f);
+                            b2.get('files').add(f1);
                         }
                         else if (item.type === 'DOCUMENT') {
                             var d = new Document({
@@ -86,31 +86,31 @@
                             });
                             d.storageType = storageType;
 
-                            var b = boxes.findWhere({barcode: item.document.file.box.barcode});
-                            if (!b) {
-                                b = new Box({
+                            var b3 = boxes.findWhere({barcode: item.document.file.box.barcode});
+                            if (!b3) {
+                                b3 = new Box({
                                     id: item.document.file.box.id,
                                     barcode: item.document.file.box.barcode,
                                     location: item.document.file.box.location,
                                     files: new Files()
                                 });
-                                b.storageType = storageType;
-                                boxes.add(b);
+                                b3.storageType = storageType;
+                                boxes.add(b3);
                             }
 
-                            var f = b.get('files').findWhere({barcode: item.document.file.barcode});
-                            if (!f) {
-                                f = new File({
+                            var f2 = b3.get('files').findWhere({barcode: item.document.file.barcode});
+                            if (!f2) {
+                                f2 = new File({
                                     id: item.document.file.id,
                                     barcode: item.document.file.barcode,
                                     location: item.document.file.location,
                                     documents: new Documents()
                                 });
-                                f.storageType = storageType;
-                                b.get('files').add(f);
+                                f2.storageType = storageType;
+                                b3.get('files').add(f2);
                             }
 
-                            f.get('documents').add(d);
+                            f2.get('documents').add(d);
 
                         }
                     });
@@ -263,7 +263,7 @@
                         f.parentBarcode = record.get('parentId');
 
                         if(f.storageType === 'FILE'){
-                            var i = new InventoryItem({
+                            var i1 = new InventoryItem({
                                 ref1: record.get('ref1'),
                                 ref2: record.get('ref2'),
                                 ref3: record.get('ref3'),
@@ -273,7 +273,7 @@
                                 status: record.get('status')
                             });
 
-                            f.set('inventoryItem', i);
+                            f.set('inventoryItem', i1);
                         }
                         else{
                             f.set('documents', new Documents());
@@ -289,7 +289,7 @@
                         d.storageType = record.get('storageType');
                         d.parentBarcode = record.get('parentId');
 
-                        var i = new InventoryItem({
+                        var i2 = new InventoryItem({
                             ref1: record.get('ref1'),
                             ref2: record.get('ref2'),
                             ref3: record.get('ref3'),
@@ -299,7 +299,7 @@
                             status: record.get('status')
                         });
 
-                        d.set('inventoryItem', i);
+                        d.set('inventoryItem', i2);
 
                         docs.add(d);
                     }
@@ -629,7 +629,7 @@
                     type: "success"
                 },
                 function(){
-                    window.location.href='/requests/' + response.id + '/workflow'
+                    window.location.href='/requests/' + response.id + '/workflow';
                 });
         },
 
@@ -703,7 +703,7 @@
             this.updateDeleteButtonEnabled();
         },
 
-        onRender() {
+        onRender: function() {
             this.showChildView('body', new BoxesTableView({collection: this.collection}));
         }
     });
@@ -793,7 +793,7 @@
             this.triggerMethod('show:boxes', this.model, this.isNewBox);
         },
 
-        clearValidationErrors(){
+        clearValidationErrors: function(){
             this.$('.form-group').removeClass('has-error has-feedback');
             this.$('.help-block').remove();
         },
@@ -929,7 +929,7 @@
             this.updateDeleteButtonEnabled();
         },
 
-        onRender() {
+        onRender: function() {
             this.$('#filesPanelTitle').text('BOX ' + this.options.box.get('barcode') + ' >> FILES');
             this.showChildView('body', new FilesTableView({collection: this.collection}));
         }
@@ -1021,7 +1021,7 @@
             this.triggerMethod('show:files', this.options.box);
         },
 
-        clearValidationErrors(){
+        clearValidationErrors: function(){
             this.$('.form-group').removeClass('has-error has-feedback');
             this.$('.help-block').remove();
         },
@@ -1137,7 +1137,7 @@
             this.updateDeleteButtonEnabled();
         },
 
-        onRender() {
+        onRender: function() {
             var boxBarcode = this.options.box.get('barcode');
             var fileBarcode = this.options.file.get('barcode');
             this.$('#documentsPanelTitle').text('BOX ' + boxBarcode + ' >> FILE ' + fileBarcode + ' >> DOCUMENTS');
@@ -1229,7 +1229,7 @@
             this.triggerMethod('show:documents', this.options.file, this.options.box);
         },
 
-        clearValidationErrors(){
+        clearValidationErrors: function(){
             this.$('.form-group').removeClass('has-error has-feedback');
             this.$('.help-block').remove();
         },
@@ -1363,7 +1363,7 @@
                 type: 'success'
 
             },function(){
-                window.location.href='/requests/' + response.id
+                window.location.href='/requests/' + response.id;
             });
         },
 
@@ -1377,7 +1377,7 @@
             }
         },
 
-        clearValidationErrors(){
+        clearValidationErrors: function(){
             this.$('.form-group').removeClass('has-error has-feedback');
             this.$('.help-block').remove();
         },
@@ -1474,7 +1474,7 @@
                 type: 'success'
 
             },function(){
-                window.location.href='/requests/' + response.id
+                window.location.href='/requests/' + response.id;
             });
         },
 
@@ -1497,7 +1497,7 @@
         templateContext: function(){
             return {
                 isSystemBoxesView: this.isSystemBoxesView
-            }
+            };
         },
 
         initialize: function(options){
@@ -1523,7 +1523,7 @@
         childViewOptions: function(){
             return {
                 isSystemBoxesView: this.options.isSystemBoxesView
-            }
+            };
         },
 
         onChildviewDeleteIncomingBox: function(childView) {
@@ -1616,7 +1616,7 @@
             }
         },
 
-        updateVerifyProgress(){
+        updateVerifyProgress: function(){
             var sysVerified = this.systemBoxes.where({verified: true});
             var sysSize = this.systemBoxes.size();
 
@@ -1641,7 +1641,7 @@
             }
         },
 
-        onRender() {
+        onRender: function() {
             this.updateVerifyProgress();
             this.showChildView('incomingBoxesRegion', new VerifyRecordsListView({collection: this.incomingBoxes, isSystemBoxesView: false}));
             this.showChildView('systemBoxesRegion', new VerifyRecordsListView({collection: this.systemBoxes, isSystemBoxesView: true}));
@@ -1671,7 +1671,7 @@
         templateContext: function(){
             return {
                 isStoredBoxesView: this.isStoredBoxesView
-            }
+            };
         },
 
         initialize: function(options){
@@ -1696,7 +1696,7 @@
         childViewOptions: function(){
             return {
                 isStoredBoxesView: this.options.isStoredBoxesView
-            }
+            };
         },
 
         onChildviewDeleteStoredBox: function(childView) {
@@ -1760,7 +1760,7 @@
             }
         },
 
-        updateCloseProgress(){
+        updateCloseProgress: function(){
 
             var validatedBoxesSize = this.validatedBoxes.size();
             var storedBoxesSize = this.storedBoxes.size();
@@ -1819,7 +1819,7 @@
         },
 
 
-        onRender() {
+        onRender: function() {
             this.updateCloseProgress();
             this.showChildView('validatedBoxesRegion', new StoreRecordsListView({collection: this.validatedBoxes, isStoredBoxesView: false}));
             this.showChildView('storedBoxesRegion', new StoreRecordsListView({collection: this.storedBoxes, isStoredBoxesView: true}));

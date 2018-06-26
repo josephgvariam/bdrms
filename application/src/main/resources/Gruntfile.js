@@ -3,21 +3,27 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        uglify: {
+        jshint: {
+            files: ['static/public/js/workflow.js'],
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-            },
+                globals: {
+                    jQuery: true,
+                    console: true,
+                    module: true
+                }
+            }
+        },
+        uglify: {
             build: {
                 src: 'static/public/js/workflow.js',
-                dest: 'build/workflow.min.js'
+                dest: 'static/public/js/workflow.min.js'
             }
         }
     });
 
-    // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    // Default task(s).
-    grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('default', ['jshint', 'uglify']);
 
 };
