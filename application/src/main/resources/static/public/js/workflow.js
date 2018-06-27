@@ -1742,9 +1742,28 @@
                 if(barcode) {
                     var validatedBox = this.validatedBoxes.get(barcode);
 
+                    var _this = this;
                     if (typeof validatedBox !== 'undefined') {
-                        this.storedBoxes.add(validatedBox);
-                        this.validatedBoxes.remove(validatedBox);
+                        swal({
+                            title: "Scan Shelf Barcode",
+                            text: "",
+                            type: "input",
+                            showCancelButton: true,
+                            closeOnConfirm: this.validatedBoxes.size()!=1,
+                            inputPlaceholder: "Shelf Barcode"
+                        }, function (inputValue) {
+                            if (inputValue === false) return false;
+                            if (inputValue === "") {
+                                swal.showInputError("Scan shelf!");
+                                return false;
+                            }
+
+                            validatedBox.set({shelfBarcode: inputValue});
+                            _this.storedBoxes.add(validatedBox);
+                            _this.validatedBoxes.remove(validatedBox);
+
+                            _this.updateStoreProgress();
+                        });
                     }
                     else{
                         swal({
@@ -1753,14 +1772,14 @@
                             type: 'error'
                         });
                     }
-
-                    this.updateCloseProgress();
                 }
 
             }
         },
 
-        updateCloseProgress: function(){
+        updateStoreProgress: function(){
+
+            console.log('Yo');
 
             var validatedBoxesSize = this.validatedBoxes.size();
             var storedBoxesSize = this.storedBoxes.size();
@@ -1771,19 +1790,19 @@
             pb.width(p + '%');
             pb.text(p + '%');
 
-
             if(validatedBoxesSize === 0){
-                swal({
-                        title: 'All Records Stored!',
-                        text: '',
-                        type: "success",
-                        closeOnConfirm: false
-                    },
-                    this.updateRequest);
+                console.log('YoYo');
+                this.updateRequest();
             }
         },
 
         updateRequest: function(){
+
+            _.each(this.model.get('inventoryItems'), function(inventoryItem){
+                var sBox = this.storedBoxes.get(inventoryItem.boxBarcode);
+                inventoryItem.box.shelf = sBox.get('shelfBarcode');
+            }, this);
+
             this.model.save({
                 status: 'STORED'
             }, {
@@ -1815,12 +1834,12 @@
             this.storedBoxes.remove(sBox);
             this.validatedBoxes.add(sBox);
 
-            this.updateCloseProgress();
+            this.updateStoreProgress();
         },
 
 
         onRender: function() {
-            this.updateCloseProgress();
+            this.updateStoreProgress();
             this.showChildView('validatedBoxesRegion', new StoreRecordsListView({collection: this.validatedBoxes, isStoredBoxesView: false}));
             this.showChildView('storedBoxesRegion', new StoreRecordsListView({collection: this.storedBoxes, isStoredBoxesView: true}));
         },
