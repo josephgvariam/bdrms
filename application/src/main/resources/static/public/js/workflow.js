@@ -932,7 +932,7 @@
                 this.triggerMethod('show:file', file, this.options.box);
             }else if(isNew){
                 this.collection.add(file);
-                storage.storeFile(file, this.options.request);
+                storage.storeFile(file, this.options.box, this.options.request);
             }
         },
 
@@ -1169,7 +1169,41 @@
             'click #deleteDocumentButton': 'deleteDocument',
             'click div.ckbox>input': 'updateDeleteButtonEnabled',
             'click #editDocumentButton': 'editDocument',
-            'click #showFilesButton': 'showFiles'
+            'click #showFilesButton': 'showFiles',
+            'change #docBarcode': 'docBarcodeChanged',
+            'blur #docBarcode': 'focusBack'
+        },
+
+        focusBack: function(){
+            this.$('#docBarcode').val('');
+            this.$('#docBarcode').focus();
+        },
+
+        docBarcodeChanged: function(e){
+            var barcode = this.$('#docBarcode').val().toUpperCase().trim();
+            this.$('#docBarcode').val('');
+            this.$('#docBarcode').focus();
+
+
+            var doc = this.collection.findWhere({barcode: barcode});
+            var storageType = this.options.request.get('storageType').name;
+            var isNew = typeof doc === 'undefined';
+
+            if(isNew){
+                doc = new Document({barcode: barcode});
+                doc.storageType = storageType;
+
+                if(storageType === 'DOCUMENT'){
+                    doc.set('inventoryItem', new InventoryItem({type: 'DOCUMENT'}));
+                }
+            }
+
+            if(storageType === 'DOCUMENT'){
+                this.triggerMethod('show:document', doc, this.options.file, this.options.box);
+            }else if(isNew){
+                this.collection.add(doc);
+                storage.storeDocument(doc, this.options.file, this.options.request);
+            }
         },
 
         showFiles: function(e){
@@ -1224,6 +1258,10 @@
             var fileBarcode = this.options.file.get('barcode');
             this.$('#documentsPanelTitle').text('BOX ' + boxBarcode + ' >> FILE ' + fileBarcode + ' >> DOCUMENTS');
             this.showChildView('body', new DocumentsTableView({collection: this.collection}));
+        },
+
+        onAttach: function(){
+            this.$('#docBarcode').focus();
         }
     });
 
@@ -1332,6 +1370,7 @@
                 this.$('#barcode').focus();
             }else{
                 this.$('#barcode').prop('readonly', true);
+                this.$('#ref1').focus();
             }
 
         }

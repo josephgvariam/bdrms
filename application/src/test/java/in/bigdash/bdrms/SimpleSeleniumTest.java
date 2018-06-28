@@ -49,6 +49,19 @@ public class SimpleSeleniumTest {
         driver.findElement(By.xpath("(//button[@type='submit'])[2]")).click();
     }
 
+    @Test
+    public void newPickupRequestWithDocumentStorageType() throws Exception {
+        driver.get("http://localhost:8080/login");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.get("http://localhost:8080/pickuprequests/create-form");
+        driver.findElement(By.id("select2-storagetypesselect2-container")).click();
+        Thread.sleep(250);
+        driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(3)")).click();
+        driver.findElement(By.id("pickupDateTime")).sendKeys("2018-06-30 22:00 pm");
+        driver.findElement(By.id("numberFiles")).sendKeys("100");
+        driver.findElement(By.xpath("(//button[@type='submit'])[2]")).click();
+    }
+
     @After
     public void tearDown() throws Exception {
         Thread.sleep(5000);
