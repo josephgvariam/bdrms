@@ -423,9 +423,6 @@
     });
 
     var StoreBox = Backbone.Model.extend({
-        defaults: {
-            verified: false
-        }
     });
 
     var StoreBoxes = Backbone.Collection.extend({
@@ -1658,7 +1655,13 @@
         template: '#verify-records-template',
 
         events: {
-            'keyup #incomingBoxBarcode' : 'addIncomingBox'
+            'change #incomingBoxBarcode' : 'addIncomingBox',
+            'blur #incomingBoxBarcode': 'focusBack'
+        },
+
+        focusBack: function(){
+            this.$('#incomingBoxBarcode').val('');
+            this.$('#incomingBoxBarcode').focus();
         },
 
         regions: {
@@ -1683,29 +1686,31 @@
         },
 
         addIncomingBox: function(e){
-            if(event.keyCode == 13){
-                var barcode = this.$('#incomingBoxBarcode').val().trim().toUpperCase();
-                this.$('#incomingBoxBarcode').val('');
-                if(barcode) {
+            var barcode = this.$('#incomingBoxBarcode').val().toUpperCase().trim();
 
-                    var sysBox = this.systemBoxes.get(barcode);
-                    var verified = typeof sysBox !== 'undefined';
+            this.$('#incomingBoxBarcode').val('');
+            this.$('#incomingBoxBarcode').focus();
 
-                    if (verified === true) {
-                        sysBox.set('verified', true);
+            console.log(e,barcode);
 
-                        //this.systemBoxes.set(sysBox, {remove: false});
-                        this.systemBoxes.add(sysBox);
-                        this.systemBoxes.trigger('reset');
+            if(barcode) {
 
-                    }
+                var sysBox = this.systemBoxes.get(barcode);
+                var verified = typeof sysBox !== 'undefined';
 
-                    var inBox = new VerifyBox({id: barcode, verified: verified});
-                    this.incomingBoxes.add(inBox);
+                if (verified === true) {
+                    sysBox.set('verified', true);
 
-                    this.updateVerifyProgress();
+                    //this.systemBoxes.set(sysBox, {remove: false});
+                    this.systemBoxes.add(sysBox);
+                    this.systemBoxes.trigger('reset');
+
                 }
 
+                var inBox = new VerifyBox({id: barcode, verified: verified});
+                this.incomingBoxes.add(inBox);
+
+                this.updateVerifyProgress();
             }
         },
 
@@ -1781,6 +1786,10 @@
             }
 
             this.updateVerifyProgress();
+        },
+
+        onAttach: function(){
+            this.$('#incomingBoxBarcode').focus();
         }
     });
 
@@ -1831,7 +1840,13 @@
         template: '#store-records-template',
 
         events: {
-            'keyup #validatedBoxBarcode' : 'storeBox'
+            'change #validatedBoxBarcode' : 'storeBox',
+        },
+
+
+        focusBack: function(){
+            this.$('#validatedBoxBarcode').val('');
+            this.$('#validatedBoxBarcode').focus();
         },
 
         regions: {
@@ -1843,11 +1858,20 @@
             _.bindAll(this, "handleSaveSuccess", "handleSaveError", "updateRequest");
 
             this.validatedBoxes = new StoreBoxes();
+            var storageType = this.model.get('storageType').name;
 
             _.each(this.model.get('inventoryItems'), function(inventoryItem){
                 var sBox = new StoreBox({
                     id: inventoryItem.boxBarcode
                 });
+
+                if(storageType === 'BOX'){
+                    sBox.set('_id',inventoryItem.box.id)
+                }else if(storageType === 'FILE'){
+                    sBox.set('_id',inventoryItem.file.box.id)
+                }else{
+                    sBox.set('_id',inventoryItem.document.file.box.id)
+                }
 
                 this.validatedBoxes.add(sBox);
             }, this);
@@ -1856,51 +1880,46 @@
         },
 
         storeBox: function(e){
-            if(event.keyCode == 13){
-                var barcode = this.$('#validatedBoxBarcode').val().trim().toUpperCase();
-                this.$('#validatedBoxBarcode').val('');
+            var barcode = this.$('#validatedBoxBarcode').val().trim().toUpperCase();
+            this.$('#validatedBoxBarcode').val('');
 
-                if(barcode) {
-                    var validatedBox = this.validatedBoxes.get(barcode);
+            if(barcode) {
+                var validatedBox = this.validatedBoxes.get(barcode);
 
-                    var _this = this;
-                    if (typeof validatedBox !== 'undefined') {
-                        swal({
-                            title: "Scan Shelf Barcode",
-                            text: "",
-                            type: "input",
-                            showCancelButton: true,
-                            closeOnConfirm: this.validatedBoxes.size()!=1,
-                            inputPlaceholder: "Shelf Barcode"
-                        }, function (inputValue) {
-                            if (inputValue === false) return false;
-                            if (inputValue === "") {
-                                swal.showInputError("Scan shelf!");
-                                return false;
-                            }
+                var _this = this;
+                if (typeof validatedBox !== 'undefined') {
+                    swal({
+                        title: "Scan Shelf Barcode",
+                        text: "",
+                        type: "input",
+                        showCancelButton: true,
+                        closeOnConfirm: this.validatedBoxes.size()!==1,
+                        inputPlaceholder: "Shelf Barcode"
+                    }, function (inputValue) {
+                        if (inputValue === false) return false;
+                        if (inputValue === "") {
+                            swal.showInputError("Scan shelf!");
+                            return false;
+                        }
 
-                            validatedBox.set({shelfBarcode: inputValue});
-                            _this.storedBoxes.add(validatedBox);
-                            _this.validatedBoxes.remove(validatedBox);
+                        validatedBox.set({shelfBarcode: inputValue});
+                        _this.storedBoxes.add(validatedBox);
+                        _this.validatedBoxes.remove(validatedBox);
 
-                            _this.updateStoreProgress();
-                        });
-                    }
-                    else{
-                        swal({
-                            title: 'Not a valid box!',
-                            text: 'Barcode is not part of this request.',
-                            type: 'error'
-                        });
-                    }
+                        _this.updateStoreProgress();
+                    });
                 }
-
+                else{
+                    swal({
+                        title: 'Not a valid box!',
+                        text: 'Barcode is not part of this request.',
+                        type: 'error'
+                    });
+                }
             }
         },
 
         updateStoreProgress: function(){
-
-            console.log('Yo');
 
             var validatedBoxesSize = this.validatedBoxes.size();
             var storedBoxesSize = this.storedBoxes.size();
@@ -1912,25 +1931,30 @@
             pb.text(p + '%');
 
             if(validatedBoxesSize === 0){
-                console.log('YoYo');
                 this.updateRequest();
             }
         },
 
         updateRequest: function(){
 
-            _.each(this.model.get('inventoryItems'), function(inventoryItem){
-                var sBox = this.storedBoxes.get(inventoryItem.boxBarcode);
-                inventoryItem.box.shelf = sBox.get('shelfBarcode');
-            }, this);
-
-            this.model.save({
-                status: 'STORED'
-            }, {
-                wait: true,
-                success: this.handleSaveSuccess,
-                error: this.handleSaveError
+            var toSave = new Boxes();
+            this.storedBoxes.each(function(sBox){
+                var box = new Box({
+                    id: sBox.get('_id'),
+                    shelfBarcode: sBox.get('shelfBarcode')
+                });
+                toSave.add(box);
             });
+
+            console.log(toSave);
+
+            // this.model.save({
+            //     status: 'STORED'
+            // }, {
+            //     wait: true,
+            //     success: this.handleSaveSuccess,
+            //     error: this.handleSaveError
+            // });
         },
 
         handleSaveSuccess: function(model, response){
@@ -1964,6 +1988,10 @@
             this.showChildView('validatedBoxesRegion', new StoreRecordsListView({collection: this.validatedBoxes, isStoredBoxesView: false}));
             this.showChildView('storedBoxesRegion', new StoreRecordsListView({collection: this.storedBoxes, isStoredBoxesView: true}));
         },
+
+        onAttach: function(){
+            this.$('#validatedBoxBarcode').focus();
+        }
 
     });
 
