@@ -475,7 +475,43 @@
             'click div.ckbox>input': 'updateDeleteButtonEnabled',
             'click #editBoxButton': 'editBox',
             'click #showFilesButton': 'showFiles',
-            'click #saveRecordsButton': 'saveRecords'
+            'click #saveRecordsButton': 'saveRecords',
+            'change #boxBarcode': 'boxBarcodeChanged',
+            'blur #boxBarcode': 'focusBack'
+        },
+
+        focusBack: function(){
+            this.$('#boxBarcode').val('');
+            this.$('#boxBarcode').focus();
+        },
+
+        boxBarcodeChanged: function(e){
+            var barcode = this.$('#boxBarcode').val().toUpperCase().trim();
+            this.$('#boxBarcode').val('');
+            this.$('#boxBarcode').focus();
+
+
+            var box = this.collection.findWhere({barcode: barcode});
+            var storageType = this.options.request.get('storageType').name;
+            var isNew = typeof box === 'undefined';
+
+            if(isNew){
+                box = new Box({barcode: barcode});
+                box.storageType = storageType;
+
+                if(storageType === 'BOX'){
+                    box.set('inventoryItem', new InventoryItem({type: 'BOX'}));
+                }else{
+                    box.set('files', new Files());
+                }
+            }
+
+            if(storageType === 'BOX'){
+                this.triggerMethod('show:box', box);
+            }else if(isNew){
+                this.collection.add(box);
+                storage.storeBox(box, this.options.request);
+            }
         },
 
         validateRecords: function(){
@@ -664,6 +700,7 @@
         },
 
         addBox: function(e) {
+            e.preventDefault();
             var storageType = this.options.request.get('storageType').name;
             var box = new Box();
             box.storageType = storageType;
@@ -705,6 +742,10 @@
 
         onRender: function() {
             this.showChildView('body', new BoxesTableView({collection: this.collection}));
+        },
+
+        onAttach: function(){
+            this.$('#boxBarcode').focus();
         }
     });
 
@@ -809,9 +850,8 @@
                 this.$('#barcode').focus();
             }else{
                 this.$('#barcode').prop('readonly', true);
+                this.$('#ref1').focus();
             }
-
-
         }
 
     });

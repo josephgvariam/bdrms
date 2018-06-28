@@ -26,9 +26,8 @@ public class SimpleSeleniumTest {
     }
 
     @Test
-    public void testUntitledTestCase() throws Exception {
+    public void newPickupRequestWithFileStorageType() throws Exception {
         driver.get("http://localhost:8080/login");
-        Thread.sleep(5000);
         driver.findElement(By.xpath("//button[@type='submit']")).click();
         driver.get("http://localhost:8080/pickuprequests/create-form");
         driver.findElement(By.id("select2-storagetypesselect2-container")).click();
@@ -36,7 +35,18 @@ public class SimpleSeleniumTest {
         driver.findElement(By.id("pickupDateTime")).sendKeys("2018-06-30 22:00 pm");
         driver.findElement(By.id("numberFiles")).sendKeys("100");
         driver.findElement(By.xpath("(//button[@type='submit'])[2]")).click();
-        // ERROR: Caught exception [unknown command []]
+    }
+
+    @Test
+    public void newPickupRequestWithBoxStorageType() throws Exception {
+        driver.get("http://localhost:8080/login");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.get("http://localhost:8080/pickuprequests/create-form");
+        driver.findElement(By.id("select2-storagetypesselect2-container")).click();
+        driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(1)")).click();
+        driver.findElement(By.id("pickupDateTime")).sendKeys("2018-06-30 22:00 pm");
+        driver.findElement(By.id("numberFiles")).sendKeys("100");
+        driver.findElement(By.xpath("(//button[@type='submit'])[2]")).click();
     }
 
     @After
