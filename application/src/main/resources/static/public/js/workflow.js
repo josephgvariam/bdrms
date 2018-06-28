@@ -1935,7 +1935,26 @@
             });
         },
 
+        getLocation: function(boxBarcode){
+            var box = this.storedBoxes.findWhere({barcode: boxBarcode});
+            return box.get('location');
+        },
+
         handleSaveSuccess: function(){
+            var storageType = this.model.get('storageType').name;
+
+            _.each(this.model.get('inventoryItems'), function(inventoryItem){
+                inventoryItem.status = 'STORED';
+
+                if(storageType === 'BOX'){
+                    inventoryItem.box.location = this.getLocation(inventoryItem.box.barcode);
+                }else if (storageType === 'FILE'){
+                    inventoryItem.file.location = this.getLocation(inventoryItem.file.box.barcode);
+                }else{
+                    inventoryItem.document.location = this.getLocation(inventoryItem.document.file.box.barcode);
+                }
+            }, this);
+
             this.model.save({
                 status: 'STORED'
             }, {

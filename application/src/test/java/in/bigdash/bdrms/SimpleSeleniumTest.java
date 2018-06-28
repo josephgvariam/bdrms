@@ -66,7 +66,7 @@ public class SimpleSeleniumTest {
     }
 
     @Test
-    public void testUntitledTestCase() throws Exception {
+    public void newPickupRequestTillStore() throws Exception {
         String id = getId();
 
         driver.get("http://localhost:8080/login");
