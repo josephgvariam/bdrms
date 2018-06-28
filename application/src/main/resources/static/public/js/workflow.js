@@ -897,8 +897,45 @@
             'click div.ckbox>input': 'updateDeleteButtonEnabled',
             'click #editFileButton': 'editFile',
             'click #showDocsButton': 'showDocs',
-            'click #showBoxesButton': 'showBoxes'
+            'click #showBoxesButton': 'showBoxes',
+            'change #fileBarcode': 'fileBarcodeChanged',
+            'blur #fileBarcode': 'focusBack'
         },
+
+        focusBack: function(){
+            this.$('#fileBarcode').val('');
+            this.$('#fileBarcode').focus();
+        },
+
+        fileBarcodeChanged: function(e){
+            var barcode = this.$('#fileBarcode').val().toUpperCase().trim();
+            this.$('#fileBarcode').val('');
+            this.$('#fileBarcode').focus();
+
+
+            var file = this.collection.findWhere({barcode: barcode});
+            var storageType = this.options.request.get('storageType').name;
+            var isNew = typeof file === 'undefined';
+
+            if(isNew){
+                file = new File({barcode: barcode});
+                file.storageType = storageType;
+
+                if(storageType === 'FILE'){
+                    file.set('inventoryItem', new InventoryItem({type: 'FILE'}));
+                }else{
+                    file.set('documents', new Documents());
+                }
+            }
+
+            if(storageType === 'FILE'){
+                this.triggerMethod('show:file', file, this.options.box);
+            }else if(isNew){
+                this.collection.add(file);
+                storage.storeFile(file, this.options.request);
+            }
+        },
+
 
         showBoxes: function(e){
           this.triggerMethod('show:boxes');
@@ -972,6 +1009,10 @@
         onRender: function() {
             this.$('#filesPanelTitle').text('BOX ' + this.options.box.get('barcode') + ' >> FILES');
             this.showChildView('body', new FilesTableView({collection: this.collection}));
+        },
+
+        onAttach: function(){
+            this.$('#fileBarcode').focus();
         }
     });
 
@@ -1081,6 +1122,7 @@
                 this.$('#barcode').focus();
             }else{
                 this.$('#barcode').prop('readonly', true);
+                this.$('#ref1').focus();
             }
 
         }

@@ -358,12 +358,12 @@
 
     <script id="boxes-template" type="text/template">
         <div id="alert"></div>
-        <div class="row">
+        <div class="row bottom-buffer">
             <div class="col-md-4 col-md-offset-1">
                 <input id="boxBarcode" name="boxBarcode" type="text" class="form-control" placeholder="Box Barcode" autofocus/>
             </div>
         </div>
-        <div class="row top-buffer">
+        <div class="row">
             <div class="col-md-3 col-md-offset-1">
                 <p>
                     <button id="addBoxButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add Box</button>
@@ -499,6 +499,11 @@
     </script>
 
     <script id="files-template" type="text/template">
+        <div class="row bottom-buffer">
+            <div class="col-md-4 col-md-offset-1">
+                <input id="fileBarcode" name="fileBarcode" type="text" class="form-control" placeholder="File Barcode" autofocus/>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <p>
