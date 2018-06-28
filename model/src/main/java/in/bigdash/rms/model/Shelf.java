@@ -59,7 +59,7 @@ public class Shelf {
     private Set<Box> boxes = new HashSet<Box>();
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "FACILITY_ID")
     @EntityFormat
     private Facility facility;

@@ -422,13 +422,6 @@
         model: VerifyBox
     });
 
-    var StoreBox = Backbone.Model.extend({
-    });
-
-    var StoreBoxes = Backbone.Collection.extend({
-        model: StoreBox
-    });
-
 //////////////////////// VIEWS
 
 
@@ -1629,7 +1622,7 @@
     });
 
     var EmptyVerifyRecordsRowView = Mn.View.extend({
-        template: _.template('No Boxes. Start scanning boxes.')
+        template: _.template('No Boxes.')
     });
 
     var VerifyRecordsListView = Marionette.CollectionView.extend({
@@ -1857,26 +1850,23 @@
         initialize: function(){
             _.bindAll(this, "handleSaveSuccess", "handleSaveError", "updateRequest");
 
-            this.validatedBoxes = new StoreBoxes();
+            this.validatedBoxes = new Boxes();
             var storageType = this.model.get('storageType').name;
 
+            var box;
             _.each(this.model.get('inventoryItems'), function(inventoryItem){
-                var sBox = new StoreBox({
-                    id: inventoryItem.boxBarcode
-                });
-
                 if(storageType === 'BOX'){
-                    sBox.set('_id',inventoryItem.box.id)
+                    box = new Box(inventoryItem.box);
                 }else if(storageType === 'FILE'){
-                    sBox.set('_id',inventoryItem.file.box.id)
+                    box = new Box(inventoryItem.file.box);
                 }else{
-                    sBox.set('_id',inventoryItem.document.file.box.id)
+                    box = new Box(inventoryItem.document.file.box);
                 }
 
-                this.validatedBoxes.add(sBox);
+                this.validatedBoxes.add(box);
             }, this);
 
-            this.storedBoxes = new StoreBoxes();
+            this.storedBoxes = new Boxes();
         },
 
         storeBox: function(e){
@@ -1884,7 +1874,7 @@
             this.$('#validatedBoxBarcode').val('');
 
             if(barcode) {
-                var validatedBox = this.validatedBoxes.get(barcode);
+                var validatedBox = this.validatedBoxes.findWhere({barcode: barcode});
 
                 var _this = this;
                 if (typeof validatedBox !== 'undefined') {
@@ -1902,7 +1892,9 @@
                             return false;
                         }
 
-                        validatedBox.set({shelfBarcode: inputValue});
+                        validatedBox.set('shelf', {barcode: inputValue});
+                        validatedBox.set('location', inputValue );
+
                         _this.storedBoxes.add(validatedBox);
                         _this.validatedBoxes.remove(validatedBox);
 
@@ -1936,28 +1928,25 @@
         },
 
         updateRequest: function(){
-
-            var toSave = new Boxes();
-            this.storedBoxes.each(function(sBox){
-                var box = new Box({
-                    id: sBox.get('_id'),
-                    shelfBarcode: sBox.get('shelfBarcode')
-                });
-                toSave.add(box);
+            this.storedBoxes.url = '/api/boxes/batch';
+            this.storedBoxes.sync('update', this.storedBoxes, {
+                success: this.handleSaveSuccess,
+                error: this.handleSaveError
             });
-
-            console.log(toSave);
-
-            // this.model.save({
-            //     status: 'STORED'
-            // }, {
-            //     wait: true,
-            //     success: this.handleSaveSuccess,
-            //     error: this.handleSaveError
-            // });
         },
 
-        handleSaveSuccess: function(model, response){
+        handleSaveSuccess: function(){
+            this.model.save({
+                status: 'STORED'
+            }, {
+                wait: true,
+                success: this.handleSaveSuccess2,
+                error: this.handleSaveError2
+            });
+
+        },
+
+        handleSaveSuccess2: function(model, response){
             swal({
                     title: 'Request Updated!',
                     text: 'Records are now stored.',
@@ -1968,11 +1957,16 @@
                 });
         },
 
-        handleSaveError: function(model, response, options){
+        handleSaveError2: function(model, response){
             if(response.responseJSON.message) {
                 swal.close();
                 this.showAlert([response.responseJSON.message], 'danger');
             }
+        },
+
+        handleSaveError: function(response){
+            console.log('error', response);
+            this.showAlert('Error saving boxes: ' + response, 'danger');
         },
 
         onChildviewDeleteStoredBox: function(sBox) {

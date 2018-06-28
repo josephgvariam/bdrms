@@ -226,7 +226,7 @@
     </script>
 
     <script id="store-records-row-template" type="text/template">
-        <%= id %><% if (isStoredBoxesView){ %><i class="fa fa-remove fa-2x pull-right deleteStoredBox" style="color: red;"></i><br/><small><%= shelfBarcode %></small><%}%>
+        <%= barcode %><% if (isStoredBoxesView){ %><i class="fa fa-remove fa-2x pull-right deleteStoredBox" style="color: red;"></i><br/><small><%= shelf.barcode %></small><%}%>
     </script>
 
     <script id="verify-records-template" type="text/template">

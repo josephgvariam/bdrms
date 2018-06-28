@@ -10,4 +10,6 @@ public interface ShelfRepository extends DetachableJpaRepository<Shelf, Long>, S
 
 
     public abstract long countByFacility(Facility facility);
+
+    public abstract Shelf findByBarcode(String barcode);
 }

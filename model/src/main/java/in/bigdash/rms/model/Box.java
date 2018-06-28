@@ -74,7 +74,7 @@ public class Box {
     private BoxInventoryItem inventoryItem;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = { javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinColumn(name = "SHELF_ID")
     @EntityFormat
     private Shelf shelf;

@@ -145,6 +145,11 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
 
+    public Shelf findByBarcode(String barcode) {
+        return getShelfRepository().findByBarcode(barcode);
+    }
+
+
     public Shelf findOneForUpdate(Long id) {
         return getShelfRepository().findOneDetached(id);
     }
