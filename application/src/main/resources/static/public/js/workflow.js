@@ -1979,13 +1979,20 @@
         handleSaveError2: function(model, response){
             if(response.responseJSON.message) {
                 swal.close();
-                this.showAlert([response.responseJSON.message], 'danger');
+                util.showAlert([response.responseJSON.message], 'danger');
             }
         },
 
         handleSaveError: function(response){
             console.log('error', response);
-            this.showAlert('Error saving boxes: ' + response, 'danger');
+            swal.close();
+            if(response.responseJSON && response.responseJSON.message){
+                util.showAlert('Error saving boxes', response.responseJSON.message, 'danger');
+            }
+            else{
+                util.showAlert('Error saving boxes', response, 'danger');
+            }
+
         },
 
         onChildviewDeleteStoredBox: function(sBox) {
