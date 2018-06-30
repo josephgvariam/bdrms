@@ -192,6 +192,11 @@ public class InventoryItem {
         return this.userCreated.getClient();
     }
 
+    public String getDepartment()
+    {
+        return this.userCreated.getClient().getDepartment();
+    }
+
     public String getType() {
         return type;
     }
