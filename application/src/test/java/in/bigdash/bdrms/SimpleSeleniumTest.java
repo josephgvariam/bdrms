@@ -18,22 +18,26 @@ public class SimpleSeleniumTest {
 
     @Before
     public void setUp() throws Exception {
-        URL local = new URL("http://localhost:9515");
+        System.setProperty("webdriver.chrome.driver","/home/joppu/lib/chromedriver");
 
-        System.setProperty("webdriver.chrome.driver","/Users/joppu/lib/chromedriver");
-        ChromeOptions options = new ChromeOptions();
-        //options.addArguments("disable-infobars");
-        //options.addArguments("--start-fullscreen");
+        ChromeOptions chromeOptions = new ChromeOptions();
+        //chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("--no-sandbox");
 
-        driver = new ChromeDriver(options);
+
+
+        driver = new ChromeDriver(chromeOptions);
     }
 
     @Test
     public void newPickupRequestWithFileStorageType() throws Exception {
         driver.get("http://localhost:8080/login");
+        driver.findElement(By.name("username")).sendKeys("user1");
+        driver.findElement(By.name("password")).sendKeys("user1");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
         driver.get("http://localhost:8080/pickuprequests/create-form");
         driver.findElement(By.id("select2-storagetypesselect2-container")).click();
+        Thread.sleep(1000);
         driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(2)")).click();
         driver.findElement(By.id("pickupDateTime")).sendKeys("2018-06-30 22:00 pm");
         driver.findElement(By.id("numberFiles")).sendKeys("100");
@@ -43,9 +47,12 @@ public class SimpleSeleniumTest {
     @Test
     public void newPickupRequestWithBoxStorageType() throws Exception {
         driver.get("http://localhost:8080/login");
+        driver.findElement(By.name("username")).sendKeys("user1");
+        driver.findElement(By.name("password")).sendKeys("user1");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
         driver.get("http://localhost:8080/pickuprequests/create-form");
         driver.findElement(By.id("select2-storagetypesselect2-container")).click();
+        Thread.sleep(1000);
         driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(1)")).click();
         driver.findElement(By.id("pickupDateTime")).sendKeys("2018-06-30 22:00 pm");
         driver.findElement(By.id("numberFiles")).sendKeys("100");
@@ -55,10 +62,12 @@ public class SimpleSeleniumTest {
     @Test
     public void newPickupRequestWithDocumentStorageType() throws Exception {
         driver.get("http://localhost:8080/login");
+        driver.findElement(By.name("username")).sendKeys("user1");
+        driver.findElement(By.name("password")).sendKeys("user1");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
         driver.get("http://localhost:8080/pickuprequests/create-form");
         driver.findElement(By.id("select2-storagetypesselect2-container")).click();
-        Thread.sleep(250);
+        Thread.sleep(1000);
         driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(3)")).click();
         driver.findElement(By.id("pickupDateTime")).sendKeys("2018-06-30 22:00 pm");
         driver.findElement(By.id("numberFiles")).sendKeys("100");
@@ -70,6 +79,8 @@ public class SimpleSeleniumTest {
         String id = getId();
 
         driver.get("http://localhost:8080/login");
+        driver.findElement(By.name("username")).sendKeys("user1");
+        driver.findElement(By.name("password")).sendKeys("user1");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
         driver.get("http://localhost:8080/pickuprequests/create-form");
         driver.findElement(By.id("select2-storagetypesselect2-container")).click();
@@ -78,7 +89,15 @@ public class SimpleSeleniumTest {
         driver.findElement(By.id("pickupDateTime")).sendKeys("2018-06-30 22:00 pm");
         driver.findElement(By.id("numberFiles")).sendKeys("100");
         driver.findElement(By.xpath("(//button[@type='submit'])[2]")).click();
-        driver.findElement(By.id("Request_workflow")).click();
+
+        String requestId = getRequestIdFromUrl(driver.findElement(By.id("PickupRequest_edit")).getAttribute("href"));
+        driver.get("http://localhost:8080/login");
+        driver.findElement(By.name("username")).sendKeys("operator");
+        driver.findElement(By.name("password")).sendKeys("operator");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.get("http://localhost:8080/requests/" + requestId + "/workflow");
+
+
         driver.findElement(By.id("select2-userAssigned-container")).click();
         Thread.sleep(1000);
         driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(1)")).click();
@@ -187,6 +206,12 @@ public class SimpleSeleniumTest {
     private String getId(){
         //return DigestUtils.sha1Hex(UUID.randomUUID().toString());
         return UUID.randomUUID().toString().replaceAll("-","").substring(0,7).toUpperCase();
+    }
+
+    private String getRequestIdFromUrl(String url){
+        int j = url.lastIndexOf("/");
+        int i = url.lastIndexOf("/", j-1) + 1;
+        return url.substring(i,j);
     }
 
 
