@@ -28,6 +28,23 @@
             <div id="mainEntityFieldSet">
               <h2 data-th-text="#{label_data_entity(#{label_documentinventoryitem})}">DocumentInventoryItem data</h2>
               <ul class="list-unstyled" id="containerFields">
+                  <li id="inventoryitem-boxbarcode-field">
+                      <strong>Box Barcode</strong>
+                      <span data-th-text="*{{boxBarcode}}"></span>
+                  </li>
+                  <li id="inventoryitem-filebarcode-field">
+                      <strong>File Barcode</strong>
+                      <span data-th-text="*{{fileBarcode}}"></span>
+                  </li>
+                  <li id="inventoryitem-docbarcode-field">
+                      <strong>Document Barcode</strong>
+                      <span data-th-text="*{{documentBarcode}}"></span>
+                  </li>
+                  <li sec:authorize="hasRole('OPERATOR')" id="inventoryitem-shelfbarcode-field">
+                      <strong>Shelf Barcode</strong>
+                      <span data-th-text="*{{shelfBarcode}}"></span>
+                  </li>
+
                   <li id="documentinventoryitem-ref1-field" data-z="c6157709">
             	      <strong data-th-text="#{label_documentinventoryitem_ref1}">ref1</strong>
                     <span data-th-text="*{{ref1}}">ref1Value</span>
@@ -61,7 +78,7 @@
 
 
           <div class="clearfix">
-            <div class="pull-right">
+            <div sec:authorize="hasRole('OPERATOR')" class="pull-right">
              <a id="DocumentInventoryItem_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('DocumentInventoryItemsItemThymeleafController').to('editForm').with('documentInventoryItem', documentInventoryItem.id)}" data-th-text="#{label_edit}">Edit</a>
             </div>
 

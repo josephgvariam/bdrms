@@ -37,14 +37,14 @@
             <div id="mainnav" class="navbar-collapse collapse">
 
               <ul class="nav navbar-nav" id="entitiesMenuEntries">
-                <li class="dropdown" id="client-entry" data-z="7dd05d28">
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown" id="client-entry" data-z="7dd05d28">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_client})}">Client<span class="caret"></span></a>
                  <ul class="dropdown-menu">
 	                   <li><a href="/clients/create-form" data-th-href="@{/clients/create-form}" data-th-utext="#{label_create_entity(#{label_client})}">Create Client</a></li>
 	                  <li><a href="/clients" data-th-href="@{/clients}" data-th-utext="#{label_list_entity(#{label_client_plural})}">List Client</a></li>
                  </ul>
                 </li>
-                <li class="dropdown" id="facility-entry" data-z="a96cfb79">
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown" id="facility-entry" data-z="a96cfb79">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_facility})}">Facility<span class="caret"></span></a>
                  <ul class="dropdown-menu">
 	                   <li><a href="/facilities/create-form" data-th-href="@{/facilities/create-form}" data-th-utext="#{label_create_entity(#{label_facility})}">Create Facility</a></li>
@@ -70,7 +70,7 @@
                      <li><a href="/insertionrequests/create-form" data-th-href="@{/insertionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_insertionrequest})}">Create InsertionRequest</a></li>
                  </ul>
                 </li>
-                <li class="dropdown" id="user-entry" data-z="a49e5768">
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown" id="user-entry" data-z="a49e5768">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_user})}">User<span class="caret"></span></a>
                  <ul class="dropdown-menu">
 	                   <li><a href="/users/create-form" data-th-href="@{/users/create-form}" data-th-utext="#{label_create_entity(#{label_user})}">Create User</a></li>
