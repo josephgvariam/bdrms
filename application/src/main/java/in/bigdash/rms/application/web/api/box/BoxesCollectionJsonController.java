@@ -79,8 +79,9 @@ public class BoxesCollectionJsonController {
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getBoxService().save(boxes);
-        return ResponseEntity.created(listURI().toUri()).build();
+
+        Collection<Box> updatedBoxes = getBoxService().save(boxes);
+        return ResponseEntity.ok(updatedBoxes);
     }
 
 
@@ -89,8 +90,8 @@ public class BoxesCollectionJsonController {
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getBoxService().save(boxes);
-        return ResponseEntity.ok().build();
+        Collection<Box> updatedBoxes = getBoxService().save(boxes);
+        return ResponseEntity.ok(updatedBoxes);
     }
 
 

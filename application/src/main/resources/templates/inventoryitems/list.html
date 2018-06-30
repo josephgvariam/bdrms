@@ -39,7 +39,7 @@
                     <th data-data="documentBarcode">Document Barcode</th>
                     <th data-data="fileBarcode">File Barcode</th>
                     <th data-data="boxBarcode">Box Barcode</th>
-                    <th data-data="shelfBarcode">Shelf Barcode</th>
+                    <th sec:authorize="hasRole('OPERATOR')" data-data="shelfBarcode">Shelf Barcode</th>
                     <th data-data="ref1" data-th-text="#{label_inventoryitem_ref1}">ref1</th>
                     <th data-data="ref2" data-th-text="#{label_inventoryitem_ref2}">ref2</th>
                     <th data-data="ref3" data-th-text="#{label_inventoryitem_ref3}">ref3</th>
@@ -58,7 +58,7 @@
                     <td>documentBarcode</td>
                     <td>fileBarcode</td>
                     <td>boxBarcode</td>
-                    <td>shelfBarcode</td>
+                    <td sec:authorize="hasRole('OPERATOR')">shelfBarcode</td>
                     <td>ref1</td>
                     <td>ref2</td>
                     <td>ref3</td>

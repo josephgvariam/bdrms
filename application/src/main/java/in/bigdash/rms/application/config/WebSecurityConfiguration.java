@@ -62,16 +62,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/public/**", "/webjars/**", "/resources/**", "/static/**", "/login/**").permitAll()
-                //.antMatchers("/files/**","/requests/**").hasRole("USER")
-                //.antMatchers("/users/**", "/roles/**","/clients/**", "/facilities/**").hasRole("ADMIN")
+                .antMatchers("/**/workflow/**").hasRole("OPERATOR")
+                .antMatchers("/requests/**/edit-form").hasRole("OPERATOR")
+
+                .antMatchers("/inventoryitems/**","/requests/**").hasRole("USER")
+                .antMatchers("/boxes/**", "/files/**","/documents/**", "/shelves/**", "/users/s2o").hasRole("OPERATOR")
+                .antMatchers("/users/**", "/roles/**","/clients/**", "/facilities/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage(LOGIN_FORM_URL)
-                .permitAll()
+                .formLogin().loginPage(LOGIN_FORM_URL).permitAll()
                 .and()
-                .logout()
-                .permitAll();
+                .logout().permitAll();
 
         http.csrf().ignoringAntMatchers("/api/**");
 

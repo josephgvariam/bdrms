@@ -1,6 +1,7 @@
 package in.bigdash.rms.application.web.api.shelf;
 import in.bigdash.rms.model.Shelf;
 import in.bigdash.rms.service.api.ShelfService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -50,13 +51,37 @@ public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
     }
 
 
-    public Shelf deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode tree) {
-        String idText = tree.asText();
-        Long id = conversionService.convert(idText, Long.class);
-        Shelf shelf = shelfService.findOne(id);
+    public Shelf deserializeObject(JsonParser jsonParser, DeserializationContext context, ObjectCodec codec, JsonNode node) {
+
+        Shelf shelf = null;
+
+        Long id = getLong(node);
+
+        if(id != null) {
+            shelf = shelfService.findOne(id);
+        }else{
+            String barcode = node.get("barcode").asText();
+            shelf = shelfService.findByBarcode(barcode);
+        }
+
         if (shelf == null) {
             throw new NotFoundException("Shelf not found");
         }
         return shelf;
+    }
+
+    private Long getLong(JsonNode node){
+
+        if(node == null){
+            return null;
+        }
+
+        String idText = node.asText();
+
+        if(StringUtils.isBlank(idText) || idText.equals("null")){
+            return null;
+        }else{
+            return Long.parseLong(idText);
+        }
     }
 }

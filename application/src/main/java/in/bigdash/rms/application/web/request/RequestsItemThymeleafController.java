@@ -20,6 +20,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -227,6 +228,9 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Request request) {
+        if(request.getStatus() != RequestStatus.OPEN){
+            throw new RuntimeException("Cannot delete non-open requests");
+        }
         getRequestService().delete(request);
         return ResponseEntity.ok().build();
     }

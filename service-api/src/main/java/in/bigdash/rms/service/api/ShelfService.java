@@ -14,6 +14,8 @@ public interface ShelfService extends EntityResolver<Shelf, Long>, ValidatorServ
 
     public abstract Shelf findOne(Long id);
 
+    public abstract Shelf findByBarcode(String barcode);
+
 
     public abstract void delete(Shelf shelf);
 

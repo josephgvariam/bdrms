@@ -1356,13 +1356,13 @@
         }
 
         var editUrl = getEditUrl(datatables, rowId);
-        if (editUrl) {
+        if (editUrl && full.status == 'OPEN') {
             buttons = buttons.concat('<a class="btn btn-action btn-sm" href="')
                 .concat(editUrl).concat('"><span class="glyphicon glyphicon-pencil"></span></a>');
         }
 
         var deleteUrl = getDeleteUrl(datatables, rowId);
-        if (deleteUrl) {
+        if (deleteUrl && full.status == 'OPEN'  ) {
             buttons = buttons.concat('<a role="button" class="btn btn-action btn-sm" data-toggle="modal" data-target="#')
                 .concat(tableId).concat('DeleteConfirm" data-row-id="')
                 .concat(data).concat('"><span class="glyphicon glyphicon-trash"></span></a>');

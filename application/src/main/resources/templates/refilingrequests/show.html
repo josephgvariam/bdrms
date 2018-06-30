@@ -70,7 +70,7 @@
             </div>
 
 
-              <div class="pull-right">
+              <div sec:authorize="hasRole('OPERATOR')" class="pull-right">
                   <a id="Request_workflow" data-th-href="'/requests/' + ${refilingRequest.id} + '/workflow'" class="btn btn-primary" style="margin-right: 5px">Workflow</a>
               </div>
 
