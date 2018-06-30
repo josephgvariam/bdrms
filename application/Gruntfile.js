@@ -18,12 +18,27 @@ module.exports = function(grunt) {
                 src: 'src/main/resources/static/public/js/workflow.js',
                 dest: 'src/main/resources/static/public/js/workflow.min.js'
             }
-        }
+        },
+        rev: {
+            assets: {
+                files: [{
+                    src: [
+                        'src/main/resources/static/public/js/workflow.min.js',
+                    ]
+                }]
+            }
+        },
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-file-rev');
+    //grunt.loadNpmTasks('grunt-filerev-replace');
+    //grunt.loadNpmTasks('grunt-filerev-replace');
+    // see https://martinsonesson.wordpress.com/tag/filerev/
 
-    grunt.registerTask('default', ['jshint', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'uglify', 'rev']);
+
+
 
 };

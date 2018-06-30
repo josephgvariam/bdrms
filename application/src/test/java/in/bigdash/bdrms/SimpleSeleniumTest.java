@@ -10,6 +10,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+@Ignore
 public class SimpleSeleniumTest {
     private WebDriver driver;
     private String baseUrl;
