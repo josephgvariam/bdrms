@@ -59,14 +59,19 @@ public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
 
         if(id != null) {
             shelf = shelfService.findOne(id);
+
+            if (shelf == null) {
+                throw new IllegalArgumentException("Shelf id " + id + " not found");
+            }
         }else{
             String barcode = node.get("barcode").asText();
             shelf = shelfService.findByBarcode(barcode);
+
+            if (shelf == null) {
+                throw new IllegalArgumentException("Shelf barcode " + barcode + " not found");
+            }
         }
 
-        if (shelf == null) {
-            throw new NotFoundException("Shelf not found");
-        }
         return shelf;
     }
 

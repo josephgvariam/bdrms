@@ -1851,6 +1851,15 @@
             _.bindAll(this, "handleSaveSuccess", "handleSaveError", "updateRequest");
 
             this.validatedBoxes = new Boxes();
+            this.storedBoxes = new Boxes();
+            this.resetLists();
+        },
+
+        resetLists: function(){
+
+            this.validatedBoxes.reset();
+            this.storedBoxes.reset();
+
             var storageType = this.model.get('storageType').name;
 
             var box;
@@ -1866,7 +1875,6 @@
                 this.validatedBoxes.add(box);
             }, this);
 
-            this.storedBoxes = new Boxes();
         },
 
         storeBox: function(e){
@@ -1984,8 +1992,11 @@
         },
 
         handleSaveError: function(response){
-            console.log('error', response);
+            //console.log('error', response);
             swal.close();
+            this.resetLists();
+            this.updateStoreProgress();
+
             if(response.responseJSON && response.responseJSON.message){
                 util.showAlert('Error saving boxes', response.responseJSON.message, 'danger');
             }
