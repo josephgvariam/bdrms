@@ -3,6 +3,8 @@ package in.bigdash.rms.application.web.api.storagetype;
 import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.service.api.StorageTypeService;
 import io.springlets.web.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/api/storagetypes/{storageType}", name = "StorageTypesItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StorageTypesItemJsonController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private StorageTypeService storageTypeService;
 

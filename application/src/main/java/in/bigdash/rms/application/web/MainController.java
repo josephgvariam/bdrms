@@ -1,5 +1,7 @@
 package in.bigdash.rms.application.web;
 import io.springlets.web.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class MainController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/")
     public String index(Model model) {

@@ -10,10 +10,13 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class JasperReportsPdfExporter implements JasperReportsExporter {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void export(JasperPrint jp, String fileName, HttpServletResponse response) throws JRException, IOException {

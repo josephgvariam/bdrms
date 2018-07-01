@@ -12,6 +12,8 @@ import io.springlets.web.mvc.util.concurrency.ConcurrencyTemplate;
 import java.util.Locale;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -39,6 +41,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/boxes/{box}", name = "BoxesItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<Box> concurrencyTemplate = new ConcurrencyTemplate<Box>(this);
 

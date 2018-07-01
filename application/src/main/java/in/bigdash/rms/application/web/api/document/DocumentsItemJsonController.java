@@ -4,6 +4,9 @@ import in.bigdash.rms.model.Document;
 import in.bigdash.rms.service.api.DocumentService;
 import io.springlets.web.NotFoundException;
 import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +28,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/api/documents/{document}", name = "DocumentsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DocumentsItemJsonController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private DocumentService documentService;
 

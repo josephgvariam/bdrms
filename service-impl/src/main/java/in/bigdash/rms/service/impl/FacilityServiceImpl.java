@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class FacilityServiceImpl implements FacilityService {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private ShelfService shelfService;
 

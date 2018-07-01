@@ -70,7 +70,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/destructionrequests", name = "DestructionRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class DestructionRequestsCollectionThymeleafController {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private DestructionRequestService destructionRequestService;
 

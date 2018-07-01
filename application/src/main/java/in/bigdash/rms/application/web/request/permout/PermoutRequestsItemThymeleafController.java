@@ -41,7 +41,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/permoutrequests/{permoutRequest}", name = "PermoutRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class PermoutRequestsItemThymeleafController implements ConcurrencyManager<PermoutRequest> {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private PermoutRequestService permoutRequestService;
 

@@ -41,7 +41,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/transferrequests/{transferRequest}", name = "TransferRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class TransferRequestsItemThymeleafController implements ConcurrencyManager<TransferRequest> {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<TransferRequest> concurrencyTemplate = new ConcurrencyTemplate<TransferRequest>(this);
 

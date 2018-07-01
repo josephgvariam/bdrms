@@ -3,6 +3,8 @@ package in.bigdash.rms.application.web.api.role;
 import in.bigdash.rms.model.Role;
 import in.bigdash.rms.service.api.RoleService;
 import io.springlets.web.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/api/roles/{role}", name = "RolesItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RolesItemJsonController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private RoleService roleService;
 

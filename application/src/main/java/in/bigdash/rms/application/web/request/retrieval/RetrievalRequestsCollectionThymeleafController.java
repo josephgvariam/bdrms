@@ -69,7 +69,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/retrievalrequests", name = "RetrievalRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RetrievalRequestsCollectionThymeleafController {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private MethodLinkBuilderFactory<RetrievalRequestsItemThymeleafController> itemLink;
 

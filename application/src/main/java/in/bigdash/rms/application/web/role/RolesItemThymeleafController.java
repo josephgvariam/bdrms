@@ -9,6 +9,8 @@ import io.springlets.web.mvc.util.MethodLinkBuilderFactory;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyCallback;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -31,6 +33,7 @@ import java.util.Locale;
 @RequestMapping(value = "/roles/{role}", name = "RolesItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RolesItemThymeleafController implements ConcurrencyManager<Role> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<Role> concurrencyTemplate = new ConcurrencyTemplate<Role>(this);
 

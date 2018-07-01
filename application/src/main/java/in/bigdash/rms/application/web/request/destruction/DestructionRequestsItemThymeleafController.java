@@ -41,7 +41,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/destructionrequests/{destructionRequest}", name = "DestructionRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class DestructionRequestsItemThymeleafController implements ConcurrencyManager<DestructionRequest> {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private DestructionRequestService destructionRequestService;
 

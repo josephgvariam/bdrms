@@ -4,6 +4,9 @@ import in.bigdash.rms.model.inventory.FileInventoryItem;
 import in.bigdash.rms.service.api.FileInventoryItemService;
 import io.springlets.web.NotFoundException;
 import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +28,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/api/fileinventoryitems/{fileInventoryItem}", name = "FileInventoryItemsItemJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FileInventoryItemsItemJsonController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private FileInventoryItemService fileInventoryItemService;
 

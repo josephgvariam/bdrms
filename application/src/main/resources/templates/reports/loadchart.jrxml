@@ -112,7 +112,7 @@
 				</textElement>
 				<text><![CDATA[Date]]></text>
 			</staticText>
-			<textField pattern="MMMM d, yyyy">
+			<textField pattern="MMM d, yyyy">
 				<reportElement x="465" y="10" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>

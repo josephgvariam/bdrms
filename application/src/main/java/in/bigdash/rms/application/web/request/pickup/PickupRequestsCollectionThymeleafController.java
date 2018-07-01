@@ -71,7 +71,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/pickuprequests", name = "PickupRequestsCollectionThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class PickupRequestsCollectionThymeleafController {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private MethodLinkBuilderFactory<PickupRequestsItemThymeleafController> itemLink;
 

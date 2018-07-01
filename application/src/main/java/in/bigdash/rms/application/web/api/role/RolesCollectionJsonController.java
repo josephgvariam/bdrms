@@ -3,6 +3,8 @@ package in.bigdash.rms.application.web.api.role;
 import in.bigdash.rms.model.Role;
 import in.bigdash.rms.service.api.RoleService;
 import io.springlets.data.domain.GlobalSearch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,7 @@ import java.util.Collection;
 @RequestMapping(value = "/api/roles", name = "RolesCollectionJsonController", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RolesCollectionJsonController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private RoleService roleService;
 

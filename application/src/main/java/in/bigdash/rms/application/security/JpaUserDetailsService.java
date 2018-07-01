@@ -16,12 +16,12 @@ public class JpaUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByUsername(username);
-        LOG.info("Got user: {}", user);
+        log.info("Got user: {}", user);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }

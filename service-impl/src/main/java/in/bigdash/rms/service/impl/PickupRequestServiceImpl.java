@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class PickupRequestServiceImpl implements PickupRequestService {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private PickupRequestRepository pickupRequestRepository;
 

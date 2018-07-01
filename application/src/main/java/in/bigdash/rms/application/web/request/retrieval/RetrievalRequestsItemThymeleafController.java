@@ -41,7 +41,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/retrievalrequests/{retrievalRequest}", name = "RetrievalRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class RetrievalRequestsItemThymeleafController implements ConcurrencyManager<RetrievalRequest> {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<RetrievalRequest> concurrencyTemplate = new ConcurrencyTemplate<RetrievalRequest>(this);
 

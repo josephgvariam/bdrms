@@ -61,7 +61,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/pickuprequests/{pickupRequest}", name = "PickupRequestsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class PickupRequestsItemThymeleafController implements ConcurrencyManager<PickupRequest> {
 
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<PickupRequest> concurrencyTemplate = new ConcurrencyTemplate<PickupRequest>(this);
 
@@ -302,7 +302,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
             JasperReportsExporter exporter = new JasperReportsPdfExporter();
             exporter.export(jasperPrint, fileName, response);
         }catch (Exception e){
-            LOG.error("Error generating load chart!", e);
+            log.error("Error generating load chart!", e);
             throw new ExportingErrorException(e.getMessage());
         }
 

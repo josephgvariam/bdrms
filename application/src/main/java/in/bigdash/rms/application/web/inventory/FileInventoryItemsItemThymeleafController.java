@@ -13,6 +13,9 @@ import io.springlets.web.mvc.util.concurrency.ConcurrencyTemplate;
 import java.util.Arrays;
 import java.util.Locale;
 import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -40,6 +43,7 @@ import org.springframework.web.util.UriComponents;
 @RequestMapping(value = "/fileinventoryitems/{fileInventoryItem}", name = "FileInventoryItemsItemThymeleafController", produces = MediaType.TEXT_HTML_VALUE)
 public class FileInventoryItemsItemThymeleafController implements ConcurrencyManager<FileInventoryItem> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ConcurrencyTemplate<FileInventoryItem> concurrencyTemplate = new ConcurrencyTemplate<FileInventoryItem>(this);
 
