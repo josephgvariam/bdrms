@@ -1,5 +1,14 @@
 package in.bigdash.rms.application.web.request.pickup;
+import ar.com.fdvs.dj.core.DynamicJasperHelper;
+import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
+import in.bigdash.rms.application.web.reports.*;
+import in.bigdash.rms.model.Box;
+import in.bigdash.rms.model.inventory.DocumentInventoryItem;
+import in.bigdash.rms.model.inventory.FileInventoryItem;
+import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.model.request.PickupRequest;
+import io.springlets.data.domain.GlobalSearch;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
 
 import in.bigdash.rms.model.request.RequestStatus;
@@ -10,15 +19,24 @@ import io.springlets.web.mvc.util.ControllerMethodLinkBuilderFactory;
 import io.springlets.web.mvc.util.MethodLinkBuilderFactory;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyCallback;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyTemplate;
-import java.util.Arrays;
-import java.util.Locale;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -230,6 +248,64 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute PickupRequest pickupRequest) {
         getPickupRequestService().delete(pickupRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(name = "/loadchart", value = "loadchart")
+    @ResponseBody
+    public ResponseEntity<?> loadchart(@ModelAttribute PickupRequest request, HttpServletResponse response) {
+
+        try {
+            InputStream jasperStream = this.getClass().getResourceAsStream("/templates/reports/loadchart.jasper");
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("requestId", request.getId());
+            params.put("clientName", request.getClient().getName());
+            params.put("clientDepartment", request.getClient().getDepartment());
+            params.put("clientAddress", request.getClient().getAddress());
+
+            Map<String, BoxReport> boxReportsMap = new HashMap<>();
+
+            for(InventoryItem inventoryItem: request.getInventoryItems()){
+                String boxBarcode = inventoryItem.getBoxBarcode();
+
+                if(inventoryItem.getType().equals("BOX")){
+                    BoxReport br = new BoxReport(boxBarcode, 0, 0);
+                    boxReportsMap.put(boxBarcode, br);
+                }
+                else if(inventoryItem.getType().equals("FILE")){
+                    if(!boxReportsMap.containsKey(boxBarcode)){
+                        int numberFiles = ((FileInventoryItem) inventoryItem).getFile().getBox().getFiles().size();
+                        BoxReport br = new BoxReport(boxBarcode, numberFiles, 0);
+                        boxReportsMap.put(boxBarcode, br);
+                    }
+                }
+                else if(inventoryItem.getType().equals("DOCUMENT")){
+                    if(!boxReportsMap.containsKey(boxBarcode)){
+                        int numberFiles = ((DocumentInventoryItem) inventoryItem).getDocument().getFile().getBox().getFiles().size();
+                        int numberDocs = ((DocumentInventoryItem) inventoryItem).getDocument().getFile().getDocuments().size();
+                        BoxReport br = new BoxReport(boxBarcode, numberFiles, numberDocs);
+                        boxReportsMap.put(boxBarcode, br);
+                    }
+                }
+            }
+
+            List data = new ArrayList<>(boxReportsMap.values());
+            Collections.sort(data);
+
+            params.put("totalBoxes", data.size());
+
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JRBeanCollectionDataSource(data));
+
+            String fileName = "Loadchart-Request-" + request.getId() + ".pdf";
+            JasperReportsExporter exporter = new JasperReportsPdfExporter();
+            exporter.export(jasperPrint, fileName, response);
+        }catch (Exception e){
+            LOG.error("Error generating load chart!", e);
+            throw new ExportingErrorException(e.getMessage());
+        }
+
         return ResponseEntity.ok().build();
     }
 }

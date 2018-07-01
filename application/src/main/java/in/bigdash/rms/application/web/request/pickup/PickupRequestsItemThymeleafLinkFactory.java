@@ -46,6 +46,9 @@ public class PickupRequestsItemThymeleafLinkFactory implements MethodLinkFactory
         if (methodName.equals(DELETE)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).delete(null)).buildAndExpand(pathVariables);
         }
+        if (methodName.equals("loadchart")) {
+            return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).loadchart(null, null)).buildAndExpand(pathVariables);
+        }
         throw new IllegalArgumentException("Invalid method name: " + methodName);
     }
 }

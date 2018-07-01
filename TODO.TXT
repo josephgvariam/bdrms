@@ -24,6 +24,4 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - implicit barcode format (u can tell what kind of barcode it is by just looking at it eg: its a box barcode)
 
 
-- generic search scan any barcode and get its details
-
-- figure out this databasles search and the indexing of all fields. but box barcode search of inventory dont happen?
+- figure out this datatables search and the indexing of all fields. but box barcode search of inventory dont happen?
