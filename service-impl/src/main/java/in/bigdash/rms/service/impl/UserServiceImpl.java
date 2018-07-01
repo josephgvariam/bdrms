@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,12 +41,15 @@ public class UserServiceImpl implements UserService {
 
     private RoleService roleService;
 
+    private PasswordEncoder passwordEncoder;
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, @Lazy RoleService roleService, @Lazy RequestService requestService) {
         setUserRepository(userRepository);
         setRoleService(roleService);
         setRequestService(requestService);
+        passwordEncoder = new BCryptPasswordEncoder();
     }
 
 
@@ -198,6 +203,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public User save(User entity) {
+        if(entity.getPassword() != null && entity.getPassword().length() != 60) {
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        }
+
         return getUserRepository().save(entity);
     }
 

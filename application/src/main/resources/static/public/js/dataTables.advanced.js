@@ -1356,17 +1356,36 @@
         }
 
         var editUrl = getEditUrl(datatables, rowId);
-        if (editUrl && full.status == 'OPEN') {
-            buttons = buttons.concat('<a class="btn btn-action btn-sm" href="')
-                .concat(editUrl).concat('"><span class="glyphicon glyphicon-pencil"></span></a>');
+        if (editUrl) {
+            if(editUrl.startsWith("/requests")) {
+                if (full.status == 'OPEN') {
+                    buttons = buttons.concat('<a class="btn btn-action btn-sm" href="')
+                        .concat(editUrl).concat('"><span class="glyphicon glyphicon-pencil"></span></a>');
+                }
+            }
+            else{
+                buttons = buttons.concat('<a class="btn btn-action btn-sm" href="')
+                    .concat(editUrl).concat('"><span class="glyphicon glyphicon-pencil"></span></a>');
+            }
         }
 
         var deleteUrl = getDeleteUrl(datatables, rowId);
-        if (deleteUrl && full.status == 'OPEN'  ) {
-            buttons = buttons.concat('<a role="button" class="btn btn-action btn-sm" data-toggle="modal" data-target="#')
-                .concat(tableId).concat('DeleteConfirm" data-row-id="')
-                .concat(data).concat('"><span class="glyphicon glyphicon-trash"></span></a>');
+        if(deleteUrl){
+            if(editUrl.startsWith("/requests")) {
+                if (full.status == 'OPEN') {
+                    buttons = buttons.concat('<a role="button" class="btn btn-action btn-sm" data-toggle="modal" data-target="#')
+                        .concat(tableId).concat('DeleteConfirm" data-row-id="')
+                        .concat(data).concat('"><span class="glyphicon glyphicon-trash"></span></a>');
+                }
+            }
+            else{
+                buttons = buttons.concat('<a role="button" class="btn btn-action btn-sm" data-toggle="modal" data-target="#')
+                    .concat(tableId).concat('DeleteConfirm" data-row-id="')
+                    .concat(data).concat('"><span class="glyphicon glyphicon-trash"></span></a>');
+            }
+
         }
+
 
         var workflowUrl = getWorkflowUrl(datatables, rowId);
         if (workflowUrl) {

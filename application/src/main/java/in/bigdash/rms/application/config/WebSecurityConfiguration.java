@@ -3,13 +3,10 @@ package in.bigdash.rms.application.config;
 import in.bigdash.rms.application.security.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.accept.ContentNegotiationStrategy;
 
@@ -31,15 +28,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static String X_WEBKIT_CSP_POLICY_HEADER = "X-WebKit-CSP";
 
-    /**
-     * {@inheritDoc}
-     *
-     * Initializes the default {@link UserDetailsService} causing the {@link AuthenticationManagerBuilder}
-     * creates automatically the {@link DaoAuthenticationProvider} that delegates on the given
-     * {@link UserDetailsService}.
-     *
-     * Also setup the {@link BCryptPasswordEncoder} to use with the {@link DaoAuthenticationProvider}
-     */
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

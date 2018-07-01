@@ -45,7 +45,7 @@
 <div class="form-group has-error has-feedback" data-z="adc41a36" id="user-password-field" data-th-classappend="${#fields.hasErrors('password')}? 'has-error has-feedback'" data-th-class="form-group">
   <label for="password" class="col-md-3 control-label" data-th-text="#{label_user_password}">password</label>
   <div class="col-md-6">
-    <input id="password" name="password" data-th-value="*{{password}}" type="text" class="form-control" placeholder="password" data-th-placeholder="#{label_user_password}" data-toggle="tooltip" aria-describedby="passwordStatus" required="required" />
+    <input id="password" name="password" data-th-value="*{{password}}" type="password" class="form-control" placeholder="password" data-th-placeholder="#{label_user_password}" data-toggle="tooltip" aria-describedby="passwordStatus" required="required" />
       <span data-th-classappend="${#fields.hasErrors('password')}? 'glyphicon glyphicon-remove form-control-feedback'" class="glyphicon glyphicon-remove form-control-feedback" data-th-if="${#fields.hasErrors('password')}" aria-hidden="true"></span>
       <span id="password-error" class="help-block" data-th-if="${#fields.hasErrors('password')}" data-th-errors="*{password}">Error message.</span>
   </div>
