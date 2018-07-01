@@ -43,6 +43,9 @@ public class RequestsItemThymeleafLinkFactory implements MethodLinkFactory<Reque
         if (methodName.equals("workflow")) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).workflow(null, null)).buildAndExpand(pathVariables);
         }
+        if (methodName.equals("loadchart")) {
+            return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).loadchart(null, null)).buildAndExpand(pathVariables);
+        }
         if (methodName.equals(UPDATE)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).update(null, null, null, null, null)).buildAndExpand(pathVariables);
         }

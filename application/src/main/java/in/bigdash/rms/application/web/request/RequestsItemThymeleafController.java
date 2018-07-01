@@ -202,6 +202,15 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         return new ModelAndView("requests/workflow");
     }
 
+    @GetMapping(value = "/loadchart", name = "loadchart")
+    public ModelAndView loadchart(@ModelAttribute Request request, Model model) {
+        if(request.getType().equals("PICKUP")) {
+            return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId() + "/loadchart");
+        }
+
+        return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId());
+    }
+
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Request request, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
