@@ -104,4 +104,11 @@ public class JpaUserDetails implements UserDetails, CredentialsContainer {
         return username.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "JpaUserDetails{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }
