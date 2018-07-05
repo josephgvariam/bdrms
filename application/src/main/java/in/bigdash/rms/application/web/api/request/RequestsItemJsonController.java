@@ -61,6 +61,7 @@ public class RequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Request request) {
+        log.debug("show: {}", request);
         return ResponseEntity.ok(request);
     }
 
@@ -72,17 +73,21 @@ public class RequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Request storedRequest, @Valid @RequestBody Request request, BindingResult result) {
+        log.debug("update: {}", request);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", request, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         request.setId(storedRequest.getId());
-        getRequestService().save(request);
+        Request updatedRequest = getRequestService().save(request);
+        log.debug("update saved: {}", updatedRequest);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Request request) {
+        log.debug("delete: {}", request);
         getRequestService().delete(request);
         return ResponseEntity.ok().build();
     }

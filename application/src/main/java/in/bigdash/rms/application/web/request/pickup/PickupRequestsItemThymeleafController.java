@@ -129,6 +129,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
 
     @ModelAttribute
     public PickupRequest getPickupRequest(@PathVariable("pickupRequest") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         PickupRequest pickupRequest = null;
         if (HttpMethod.PUT.equals(method)) {
             pickupRequest = pickupRequestService.findOneForUpdate(id);
@@ -145,6 +146,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute PickupRequest pickupRequest, Model model) {
+        log.debug("show: {}", pickupRequest);
         model.addAttribute("pickupRequest", pickupRequest);
         return new ModelAndView("pickuprequests/show");
     }
@@ -216,6 +218,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute PickupRequest pickupRequest, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("pickupRequest", pickupRequest);
         return new ModelAndView("pickuprequests/edit");
@@ -224,8 +227,10 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute PickupRequest pickupRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", pickupRequest);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", pickupRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -236,7 +241,9 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
 
             @Override
             public PickupRequest doInConcurrency(PickupRequest pickupRequest) throws Exception {
-                return getPickupRequestService().save(pickupRequest);
+                PickupRequest updatedPickupRequest =  getPickupRequestService().save(pickupRequest);
+                log.debug("update saved: {}", updatedPickupRequest);
+                return updatedPickupRequest;
             }
         });
         UriComponents showURI = getItemLink().to(PickupRequestsItemThymeleafLinkFactory.SHOW).with("pickupRequest", savedPickupRequest.getId()).toUri();
@@ -247,6 +254,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute PickupRequest pickupRequest) {
+        log.debug("delete: {}", pickupRequest);
         getPickupRequestService().delete(pickupRequest);
         return ResponseEntity.ok().build();
     }
@@ -254,7 +262,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
     @GetMapping(name = "/loadchart", value = "loadchart")
     @ResponseBody
     public ResponseEntity<?> loadchart(@ModelAttribute PickupRequest request, HttpServletResponse response) {
-
+        log.debug("Generating loadchart for {}", request);
         try {
             InputStream jasperStream = this.getClass().getResourceAsStream("/templates/reports/loadchart.jasper");
 
@@ -306,6 +314,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
             throw new ExportingErrorException(e.getMessage());
         }
 
+        log.debug("loadchart generated for {}", request);
         return ResponseEntity.ok().build();
     }
 }

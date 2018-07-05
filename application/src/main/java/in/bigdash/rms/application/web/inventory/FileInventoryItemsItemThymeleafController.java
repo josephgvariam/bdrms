@@ -111,6 +111,7 @@ public class FileInventoryItemsItemThymeleafController implements ConcurrencyMan
 
     @ModelAttribute
     public FileInventoryItem getFileInventoryItem(@PathVariable("fileInventoryItem") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         FileInventoryItem fileInventoryItem = null;
         if (HttpMethod.PUT.equals(method)) {
             fileInventoryItem = fileInventoryItemService.findOneForUpdate(id);
@@ -127,6 +128,7 @@ public class FileInventoryItemsItemThymeleafController implements ConcurrencyMan
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute FileInventoryItem fileInventoryItem, Model model) {
+        log.debug("show: {}", fileInventoryItem);
         model.addAttribute("fileInventoryItem", fileInventoryItem);
         return new ModelAndView("fileinventoryitems/show");
     }
@@ -197,6 +199,7 @@ public class FileInventoryItemsItemThymeleafController implements ConcurrencyMan
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute FileInventoryItem fileInventoryItem, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("fileInventoryItem", fileInventoryItem);
         return new ModelAndView("fileinventoryitems/edit");
@@ -205,8 +208,10 @@ public class FileInventoryItemsItemThymeleafController implements ConcurrencyMan
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute FileInventoryItem fileInventoryItem, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", fileInventoryItem);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", fileInventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -217,7 +222,9 @@ public class FileInventoryItemsItemThymeleafController implements ConcurrencyMan
 
             @Override
             public FileInventoryItem doInConcurrency(FileInventoryItem fileInventoryItem) throws Exception {
-                return getFileInventoryItemService().save(fileInventoryItem);
+                FileInventoryItem updatedFileInventoryItem =  getFileInventoryItemService().save(fileInventoryItem);
+                log.debug("update saved: {}", updatedFileInventoryItem);
+                return updatedFileInventoryItem;
             }
         });
         UriComponents showURI = getItemLink().to(FileInventoryItemsItemThymeleafLinkFactory.SHOW).with("fileInventoryItem", savedFileInventoryItem.getId()).toUri();
@@ -228,6 +235,7 @@ public class FileInventoryItemsItemThymeleafController implements ConcurrencyMan
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute FileInventoryItem fileInventoryItem) {
+        log.debug("delete: {}", fileInventoryItem);
         getFileInventoryItemService().delete(fileInventoryItem);
         return ResponseEntity.ok().build();
     }

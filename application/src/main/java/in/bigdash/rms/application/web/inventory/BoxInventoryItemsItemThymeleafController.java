@@ -111,6 +111,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
 
     @ModelAttribute
     public BoxInventoryItem getBoxInventoryItem(@PathVariable("boxInventoryItem") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         BoxInventoryItem boxInventoryItem = null;
         if (HttpMethod.PUT.equals(method)) {
             boxInventoryItem = boxInventoryItemService.findOneForUpdate(id);
@@ -127,6 +128,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute BoxInventoryItem boxInventoryItem, Model model) {
+        log.debug("show: {}", boxInventoryItem);
         model.addAttribute("boxInventoryItem", boxInventoryItem);
         return new ModelAndView("boxinventoryitems/show");
     }
@@ -197,6 +199,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute BoxInventoryItem boxInventoryItem, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("boxInventoryItem", boxInventoryItem);
         return new ModelAndView("boxinventoryitems/edit");
@@ -205,8 +208,10 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute BoxInventoryItem boxInventoryItem, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", boxInventoryItem);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", boxInventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -217,7 +222,9 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
 
             @Override
             public BoxInventoryItem doInConcurrency(BoxInventoryItem boxInventoryItem) throws Exception {
-                return getBoxInventoryItemService().save(boxInventoryItem);
+                BoxInventoryItem updatedBoxInventoryItem =  getBoxInventoryItemService().save(boxInventoryItem);
+                log.debug("update saved: {}", updatedBoxInventoryItem);
+                return updatedBoxInventoryItem;
             }
         });
         UriComponents showURI = getItemLink().to(BoxInventoryItemsItemThymeleafLinkFactory.SHOW).with("boxInventoryItem", savedBoxInventoryItem.getId()).toUri();
@@ -228,6 +235,7 @@ public class BoxInventoryItemsItemThymeleafController implements ConcurrencyMana
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute BoxInventoryItem boxInventoryItem) {
+        log.debug("delete: {}", boxInventoryItem);
         getBoxInventoryItemService().delete(boxInventoryItem);
         return ResponseEntity.ok().build();
     }

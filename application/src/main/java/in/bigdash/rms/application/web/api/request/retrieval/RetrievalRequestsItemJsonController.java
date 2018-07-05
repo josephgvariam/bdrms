@@ -61,6 +61,7 @@ public class RetrievalRequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute RetrievalRequest retrievalRequest) {
+        log.debug("show: {}", retrievalRequest);
         return ResponseEntity.ok(retrievalRequest);
     }
 
@@ -72,17 +73,21 @@ public class RetrievalRequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute RetrievalRequest storedRetrievalRequest, @Valid @RequestBody RetrievalRequest retrievalRequest, BindingResult result) {
+        log.debug("update: {}", retrievalRequest);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", retrievalRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         retrievalRequest.setId(storedRetrievalRequest.getId());
-        getRetrievalRequestService().save(retrievalRequest);
+        RetrievalRequest updatedRetrievalRequest = getRetrievalRequestService().save(retrievalRequest);
+        log.debug("update saved: {}", updatedRetrievalRequest);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute RetrievalRequest retrievalRequest) {
+        log.debug("delete: {}", retrievalRequest);
         getRetrievalRequestService().delete(retrievalRequest);
         return ResponseEntity.ok().build();
     }

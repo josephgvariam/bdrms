@@ -61,6 +61,7 @@ public class PickupRequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute PickupRequest pickupRequest) {
+        log.debug("show: {}", pickupRequest);
         return ResponseEntity.ok(pickupRequest);
     }
 
@@ -72,17 +73,21 @@ public class PickupRequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute PickupRequest storedPickupRequest, @Valid @RequestBody PickupRequest pickupRequest, BindingResult result) {
+        log.debug("update: {}", pickupRequest);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", pickupRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         pickupRequest.setId(storedPickupRequest.getId());
         PickupRequest updatedPickupRequest = getPickupRequestService().save(pickupRequest);
+        log.debug("update saved: {}", updatedPickupRequest);
         return ResponseEntity.ok(updatedPickupRequest);
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute PickupRequest pickupRequest) {
+        log.debug("delete: {}", pickupRequest);
         getPickupRequestService().delete(pickupRequest);
         return ResponseEntity.ok().build();
     }

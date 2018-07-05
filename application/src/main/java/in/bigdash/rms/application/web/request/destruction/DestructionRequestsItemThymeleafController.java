@@ -109,6 +109,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
 
     @ModelAttribute
     public DestructionRequest getDestructionRequest(@PathVariable("destructionRequest") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         DestructionRequest destructionRequest = null;
         if (HttpMethod.PUT.equals(method)) {
             destructionRequest = destructionRequestService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute DestructionRequest destructionRequest, Model model) {
+        log.debug("show: {}", destructionRequest);
         model.addAttribute("destructionRequest", destructionRequest);
         return new ModelAndView("destructionrequests/show");
     }
@@ -194,6 +196,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute DestructionRequest destructionRequest, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("destructionRequest", destructionRequest);
         return new ModelAndView("destructionrequests/edit");
@@ -202,8 +205,10 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute DestructionRequest destructionRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", destructionRequest);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", destructionRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -214,7 +219,9 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
 
             @Override
             public DestructionRequest doInConcurrency(DestructionRequest destructionRequest) throws Exception {
-                return getDestructionRequestService().save(destructionRequest);
+                DestructionRequest updatedDestructionRequest =  getDestructionRequestService().save(destructionRequest);
+                log.debug("update saved: {}", updatedDestructionRequest);
+                return updatedDestructionRequest;
             }
         });
         UriComponents showURI = getItemLink().to(DestructionRequestsItemThymeleafLinkFactory.SHOW).with("destructionRequest", savedDestructionRequest.getId()).toUri();
@@ -225,6 +232,7 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute DestructionRequest destructionRequest) {
+        log.debug("delete: {}", destructionRequest);
         getDestructionRequestService().delete(destructionRequest);
         return ResponseEntity.ok().build();
     }

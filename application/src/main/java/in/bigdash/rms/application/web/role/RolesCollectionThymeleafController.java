@@ -132,6 +132,7 @@ public class RolesCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("roles/list");
     }
 
@@ -139,6 +140,7 @@ public class RolesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Role>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<Role> roles = getRoleService().findAll(search, pageable);
         long totalRolesCount = roles.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -152,6 +154,7 @@ public class RolesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Role>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<Role> roles = getRoleService().findAllByIdsIn(ids, search, pageable);
         long totalRolesCount = roles.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +168,7 @@ public class RolesCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Role>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<Role> roles = getRoleService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<Role> select2Data = new Select2DataWithConversion<Role>(roles, idExpression, getConversionService());
@@ -193,11 +197,14 @@ public class RolesCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Role role, BindingResult result, Model model) {
+        log.debug("create: {}", role);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", role, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("roles/create");
         }
         Role newRole = getRoleService().save(role);
+        log.debug("create saved: {}", role);
         UriComponents showURI = getItemLink().to(RolesItemThymeleafLinkFactory.SHOW).with("role", newRole.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -205,6 +212,7 @@ public class RolesCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("role", new Role());
         return new ModelAndView("roles/create");
@@ -214,6 +222,7 @@ public class RolesCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getRoleService().delete(ids);
         return ResponseEntity.ok().build();
     }

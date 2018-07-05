@@ -150,6 +150,7 @@ public class PermoutRequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("permoutrequests/list");
     }
 
@@ -157,6 +158,7 @@ public class PermoutRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<PermoutRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<PermoutRequest> permoutRequests = getPermoutRequestService().findAll(search, pageable);
         long totalPermoutRequestsCount = permoutRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -170,6 +172,7 @@ public class PermoutRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<PermoutRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<PermoutRequest> permoutRequests = getPermoutRequestService().findAllByIdsIn(ids, search, pageable);
         long totalPermoutRequestsCount = permoutRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -183,6 +186,7 @@ public class PermoutRequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<PermoutRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<PermoutRequest> permoutRequests = getPermoutRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<PermoutRequest> select2Data = new Select2DataWithConversion<PermoutRequest>(permoutRequests, idExpression, getConversionService());
@@ -212,16 +216,19 @@ public class PermoutRequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute PermoutRequest permoutRequest, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", permoutRequest);
         permoutRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         permoutRequest.setStatus(RequestStatus.OPEN);
 
         validator.validate(permoutRequest, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", permoutRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("permoutrequests/create");
         }
         PermoutRequest newPermoutRequest = getPermoutRequestService().save(permoutRequest);
+        log.debug("create saved: {}", permoutRequest);
         UriComponents showURI = getItemLink().to(PermoutRequestsItemThymeleafLinkFactory.SHOW).with("permoutRequest", newPermoutRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -229,6 +236,7 @@ public class PermoutRequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("permoutRequest", new PermoutRequest());
         return new ModelAndView("permoutrequests/create");
@@ -238,6 +246,7 @@ public class PermoutRequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getPermoutRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

@@ -4,6 +4,8 @@ import in.bigdash.rms.model.inventory.InventoryItem;
 
 import in.bigdash.rms.service.api.InventoryItemService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -60,6 +62,7 @@ public class InventoryItemsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<InventoryItem>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<InventoryItem> inventoryItems = getInventoryItemService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(inventoryItems);
     }
@@ -72,6 +75,7 @@ public class InventoryItemsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody InventoryItem inventoryItem, BindingResult result, Authentication authentication) {
+        log.debug("create: {}", inventoryItem);
 
         inventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
 
@@ -81,9 +85,11 @@ public class InventoryItemsCollectionJsonController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", inventoryItem, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         InventoryItem newInventoryItem = getInventoryItemService().save(inventoryItem);
+        log.debug("create saved: {}", inventoryItem);
         UriComponents showURI = InventoryItemsItemJsonController.showURI(newInventoryItem);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -91,26 +97,35 @@ public class InventoryItemsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<InventoryItem> inventoryItems, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(inventoryItems.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(inventoryItems.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getInventoryItemService().save(inventoryItems);
+
+        Collection savedBatch = getInventoryItemService().save(inventoryItems);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<InventoryItem> inventoryItems, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(inventoryItems.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(inventoryItems.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getInventoryItemService().save(inventoryItems);
+
+        Collection savedBatch = getInventoryItemService().save(inventoryItems);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getInventoryItemService().delete(ids);
         return ResponseEntity.ok().build();
     }

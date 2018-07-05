@@ -109,6 +109,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
 
     @ModelAttribute
     public TransferRequest getTransferRequest(@PathVariable("transferRequest") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         TransferRequest transferRequest = null;
         if (HttpMethod.PUT.equals(method)) {
             transferRequest = transferRequestService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute TransferRequest transferRequest, Model model) {
+        log.debug("show: {}", transferRequest);
         model.addAttribute("transferRequest", transferRequest);
         return new ModelAndView("transferrequests/show");
     }
@@ -194,6 +196,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute TransferRequest transferRequest, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("transferRequest", transferRequest);
         return new ModelAndView("transferrequests/edit");
@@ -202,8 +205,10 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute TransferRequest transferRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", transferRequest);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", transferRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -214,7 +219,9 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
 
             @Override
             public TransferRequest doInConcurrency(TransferRequest transferRequest) throws Exception {
-                return getTransferRequestService().save(transferRequest);
+                TransferRequest updatedTransferRequest =  getTransferRequestService().save(transferRequest);
+                log.debug("update saved: {}", updatedTransferRequest);
+                return updatedTransferRequest;
             }
         });
         UriComponents showURI = getItemLink().to(TransferRequestsItemThymeleafLinkFactory.SHOW).with("transferRequest", savedTransferRequest.getId()).toUri();
@@ -225,6 +232,7 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute TransferRequest transferRequest) {
+        log.debug("delete: {}", transferRequest);
         getTransferRequestService().delete(transferRequest);
         return ResponseEntity.ok().build();
     }

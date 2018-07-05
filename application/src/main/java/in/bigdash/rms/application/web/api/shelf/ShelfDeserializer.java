@@ -2,6 +2,8 @@ package in.bigdash.rms.application.web.api.shelf;
 import in.bigdash.rms.model.Shelf;
 import in.bigdash.rms.service.api.ShelfService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -17,6 +19,7 @@ import org.springframework.boot.jackson.JsonComponent;
 @JsonComponent
 public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private ShelfService shelfService;
 
@@ -68,6 +71,7 @@ public class ShelfDeserializer extends JsonObjectDeserializer<Shelf> {
             shelf = shelfService.findByBarcode(barcode);
 
             if (shelf == null) {
+                log.error("Shelf with barcode {} not found", barcode);
                 throw new IllegalArgumentException("Shelf barcode " + barcode + " not found");
             }
         }

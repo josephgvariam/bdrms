@@ -145,6 +145,7 @@ public class BoxesCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("boxes/list");
     }
 
@@ -152,6 +153,7 @@ public class BoxesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Box>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<Box> boxes = getBoxService().findAll(search, pageable);
         long totalBoxesCount = boxes.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +167,7 @@ public class BoxesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Box>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<Box> boxes = getBoxService().findAllByIdsIn(ids, search, pageable);
         long totalBoxesCount = boxes.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -178,6 +181,7 @@ public class BoxesCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Box>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<Box> boxes = getBoxService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<Box> select2Data = new Select2DataWithConversion<Box>(boxes, idExpression, getConversionService());
@@ -209,11 +213,14 @@ public class BoxesCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Box box, BindingResult result, Model model) {
+        log.debug("create: {}", box);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", box, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("boxes/create");
         }
         Box newBox = getBoxService().save(box);
+        log.debug("create saved: {}", box);
         UriComponents showURI = getItemLink().to(BoxesItemThymeleafLinkFactory.SHOW).with("box", newBox.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -221,6 +228,7 @@ public class BoxesCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("box", new Box());
         return new ModelAndView("boxes/create");
@@ -230,6 +238,7 @@ public class BoxesCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getBoxService().delete(ids);
         return ResponseEntity.ok().build();
     }

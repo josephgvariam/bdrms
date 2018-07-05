@@ -61,6 +61,7 @@ public class FacilitiesItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Facility facility) {
+        log.debug("show: {}", facility);
         return ResponseEntity.ok(facility);
     }
 
@@ -72,17 +73,21 @@ public class FacilitiesItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Facility storedFacility, @Valid @RequestBody Facility facility, BindingResult result) {
+        log.debug("update: {}", facility);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", facility, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         facility.setId(storedFacility.getId());
-        getFacilityService().save(facility);
+        Facility updatedFacility = getFacilityService().save(facility);
+        log.debug("update saved: {}", updatedFacility);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Facility facility) {
+        log.debug("delete: {}", facility);
         getFacilityService().delete(facility);
         return ResponseEntity.ok().build();
     }

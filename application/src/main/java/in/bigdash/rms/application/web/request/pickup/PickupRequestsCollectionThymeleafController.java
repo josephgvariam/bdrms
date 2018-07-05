@@ -152,6 +152,7 @@ public class PickupRequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("pickuprequests/list");
     }
 
@@ -159,6 +160,7 @@ public class PickupRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<PickupRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<PickupRequest> pickupRequests = getPickupRequestService().findAll(search, pageable);
         long totalPickupRequestsCount = pickupRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -172,6 +174,7 @@ public class PickupRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<PickupRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<PickupRequest> pickupRequests = getPickupRequestService().findAllByIdsIn(ids, search, pageable);
         long totalPickupRequestsCount = pickupRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -185,6 +188,7 @@ public class PickupRequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<PickupRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<PickupRequest> pickupRequests = getPickupRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<PickupRequest> select2Data = new Select2DataWithConversion<PickupRequest>(pickupRequests, idExpression, getConversionService());
@@ -215,17 +219,20 @@ public class PickupRequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create( @ModelAttribute PickupRequest pickupRequest, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", pickupRequest);
         pickupRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         pickupRequest.setStatus(RequestStatus.OPEN);
 
         validator.validate(pickupRequest, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", pickupRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("pickuprequests/create");
         }
 
         PickupRequest newPickupRequest = getPickupRequestService().save(pickupRequest);
+        log.debug("create saved: {}", pickupRequest);
         UriComponents showURI = getItemLink().to(PickupRequestsItemThymeleafLinkFactory.SHOW).with("pickupRequest", newPickupRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -233,6 +240,7 @@ public class PickupRequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("pickupRequest", new PickupRequest());
         return new ModelAndView("pickuprequests/create");
@@ -241,6 +249,7 @@ public class PickupRequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getPickupRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

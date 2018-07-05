@@ -61,6 +61,7 @@ public class DestructionRequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute DestructionRequest destructionRequest) {
+        log.debug("show: {}", destructionRequest);
         return ResponseEntity.ok(destructionRequest);
     }
 
@@ -72,17 +73,21 @@ public class DestructionRequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute DestructionRequest storedDestructionRequest, @Valid @RequestBody DestructionRequest destructionRequest, BindingResult result) {
+        log.debug("update: {}", destructionRequest);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", destructionRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         destructionRequest.setId(storedDestructionRequest.getId());
-        getDestructionRequestService().save(destructionRequest);
+        DestructionRequest updatedDestructionRequest = getDestructionRequestService().save(destructionRequest);
+        log.debug("update saved: {}", updatedDestructionRequest);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute DestructionRequest destructionRequest) {
+        log.debug("delete: {}", destructionRequest);
         getDestructionRequestService().delete(destructionRequest);
         return ResponseEntity.ok().build();
     }

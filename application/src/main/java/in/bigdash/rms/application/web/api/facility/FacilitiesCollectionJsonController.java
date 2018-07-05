@@ -3,6 +3,8 @@ import in.bigdash.rms.model.Facility;
 
 import in.bigdash.rms.service.api.FacilityService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class FacilitiesCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<Facility>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<Facility> facilities = getFacilityService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(facilities);
     }
@@ -66,13 +69,16 @@ public class FacilitiesCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Facility facility, BindingResult result) {
+        log.debug("create: {}", facility);
         if (facility.getId() != null || facility.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", facility, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         Facility newFacility = getFacilityService().save(facility);
+        log.debug("create saved: {}", facility);
         UriComponents showURI = FacilitiesItemJsonController.showURI(newFacility);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,26 +86,35 @@ public class FacilitiesCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<Facility> facilities, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(facilities.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(facilities.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getFacilityService().save(facilities);
+
+        Collection savedBatch = getFacilityService().save(facilities);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<Facility> facilities, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(facilities.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(facilities.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getFacilityService().save(facilities);
+
+        Collection savedBatch = getFacilityService().save(facilities);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getFacilityService().delete(ids);
         return ResponseEntity.ok().build();
     }

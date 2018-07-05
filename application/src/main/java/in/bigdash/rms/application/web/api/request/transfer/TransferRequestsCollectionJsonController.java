@@ -3,6 +3,8 @@ import in.bigdash.rms.model.request.TransferRequest;
 
 import in.bigdash.rms.service.api.TransferRequestService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class TransferRequestsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<TransferRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<TransferRequest> transferRequests = getTransferRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(transferRequests);
     }
@@ -66,13 +69,16 @@ public class TransferRequestsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody TransferRequest transferRequest, BindingResult result) {
+        log.debug("create: {}", transferRequest);
         if (transferRequest.getId() != null || transferRequest.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", transferRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         TransferRequest newTransferRequest = getTransferRequestService().save(transferRequest);
+        log.debug("create saved: {}", transferRequest);
         UriComponents showURI = TransferRequestsItemJsonController.showURI(newTransferRequest);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,26 +86,35 @@ public class TransferRequestsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<TransferRequest> transferRequests, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(transferRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(transferRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getTransferRequestService().save(transferRequests);
+
+        Collection savedBatch = getTransferRequestService().save(transferRequests);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<TransferRequest> transferRequests, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(transferRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(transferRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getTransferRequestService().save(transferRequests);
+
+        Collection savedBatch = getTransferRequestService().save(transferRequests);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getTransferRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

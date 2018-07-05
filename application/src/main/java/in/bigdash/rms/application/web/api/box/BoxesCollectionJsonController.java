@@ -3,6 +3,8 @@ import in.bigdash.rms.model.Box;
 
 import in.bigdash.rms.service.api.BoxService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class BoxesCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<Box>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<Box> boxes = getBoxService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(boxes);
     }
@@ -66,13 +69,16 @@ public class BoxesCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Box box, BindingResult result) {
+        log.debug("create: {}", box);
         if (box.getId() != null || box.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", box, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         Box newBox = getBoxService().save(box);
+        log.debug("create saved: {}", box);
         UriComponents showURI = BoxesItemJsonController.showURI(newBox);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,27 +86,35 @@ public class BoxesCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<Box> boxes, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(boxes.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(boxes.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
 
-        Collection<Box> updatedBoxes = getBoxService().save(boxes);
-        return ResponseEntity.ok(updatedBoxes);
+        Collection savedBatch = getBoxService().save(boxes);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
+        return ResponseEntity.ok(savedBatch);
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<Box> boxes, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(boxes.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(boxes.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        Collection<Box> updatedBoxes = getBoxService().save(boxes);
-        return ResponseEntity.ok(updatedBoxes);
+
+        Collection savedBatch = getBoxService().save(boxes);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
+        return ResponseEntity.ok(savedBatch);
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getBoxService().delete(ids);
         return ResponseEntity.ok().build();
     }

@@ -145,6 +145,7 @@ public class DocumentsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("documents/list");
     }
 
@@ -152,6 +153,7 @@ public class DocumentsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Document>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<Document> documents = getDocumentService().findAll(search, pageable);
         long totalDocumentsCount = documents.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +167,7 @@ public class DocumentsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Document>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<Document> documents = getDocumentService().findAllByIdsIn(ids, search, pageable);
         long totalDocumentsCount = documents.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -178,6 +181,7 @@ public class DocumentsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Document>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<Document> documents = getDocumentService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<Document> select2Data = new Select2DataWithConversion<Document>(documents, idExpression, getConversionService());
@@ -209,11 +213,14 @@ public class DocumentsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Document document, BindingResult result, Model model) {
+        log.debug("create: {}", document);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", document, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("documents/create");
         }
         Document newDocument = getDocumentService().save(document);
+        log.debug("create saved: {}", document);
         UriComponents showURI = getItemLink().to(DocumentsItemThymeleafLinkFactory.SHOW).with("document", newDocument.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -221,6 +228,7 @@ public class DocumentsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("document", new Document());
         return new ModelAndView("documents/create");
@@ -230,6 +238,7 @@ public class DocumentsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getDocumentService().delete(ids);
         return ResponseEntity.ok().build();
     }

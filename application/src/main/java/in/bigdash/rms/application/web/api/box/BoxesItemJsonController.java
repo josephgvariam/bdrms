@@ -61,6 +61,7 @@ public class BoxesItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Box box) {
+        log.debug("show: {}", box);
         return ResponseEntity.ok(box);
     }
 
@@ -72,17 +73,21 @@ public class BoxesItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Box storedBox, @Valid @RequestBody Box box, BindingResult result) {
+        log.debug("update: {}", box);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", box, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         box.setId(storedBox.getId());
-        getBoxService().save(box);
+        Box updatedBox = getBoxService().save(box);
+        log.debug("update saved: {}", updatedBox);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Box box) {
+        log.debug("delete: {}", box);
         getBoxService().delete(box);
         return ResponseEntity.ok().build();
     }

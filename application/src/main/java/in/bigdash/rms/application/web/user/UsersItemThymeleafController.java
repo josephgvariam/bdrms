@@ -109,6 +109,7 @@ public class UsersItemThymeleafController implements ConcurrencyManager<User> {
 
     @ModelAttribute
     public User getUser(@PathVariable("user") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         User user = null;
         if (HttpMethod.PUT.equals(method)) {
             user = userService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class UsersItemThymeleafController implements ConcurrencyManager<User> {
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute User user, Model model) {
+        log.debug("show: {}", user);
         model.addAttribute("user", user);
         return new ModelAndView("users/show");
     }
@@ -196,6 +198,7 @@ public class UsersItemThymeleafController implements ConcurrencyManager<User> {
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute User user, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("user", user);
         return new ModelAndView("users/edit");
@@ -204,8 +207,10 @@ public class UsersItemThymeleafController implements ConcurrencyManager<User> {
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute User user, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", user);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", user, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -216,7 +221,9 @@ public class UsersItemThymeleafController implements ConcurrencyManager<User> {
 
             @Override
             public User doInConcurrency(User user) throws Exception {
-                return getUserService().save(user);
+                User updatedUser =  getUserService().save(user);
+                log.debug("update saved: {}", updatedUser);
+                return updatedUser;
             }
         });
         UriComponents showURI = getItemLink().to(UsersItemThymeleafLinkFactory.SHOW).with("user", savedUser.getId()).toUri();
@@ -227,6 +234,7 @@ public class UsersItemThymeleafController implements ConcurrencyManager<User> {
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute User user) {
+        log.debug("delete: {}", user);
         getUserService().delete(user);
         return ResponseEntity.ok().build();
     }

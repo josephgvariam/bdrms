@@ -150,6 +150,7 @@ public class RefilingRequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("refilingrequests/list");
     }
 
@@ -157,6 +158,7 @@ public class RefilingRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<RefilingRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<RefilingRequest> refilingRequests = getRefilingRequestService().findAll(search, pageable);
         long totalRefilingRequestsCount = refilingRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -170,6 +172,7 @@ public class RefilingRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<RefilingRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<RefilingRequest> refilingRequests = getRefilingRequestService().findAllByIdsIn(ids, search, pageable);
         long totalRefilingRequestsCount = refilingRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -183,6 +186,7 @@ public class RefilingRequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<RefilingRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<RefilingRequest> refilingRequests = getRefilingRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<RefilingRequest> select2Data = new Select2DataWithConversion<RefilingRequest>(refilingRequests, idExpression, getConversionService());
@@ -212,16 +216,19 @@ public class RefilingRequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute RefilingRequest refilingRequest, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", refilingRequest);
         refilingRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         refilingRequest.setStatus(RequestStatus.OPEN);
 
         validator.validate(refilingRequest, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", refilingRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("refilingrequests/create");
         }
         RefilingRequest newRefilingRequest = getRefilingRequestService().save(refilingRequest);
+        log.debug("create saved: {}", refilingRequest);
         UriComponents showURI = getItemLink().to(RefilingRequestsItemThymeleafLinkFactory.SHOW).with("refilingRequest", newRefilingRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -229,6 +236,7 @@ public class RefilingRequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("refilingRequest", new RefilingRequest());
         return new ModelAndView("refilingrequests/create");
@@ -238,6 +246,7 @@ public class RefilingRequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getRefilingRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

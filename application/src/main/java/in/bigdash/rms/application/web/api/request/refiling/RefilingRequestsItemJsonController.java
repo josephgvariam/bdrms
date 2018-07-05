@@ -61,6 +61,7 @@ public class RefilingRequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute RefilingRequest refilingRequest) {
+        log.debug("show: {}", refilingRequest);
         return ResponseEntity.ok(refilingRequest);
     }
 
@@ -72,17 +73,21 @@ public class RefilingRequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute RefilingRequest storedRefilingRequest, @Valid @RequestBody RefilingRequest refilingRequest, BindingResult result) {
+        log.debug("update: {}", refilingRequest);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", refilingRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         refilingRequest.setId(storedRefilingRequest.getId());
-        getRefilingRequestService().save(refilingRequest);
+        RefilingRequest updatedRefilingRequest = getRefilingRequestService().save(refilingRequest);
+        log.debug("update saved: {}", updatedRefilingRequest);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute RefilingRequest refilingRequest) {
+        log.debug("delete: {}", refilingRequest);
         getRefilingRequestService().delete(refilingRequest);
         return ResponseEntity.ok().build();
     }

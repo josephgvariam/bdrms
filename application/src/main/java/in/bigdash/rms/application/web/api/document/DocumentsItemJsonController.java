@@ -61,6 +61,7 @@ public class DocumentsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Document document) {
+        log.debug("show: {}", document);
         return ResponseEntity.ok(document);
     }
 
@@ -72,17 +73,21 @@ public class DocumentsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Document storedDocument, @Valid @RequestBody Document document, BindingResult result) {
+        log.debug("update: {}", document);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", document, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         document.setId(storedDocument.getId());
-        getDocumentService().save(document);
+        Document updatedDocument = getDocumentService().save(document);
+        log.debug("update saved: {}", updatedDocument);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Document document) {
+        log.debug("delete: {}", document);
         getDocumentService().delete(document);
         return ResponseEntity.ok().build();
     }

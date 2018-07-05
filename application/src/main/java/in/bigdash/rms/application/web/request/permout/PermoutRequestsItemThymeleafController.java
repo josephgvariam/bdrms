@@ -109,6 +109,7 @@ public class PermoutRequestsItemThymeleafController implements ConcurrencyManage
 
     @ModelAttribute
     public PermoutRequest getPermoutRequest(@PathVariable("permoutRequest") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         PermoutRequest permoutRequest = null;
         if (HttpMethod.PUT.equals(method)) {
             permoutRequest = permoutRequestService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class PermoutRequestsItemThymeleafController implements ConcurrencyManage
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute PermoutRequest permoutRequest, Model model) {
+        log.debug("show: {}", permoutRequest);
         model.addAttribute("permoutRequest", permoutRequest);
         return new ModelAndView("permoutrequests/show");
     }
@@ -194,6 +196,7 @@ public class PermoutRequestsItemThymeleafController implements ConcurrencyManage
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute PermoutRequest permoutRequest, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("permoutRequest", permoutRequest);
         return new ModelAndView("permoutrequests/edit");
@@ -202,8 +205,10 @@ public class PermoutRequestsItemThymeleafController implements ConcurrencyManage
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute PermoutRequest permoutRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", permoutRequest);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", permoutRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -214,7 +219,9 @@ public class PermoutRequestsItemThymeleafController implements ConcurrencyManage
 
             @Override
             public PermoutRequest doInConcurrency(PermoutRequest permoutRequest) throws Exception {
-                return getPermoutRequestService().save(permoutRequest);
+                PermoutRequest updatedPermoutRequest =  getPermoutRequestService().save(permoutRequest);
+                log.debug("update saved: {}", updatedPermoutRequest);
+                return updatedPermoutRequest;
             }
         });
         UriComponents showURI = getItemLink().to(PermoutRequestsItemThymeleafLinkFactory.SHOW).with("permoutRequest", savedPermoutRequest.getId()).toUri();
@@ -225,6 +232,7 @@ public class PermoutRequestsItemThymeleafController implements ConcurrencyManage
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute PermoutRequest permoutRequest) {
+        log.debug("delete: {}", permoutRequest);
         getPermoutRequestService().delete(permoutRequest);
         return ResponseEntity.ok().build();
     }

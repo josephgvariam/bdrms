@@ -111,6 +111,7 @@ public class ShelvesItemThymeleafController implements ConcurrencyManager<Shelf>
 
     @ModelAttribute
     public Shelf getShelf(@PathVariable("shelf") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         Shelf shelf = null;
         if (HttpMethod.PUT.equals(method)) {
             shelf = shelfService.findOneForUpdate(id);
@@ -127,6 +128,7 @@ public class ShelvesItemThymeleafController implements ConcurrencyManager<Shelf>
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Shelf shelf, Model model) {
+        log.debug("show: {}", shelf);
         model.addAttribute("shelf", shelf);
         return new ModelAndView("shelves/show");
     }
@@ -197,6 +199,7 @@ public class ShelvesItemThymeleafController implements ConcurrencyManager<Shelf>
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Shelf shelf, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("shelf", shelf);
         return new ModelAndView("shelves/edit");
@@ -205,8 +208,10 @@ public class ShelvesItemThymeleafController implements ConcurrencyManager<Shelf>
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Shelf shelf, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", shelf);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", shelf, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -217,7 +222,9 @@ public class ShelvesItemThymeleafController implements ConcurrencyManager<Shelf>
 
             @Override
             public Shelf doInConcurrency(Shelf shelf) throws Exception {
-                return getShelfService().save(shelf);
+                Shelf updatedShelf =  getShelfService().save(shelf);
+                log.debug("update saved: {}", updatedShelf);
+                return updatedShelf;
             }
         });
         UriComponents showURI = getItemLink().to(ShelvesItemThymeleafLinkFactory.SHOW).with("shelf", savedShelf.getId()).toUri();
@@ -228,6 +235,7 @@ public class ShelvesItemThymeleafController implements ConcurrencyManager<Shelf>
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Shelf shelf) {
+        log.debug("delete: {}", shelf);
         getShelfService().delete(shelf);
         return ResponseEntity.ok().build();
     }

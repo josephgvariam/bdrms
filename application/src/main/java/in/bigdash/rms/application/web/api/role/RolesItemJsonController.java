@@ -55,6 +55,7 @@ public class RolesItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Role role) {
+        log.debug("show: {}", role);
         return ResponseEntity.ok(role);
     }
 
@@ -66,17 +67,21 @@ public class RolesItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Role storedRole, @Valid @RequestBody Role role, BindingResult result) {
+        log.debug("update: {}", role);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", role, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         role.setId(storedRole.getId());
-        getRoleService().save(role);
+        Role updatedRole = getRoleService().save(role);
+        log.debug("update saved: {}", updatedRole);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Role role) {
+        log.debug("delete: {}", role);
         getRoleService().delete(role);
         return ResponseEntity.ok().build();
     }

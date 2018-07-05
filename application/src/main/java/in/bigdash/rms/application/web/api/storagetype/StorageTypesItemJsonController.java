@@ -54,6 +54,7 @@ public class StorageTypesItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute StorageType storageType) {
+        log.debug("show: {}", storageType);
         return ResponseEntity.ok(storageType);
     }
 
@@ -65,17 +66,21 @@ public class StorageTypesItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute StorageType storedStorageType, @Valid @RequestBody StorageType storageType, BindingResult result) {
+        log.debug("update: {}", storageType);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", storageType, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         storageType.setId(storedStorageType.getId());
-        getStorageTypeService().save(storageType);
+        StorageType updatedStorageType = getStorageTypeService().save(storageType);
+        log.debug("update saved: {}", updatedStorageType);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute StorageType storageType) {
+        log.debug("delete: {}", storageType);
         getStorageTypeService().delete(storageType);
         return ResponseEntity.ok().build();
     }

@@ -151,6 +151,7 @@ public class InventoryItemsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("inventoryitems/list");
     }
 
@@ -158,6 +159,7 @@ public class InventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<InventoryItem>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<InventoryItem> inventoryItems = getInventoryItemService().findAll(search, pageable);
         long totalInventoryItemsCount = inventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -171,6 +173,7 @@ public class InventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<InventoryItem>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<InventoryItem> inventoryItems = getInventoryItemService().findAllByIdsIn(ids, search, pageable);
         long totalInventoryItemsCount = inventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -184,6 +187,7 @@ public class InventoryItemsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<InventoryItem>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<InventoryItem> inventoryItems = getInventoryItemService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<InventoryItem> select2Data = new Select2DataWithConversion<InventoryItem>(inventoryItems, idExpression, getConversionService());
@@ -213,16 +217,19 @@ public class InventoryItemsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute InventoryItem inventoryItem, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", inventoryItem);
 
         inventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
 
         validator.validate(inventoryItem, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", inventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("inventoryitems/create");
         }
         InventoryItem newInventoryItem = getInventoryItemService().save(inventoryItem);
+        log.debug("create saved: {}", inventoryItem);
         UriComponents showURI = getItemLink().to(InventoryItemsItemThymeleafLinkFactory.SHOW).with("inventoryItem", newInventoryItem.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -230,6 +237,7 @@ public class InventoryItemsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("inventoryItem", new InventoryItem());
         return new ModelAndView("inventoryitems/create");
@@ -239,6 +247,7 @@ public class InventoryItemsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getInventoryItemService().delete(ids);
         return ResponseEntity.ok().build();
     }

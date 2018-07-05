@@ -151,6 +151,7 @@ public class FileInventoryItemsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("fileinventoryitems/list");
     }
 
@@ -158,6 +159,7 @@ public class FileInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<FileInventoryItem>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<FileInventoryItem> fileInventoryItems = getFileInventoryItemService().findAll(search, pageable);
         long totalFileInventoryItemsCount = fileInventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -171,6 +173,7 @@ public class FileInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<FileInventoryItem>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<FileInventoryItem> fileInventoryItems = getFileInventoryItemService().findAllByIdsIn(ids, search, pageable);
         long totalFileInventoryItemsCount = fileInventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -184,6 +187,7 @@ public class FileInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<FileInventoryItem>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<FileInventoryItem> fileInventoryItems = getFileInventoryItemService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<FileInventoryItem> select2Data = new Select2DataWithConversion<FileInventoryItem>(fileInventoryItems, idExpression, getConversionService());
@@ -213,16 +217,19 @@ public class FileInventoryItemsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute FileInventoryItem fileInventoryItem, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", fileInventoryItem);
 
         fileInventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
 
         validator.validate(fileInventoryItem, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", fileInventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("fileinventoryitems/create");
         }
         FileInventoryItem newFileInventoryItem = getFileInventoryItemService().save(fileInventoryItem);
+        log.debug("create saved: {}", fileInventoryItem);
         UriComponents showURI = getItemLink().to(FileInventoryItemsItemThymeleafLinkFactory.SHOW).with("fileInventoryItem", newFileInventoryItem.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -230,6 +237,7 @@ public class FileInventoryItemsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("fileInventoryItem", new FileInventoryItem());
         return new ModelAndView("fileinventoryitems/create");
@@ -239,6 +247,7 @@ public class FileInventoryItemsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getFileInventoryItemService().delete(ids);
         return ResponseEntity.ok().build();
     }

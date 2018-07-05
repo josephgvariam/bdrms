@@ -3,6 +3,8 @@ import in.bigdash.rms.model.request.RetrievalRequest;
 
 import in.bigdash.rms.service.api.RetrievalRequestService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class RetrievalRequestsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<RetrievalRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<RetrievalRequest> retrievalRequests = getRetrievalRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(retrievalRequests);
     }
@@ -66,13 +69,16 @@ public class RetrievalRequestsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody RetrievalRequest retrievalRequest, BindingResult result) {
+        log.debug("create: {}", retrievalRequest);
         if (retrievalRequest.getId() != null || retrievalRequest.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", retrievalRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         RetrievalRequest newRetrievalRequest = getRetrievalRequestService().save(retrievalRequest);
+        log.debug("create saved: {}", retrievalRequest);
         UriComponents showURI = RetrievalRequestsItemJsonController.showURI(newRetrievalRequest);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,26 +86,35 @@ public class RetrievalRequestsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<RetrievalRequest> retrievalRequests, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(retrievalRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(retrievalRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getRetrievalRequestService().save(retrievalRequests);
+
+        Collection savedBatch = getRetrievalRequestService().save(retrievalRequests);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<RetrievalRequest> retrievalRequests, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(retrievalRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(retrievalRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getRetrievalRequestService().save(retrievalRequests);
+
+        Collection savedBatch = getRetrievalRequestService().save(retrievalRequests);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getRetrievalRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

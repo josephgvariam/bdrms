@@ -150,6 +150,7 @@ public class InsertionRequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("insertionrequests/list");
     }
 
@@ -157,6 +158,7 @@ public class InsertionRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<InsertionRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<InsertionRequest> insertionRequests = getInsertionRequestService().findAll(search, pageable);
         long totalInsertionRequestsCount = insertionRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -170,6 +172,7 @@ public class InsertionRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<InsertionRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<InsertionRequest> insertionRequests = getInsertionRequestService().findAllByIdsIn(ids, search, pageable);
         long totalInsertionRequestsCount = insertionRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -183,6 +186,7 @@ public class InsertionRequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<InsertionRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<InsertionRequest> insertionRequests = getInsertionRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<InsertionRequest> select2Data = new Select2DataWithConversion<InsertionRequest>(insertionRequests, idExpression, getConversionService());
@@ -212,16 +216,19 @@ public class InsertionRequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute InsertionRequest insertionRequest, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", insertionRequest);
         insertionRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         insertionRequest.setStatus(RequestStatus.OPEN);
 
         validator.validate(insertionRequest, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", insertionRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("insertionrequests/create");
         }
         InsertionRequest newInsertionRequest = getInsertionRequestService().save(insertionRequest);
+        log.debug("create saved: {}", insertionRequest);
         UriComponents showURI = getItemLink().to(InsertionRequestsItemThymeleafLinkFactory.SHOW).with("insertionRequest", newInsertionRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -229,6 +236,7 @@ public class InsertionRequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("insertionRequest", new InsertionRequest());
         return new ModelAndView("insertionrequests/create");
@@ -238,6 +246,7 @@ public class InsertionRequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getInsertionRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

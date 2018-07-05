@@ -145,6 +145,7 @@ public class UsersCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("users/list");
     }
 
@@ -152,6 +153,7 @@ public class UsersCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<User>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<User> users = getUserService().findAll(search, pageable);
         long totalUsersCount = users.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +167,7 @@ public class UsersCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<User>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<User> users = getUserService().findAllByIdsIn(ids, search, pageable);
         long totalUsersCount = users.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -178,6 +181,7 @@ public class UsersCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<User>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<User> users = getUserService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<User> select2Data = new Select2DataWithConversion<User>(users, idExpression, getConversionService());
@@ -187,6 +191,7 @@ public class UsersCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2operators", value = "/s2o")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<User>> select2operators(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2operators");
         Page<User> users = getUserService().findAllOperators(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<User> select2Data = new Select2DataWithConversion<User>(users, idExpression, getConversionService());
@@ -217,11 +222,14 @@ public class UsersCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute User user, BindingResult result, Model model) {
+        log.debug("create: {}", user);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", user, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("users/create");
         }
         User newUser = getUserService().save(user);
+        log.debug("create saved: {}", user);
         UriComponents showURI = getItemLink().to(UsersItemThymeleafLinkFactory.SHOW).with("user", newUser.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -229,6 +237,7 @@ public class UsersCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("user", new User());
         return new ModelAndView("users/create");
@@ -238,6 +247,7 @@ public class UsersCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getUserService().delete(ids);
         return ResponseEntity.ok().build();
     }

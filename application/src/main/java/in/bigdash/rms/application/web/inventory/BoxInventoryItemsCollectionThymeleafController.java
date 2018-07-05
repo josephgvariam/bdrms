@@ -151,6 +151,7 @@ public class BoxInventoryItemsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("boxinventoryitems/list");
     }
 
@@ -158,6 +159,7 @@ public class BoxInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<BoxInventoryItem>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<BoxInventoryItem> boxInventoryItems = getBoxInventoryItemService().findAll(search, pageable);
         long totalBoxInventoryItemsCount = boxInventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -171,6 +173,7 @@ public class BoxInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<BoxInventoryItem>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<BoxInventoryItem> boxInventoryItems = getBoxInventoryItemService().findAllByIdsIn(ids, search, pageable);
         long totalBoxInventoryItemsCount = boxInventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -184,6 +187,7 @@ public class BoxInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<BoxInventoryItem>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<BoxInventoryItem> boxInventoryItems = getBoxInventoryItemService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<BoxInventoryItem> select2Data = new Select2DataWithConversion<BoxInventoryItem>(boxInventoryItems, idExpression, getConversionService());
@@ -213,16 +217,19 @@ public class BoxInventoryItemsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute BoxInventoryItem boxInventoryItem, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", boxInventoryItem);
 
         boxInventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
 
         validator.validate(boxInventoryItem, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", boxInventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("boxinventoryitems/create");
         }
         BoxInventoryItem newBoxInventoryItem = getBoxInventoryItemService().save(boxInventoryItem);
+        log.debug("create saved: {}", boxInventoryItem);
         UriComponents showURI = getItemLink().to(BoxInventoryItemsItemThymeleafLinkFactory.SHOW).with("boxInventoryItem", newBoxInventoryItem.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -230,6 +237,7 @@ public class BoxInventoryItemsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("boxInventoryItem", new BoxInventoryItem());
         return new ModelAndView("boxinventoryitems/create");
@@ -239,6 +247,7 @@ public class BoxInventoryItemsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getBoxInventoryItemService().delete(ids);
         return ResponseEntity.ok().build();
     }

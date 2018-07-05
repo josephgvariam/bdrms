@@ -111,6 +111,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
 
     @ModelAttribute
     public DocumentInventoryItem getDocumentInventoryItem(@PathVariable("documentInventoryItem") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         DocumentInventoryItem documentInventoryItem = null;
         if (HttpMethod.PUT.equals(method)) {
             documentInventoryItem = documentInventoryItemService.findOneForUpdate(id);
@@ -127,6 +128,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute DocumentInventoryItem documentInventoryItem, Model model) {
+        log.debug("show: {}", documentInventoryItem);
         model.addAttribute("documentInventoryItem", documentInventoryItem);
         return new ModelAndView("documentinventoryitems/show");
     }
@@ -197,6 +199,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute DocumentInventoryItem documentInventoryItem, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("documentInventoryItem", documentInventoryItem);
         return new ModelAndView("documentinventoryitems/edit");
@@ -205,8 +208,10 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute DocumentInventoryItem documentInventoryItem, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", documentInventoryItem);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", documentInventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -217,7 +222,9 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
 
             @Override
             public DocumentInventoryItem doInConcurrency(DocumentInventoryItem documentInventoryItem) throws Exception {
-                return getDocumentInventoryItemService().save(documentInventoryItem);
+                DocumentInventoryItem updatedDocumentInventoryItem =  getDocumentInventoryItemService().save(documentInventoryItem);
+                log.debug("update saved: {}", updatedDocumentInventoryItem);
+                return updatedDocumentInventoryItem;
             }
         });
         UriComponents showURI = getItemLink().to(DocumentInventoryItemsItemThymeleafLinkFactory.SHOW).with("documentInventoryItem", savedDocumentInventoryItem.getId()).toUri();
@@ -228,6 +235,7 @@ public class DocumentInventoryItemsItemThymeleafController implements Concurrenc
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute DocumentInventoryItem documentInventoryItem) {
+        log.debug("delete: {}", documentInventoryItem);
         getDocumentInventoryItemService().delete(documentInventoryItem);
         return ResponseEntity.ok().build();
     }

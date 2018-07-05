@@ -111,6 +111,7 @@ public class InventoryItemsItemThymeleafController implements ConcurrencyManager
 
     @ModelAttribute
     public InventoryItem getInventoryItem(@PathVariable("inventoryItem") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         InventoryItem inventoryItem = null;
         if (HttpMethod.PUT.equals(method)) {
             inventoryItem = inventoryItemService.findOneForUpdate(id);
@@ -127,6 +128,7 @@ public class InventoryItemsItemThymeleafController implements ConcurrencyManager
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute InventoryItem inventoryItem, Model model) {
+        log.debug("show: {}", inventoryItem);
         return new ModelAndView("forward:/" + inventoryItem.getType().toLowerCase() + "inventoryitems/" + inventoryItem.getId());
     }
 
@@ -193,14 +195,17 @@ public class InventoryItemsItemThymeleafController implements ConcurrencyManager
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute InventoryItem inventoryItem, Model model) {
+        log.debug("get edit form");
         return new ModelAndView("forward:/" + inventoryItem.getType().toLowerCase() + "inventoryitems/" + inventoryItem.getId() + "/edit-form");
     }
 
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute InventoryItem inventoryItem, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", inventoryItem);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", inventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -211,7 +216,9 @@ public class InventoryItemsItemThymeleafController implements ConcurrencyManager
 
             @Override
             public InventoryItem doInConcurrency(InventoryItem inventoryItem) throws Exception {
-                return getInventoryItemService().save(inventoryItem);
+                InventoryItem updatedInventoryItem =  getInventoryItemService().save(inventoryItem);
+                log.debug("update saved: {}", updatedInventoryItem);
+                return updatedInventoryItem;
             }
         });
         UriComponents showURI = getItemLink().to(InventoryItemsItemThymeleafLinkFactory.SHOW).with("inventoryItem", savedInventoryItem.getId()).toUri();
@@ -222,6 +229,7 @@ public class InventoryItemsItemThymeleafController implements ConcurrencyManager
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute InventoryItem inventoryItem) {
+        log.debug("delete: {}", inventoryItem);
         getInventoryItemService().delete(inventoryItem);
         return ResponseEntity.ok().build();
     }

@@ -150,6 +150,7 @@ public class RetrievalRequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("retrievalrequests/list");
     }
 
@@ -157,6 +158,7 @@ public class RetrievalRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<RetrievalRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<RetrievalRequest> retrievalRequests = getRetrievalRequestService().findAll(search, pageable);
         long totalRetrievalRequestsCount = retrievalRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -170,6 +172,7 @@ public class RetrievalRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<RetrievalRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<RetrievalRequest> retrievalRequests = getRetrievalRequestService().findAllByIdsIn(ids, search, pageable);
         long totalRetrievalRequestsCount = retrievalRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -183,6 +186,7 @@ public class RetrievalRequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<RetrievalRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<RetrievalRequest> retrievalRequests = getRetrievalRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<RetrievalRequest> select2Data = new Select2DataWithConversion<RetrievalRequest>(retrievalRequests, idExpression, getConversionService());
@@ -212,16 +216,19 @@ public class RetrievalRequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute RetrievalRequest retrievalRequest, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", retrievalRequest);
         retrievalRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         retrievalRequest.setStatus(RequestStatus.OPEN);
 
         validator.validate(retrievalRequest, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", retrievalRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("retrievalrequests/create");
         }
         RetrievalRequest newRetrievalRequest = getRetrievalRequestService().save(retrievalRequest);
+        log.debug("create saved: {}", retrievalRequest);
         UriComponents showURI = getItemLink().to(RetrievalRequestsItemThymeleafLinkFactory.SHOW).with("retrievalRequest", newRetrievalRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -229,6 +236,7 @@ public class RetrievalRequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("retrievalRequest", new RetrievalRequest());
         return new ModelAndView("retrievalrequests/create");
@@ -238,6 +246,7 @@ public class RetrievalRequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getRetrievalRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

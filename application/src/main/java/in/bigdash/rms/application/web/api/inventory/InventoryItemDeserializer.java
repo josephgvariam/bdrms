@@ -1,6 +1,8 @@
 package in.bigdash.rms.application.web.api.inventory;
 import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.service.api.InventoryItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -16,6 +18,7 @@ import org.springframework.boot.jackson.JsonComponent;
 @JsonComponent
 public class InventoryItemDeserializer extends JsonObjectDeserializer<InventoryItem> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private InventoryItemService inventoryItemService;
 

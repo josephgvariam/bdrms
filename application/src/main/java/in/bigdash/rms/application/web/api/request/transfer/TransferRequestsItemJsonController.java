@@ -61,6 +61,7 @@ public class TransferRequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute TransferRequest transferRequest) {
+        log.debug("show: {}", transferRequest);
         return ResponseEntity.ok(transferRequest);
     }
 
@@ -72,17 +73,21 @@ public class TransferRequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute TransferRequest storedTransferRequest, @Valid @RequestBody TransferRequest transferRequest, BindingResult result) {
+        log.debug("update: {}", transferRequest);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", transferRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         transferRequest.setId(storedTransferRequest.getId());
-        getTransferRequestService().save(transferRequest);
+        TransferRequest updatedTransferRequest = getTransferRequestService().save(transferRequest);
+        log.debug("update saved: {}", updatedTransferRequest);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute TransferRequest transferRequest) {
+        log.debug("delete: {}", transferRequest);
         getTransferRequestService().delete(transferRequest);
         return ResponseEntity.ok().build();
     }

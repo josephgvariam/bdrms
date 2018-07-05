@@ -17,7 +17,9 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.util.UriComponents;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 
 @RestController
@@ -47,6 +49,7 @@ public class RolesCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<Role>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<Role> roles = getRoleService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(roles);
     }
@@ -59,13 +62,16 @@ public class RolesCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Role role, BindingResult result) {
+        log.debug("create: {}", role);
         if (role.getId() != null || role.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", role, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         Role newRole = getRoleService().save(role);
+        log.debug("create saved: {}", role);
         UriComponents showURI = RolesItemJsonController.showURI(newRole);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -73,26 +79,35 @@ public class RolesCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<Role> roles, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(roles.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(roles.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getRoleService().save(roles);
+
+        Collection savedBatch = getRoleService().save(roles);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<Role> roles, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(roles.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(roles.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getRoleService().save(roles);
+
+        Collection savedBatch = getRoleService().save(roles);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getRoleService().delete(ids);
         return ResponseEntity.ok().build();
     }

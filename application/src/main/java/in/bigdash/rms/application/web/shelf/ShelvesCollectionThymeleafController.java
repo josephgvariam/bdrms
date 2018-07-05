@@ -145,6 +145,7 @@ public class ShelvesCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("shelves/list");
     }
 
@@ -152,6 +153,7 @@ public class ShelvesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Shelf>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<Shelf> shelves = getShelfService().findAll(search, pageable);
         long totalShelvesCount = shelves.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +167,7 @@ public class ShelvesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Shelf>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<Shelf> shelves = getShelfService().findAllByIdsIn(ids, search, pageable);
         long totalShelvesCount = shelves.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -178,6 +181,7 @@ public class ShelvesCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Shelf>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<Shelf> shelves = getShelfService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<Shelf> select2Data = new Select2DataWithConversion<Shelf>(shelves, idExpression, getConversionService());
@@ -207,11 +211,14 @@ public class ShelvesCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Shelf shelf, BindingResult result, Model model) {
+        log.debug("create: {}", shelf);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", shelf, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("shelves/create");
         }
         Shelf newShelf = getShelfService().save(shelf);
+        log.debug("create saved: {}", shelf);
         UriComponents showURI = getItemLink().to(ShelvesItemThymeleafLinkFactory.SHOW).with("shelf", newShelf.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -219,6 +226,7 @@ public class ShelvesCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("shelf", new Shelf());
         return new ModelAndView("shelves/create");
@@ -228,6 +236,7 @@ public class ShelvesCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getShelfService().delete(ids);
         return ResponseEntity.ok().build();
     }

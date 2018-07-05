@@ -61,6 +61,7 @@ public class InsertionRequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute InsertionRequest insertionRequest) {
+        log.debug("show: {}", insertionRequest);
         return ResponseEntity.ok(insertionRequest);
     }
 
@@ -72,17 +73,21 @@ public class InsertionRequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute InsertionRequest storedInsertionRequest, @Valid @RequestBody InsertionRequest insertionRequest, BindingResult result) {
+        log.debug("update: {}", insertionRequest);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", insertionRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         insertionRequest.setId(storedInsertionRequest.getId());
-        getInsertionRequestService().save(insertionRequest);
+        InsertionRequest updatedInsertionRequest = getInsertionRequestService().save(insertionRequest);
+        log.debug("update saved: {}", updatedInsertionRequest);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute InsertionRequest insertionRequest) {
+        log.debug("delete: {}", insertionRequest);
         getInsertionRequestService().delete(insertionRequest);
         return ResponseEntity.ok().build();
     }

@@ -148,6 +148,7 @@ public class RequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("requests/list");
     }
 
@@ -155,6 +156,7 @@ public class RequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Request>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<Request> requests = getRequestService().findAll(search, pageable);
         long totalRequestsCount = requests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -168,6 +170,7 @@ public class RequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Request>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<Request> requests = getRequestService().findAllByIdsIn(ids, search, pageable);
         long totalRequestsCount = requests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -181,6 +184,7 @@ public class RequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Request>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<Request> requests = getRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<Request> select2Data = new Select2DataWithConversion<Request>(requests, idExpression, getConversionService());
@@ -212,12 +216,15 @@ public class RequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Request request, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", request);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", request, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("requests/create");
         }
 
         Request newRequest = getRequestService().save(request);
+        log.debug("create saved: {}", request);
         UriComponents showURI = getItemLink().to(RequestsItemThymeleafLinkFactory.SHOW).with("request", newRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -225,6 +232,7 @@ public class RequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("request", new Request());
         return new ModelAndView("requests/create");
@@ -234,6 +242,7 @@ public class RequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

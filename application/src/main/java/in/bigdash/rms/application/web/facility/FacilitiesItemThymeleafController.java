@@ -109,6 +109,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
 
     @ModelAttribute
     public Facility getFacility(@PathVariable("facility") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         Facility facility = null;
         if (HttpMethod.PUT.equals(method)) {
             facility = facilityService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Facility facility, Model model) {
+        log.debug("show: {}", facility);
         model.addAttribute("facility", facility);
         return new ModelAndView("facilities/show");
     }
@@ -196,6 +198,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Facility facility, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("facility", facility);
         return new ModelAndView("facilities/edit");
@@ -204,8 +207,10 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Facility facility, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", facility);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", facility, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -216,7 +221,9 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
 
             @Override
             public Facility doInConcurrency(Facility facility) throws Exception {
-                return getFacilityService().save(facility);
+                Facility updatedFacility =  getFacilityService().save(facility);
+                log.debug("update saved: {}", updatedFacility);
+                return updatedFacility;
             }
         });
         UriComponents showURI = getItemLink().to(FacilitiesItemThymeleafLinkFactory.SHOW).with("facility", savedFacility.getId()).toUri();
@@ -227,6 +234,7 @@ public class FacilitiesItemThymeleafController implements ConcurrencyManager<Fac
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Facility facility) {
+        log.debug("delete: {}", facility);
         getFacilityService().delete(facility);
         return ResponseEntity.ok().build();
     }

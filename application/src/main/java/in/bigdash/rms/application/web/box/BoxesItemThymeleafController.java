@@ -109,6 +109,7 @@ public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
 
     @ModelAttribute
     public Box getBox(@PathVariable("box") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         Box box = null;
         if (HttpMethod.PUT.equals(method)) {
             box = boxService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Box box, Model model) {
+        log.debug("show: {}", box);
         model.addAttribute("box", box);
         return new ModelAndView("boxes/show");
     }
@@ -197,6 +199,7 @@ public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Box box, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("box", box);
         return new ModelAndView("boxes/edit");
@@ -205,8 +208,10 @@ public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Box box, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", box);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", box, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -217,7 +222,9 @@ public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
 
             @Override
             public Box doInConcurrency(Box box) throws Exception {
-                return getBoxService().save(box);
+                Box updatedBox =  getBoxService().save(box);
+                log.debug("update saved: {}", updatedBox);
+                return updatedBox;
             }
         });
         UriComponents showURI = getItemLink().to(BoxesItemThymeleafLinkFactory.SHOW).with("box", savedBox.getId()).toUri();
@@ -228,6 +235,7 @@ public class BoxesItemThymeleafController implements ConcurrencyManager<Box> {
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Box box) {
+        log.debug("delete: {}", box);
         getBoxService().delete(box);
         return ResponseEntity.ok().build();
     }

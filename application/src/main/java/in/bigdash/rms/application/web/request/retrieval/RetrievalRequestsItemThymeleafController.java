@@ -109,6 +109,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
 
     @ModelAttribute
     public RetrievalRequest getRetrievalRequest(@PathVariable("retrievalRequest") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         RetrievalRequest retrievalRequest = null;
         if (HttpMethod.PUT.equals(method)) {
             retrievalRequest = retrievalRequestService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute RetrievalRequest retrievalRequest, Model model) {
+        log.debug("show: {}", retrievalRequest);
         model.addAttribute("retrievalRequest", retrievalRequest);
         return new ModelAndView("retrievalrequests/show");
     }
@@ -194,6 +196,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute RetrievalRequest retrievalRequest, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("retrievalRequest", retrievalRequest);
         return new ModelAndView("retrievalrequests/edit");
@@ -202,8 +205,10 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute RetrievalRequest retrievalRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", retrievalRequest);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", retrievalRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -214,7 +219,9 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
 
             @Override
             public RetrievalRequest doInConcurrency(RetrievalRequest retrievalRequest) throws Exception {
-                return getRetrievalRequestService().save(retrievalRequest);
+                RetrievalRequest updatedRetrievalRequest =  getRetrievalRequestService().save(retrievalRequest);
+                log.debug("update saved: {}", updatedRetrievalRequest);
+                return updatedRetrievalRequest;
             }
         });
         UriComponents showURI = getItemLink().to(RetrievalRequestsItemThymeleafLinkFactory.SHOW).with("retrievalRequest", savedRetrievalRequest.getId()).toUri();
@@ -225,6 +232,7 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute RetrievalRequest retrievalRequest) {
+        log.debug("delete: {}", retrievalRequest);
         getRetrievalRequestService().delete(retrievalRequest);
         return ResponseEntity.ok().build();
     }

@@ -154,6 +154,7 @@ public class DestructionRequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("destructionrequests/list");
     }
 
@@ -161,6 +162,7 @@ public class DestructionRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<DestructionRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<DestructionRequest> destructionRequests = getDestructionRequestService().findAll(search, pageable);
         long totalDestructionRequestsCount = destructionRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -174,6 +176,7 @@ public class DestructionRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<DestructionRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<DestructionRequest> destructionRequests = getDestructionRequestService().findAllByIdsIn(ids, search, pageable);
         long totalDestructionRequestsCount = destructionRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -187,6 +190,7 @@ public class DestructionRequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<DestructionRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<DestructionRequest> destructionRequests = getDestructionRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<DestructionRequest> select2Data = new Select2DataWithConversion<DestructionRequest>(destructionRequests, idExpression, getConversionService());
@@ -217,6 +221,7 @@ public class DestructionRequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute DestructionRequest destructionRequest, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", destructionRequest);
         destructionRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         destructionRequest.setStatus(RequestStatus.OPEN);
 
@@ -224,11 +229,13 @@ public class DestructionRequestsCollectionThymeleafController {
         validator2.validate(destructionRequest, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", destructionRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("destructionrequests/create");
         }
 
         DestructionRequest newDestructionRequest = getDestructionRequestService().save(destructionRequest);
+        log.debug("create saved: {}", destructionRequest);
         UriComponents showURI = getItemLink().to(DestructionRequestsItemThymeleafLinkFactory.SHOW).with("destructionRequest", newDestructionRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -236,6 +243,7 @@ public class DestructionRequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("destructionRequest", new DestructionRequest());
         return new ModelAndView("destructionrequests/create");
@@ -245,6 +253,7 @@ public class DestructionRequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getDestructionRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

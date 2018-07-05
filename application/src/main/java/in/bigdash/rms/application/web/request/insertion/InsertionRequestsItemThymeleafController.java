@@ -109,6 +109,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
 
     @ModelAttribute
     public InsertionRequest getInsertionRequest(@PathVariable("insertionRequest") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         InsertionRequest insertionRequest = null;
         if (HttpMethod.PUT.equals(method)) {
             insertionRequest = insertionRequestService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute InsertionRequest insertionRequest, Model model) {
+        log.debug("show: {}", insertionRequest);
         model.addAttribute("insertionRequest", insertionRequest);
         return new ModelAndView("insertionrequests/show");
     }
@@ -194,6 +196,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute InsertionRequest insertionRequest, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("insertionRequest", insertionRequest);
         return new ModelAndView("insertionrequests/edit");
@@ -202,8 +205,10 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute InsertionRequest insertionRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", insertionRequest);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", insertionRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -214,7 +219,9 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
 
             @Override
             public InsertionRequest doInConcurrency(InsertionRequest insertionRequest) throws Exception {
-                return getInsertionRequestService().save(insertionRequest);
+                InsertionRequest updatedInsertionRequest =  getInsertionRequestService().save(insertionRequest);
+                log.debug("update saved: {}", updatedInsertionRequest);
+                return updatedInsertionRequest;
             }
         });
         UriComponents showURI = getItemLink().to(InsertionRequestsItemThymeleafLinkFactory.SHOW).with("insertionRequest", savedInsertionRequest.getId()).toUri();
@@ -225,6 +232,7 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute InsertionRequest insertionRequest) {
+        log.debug("delete: {}", insertionRequest);
         getInsertionRequestService().delete(insertionRequest);
         return ResponseEntity.ok().build();
     }

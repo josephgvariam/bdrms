@@ -151,6 +151,7 @@ public class DocumentInventoryItemsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("documentinventoryitems/list");
     }
 
@@ -158,6 +159,7 @@ public class DocumentInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<DocumentInventoryItem>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<DocumentInventoryItem> documentInventoryItems = getDocumentInventoryItemService().findAll(search, pageable);
         long totalDocumentInventoryItemsCount = documentInventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -171,6 +173,7 @@ public class DocumentInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<DocumentInventoryItem>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<DocumentInventoryItem> documentInventoryItems = getDocumentInventoryItemService().findAllByIdsIn(ids, search, pageable);
         long totalDocumentInventoryItemsCount = documentInventoryItems.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -184,6 +187,7 @@ public class DocumentInventoryItemsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<DocumentInventoryItem>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<DocumentInventoryItem> documentInventoryItems = getDocumentInventoryItemService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<DocumentInventoryItem> select2Data = new Select2DataWithConversion<DocumentInventoryItem>(documentInventoryItems, idExpression, getConversionService());
@@ -213,16 +217,19 @@ public class DocumentInventoryItemsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute DocumentInventoryItem documentInventoryItem, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", documentInventoryItem);
 
         documentInventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
 
         validator.validate(documentInventoryItem, result);
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", documentInventoryItem, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("documentinventoryitems/create");
         }
         DocumentInventoryItem newDocumentInventoryItem = getDocumentInventoryItemService().save(documentInventoryItem);
+        log.debug("create saved: {}", documentInventoryItem);
         UriComponents showURI = getItemLink().to(DocumentInventoryItemsItemThymeleafLinkFactory.SHOW).with("documentInventoryItem", newDocumentInventoryItem.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -230,6 +237,7 @@ public class DocumentInventoryItemsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("documentInventoryItem", new DocumentInventoryItem());
         return new ModelAndView("documentinventoryitems/create");
@@ -239,6 +247,7 @@ public class DocumentInventoryItemsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getDocumentInventoryItemService().delete(ids);
         return ResponseEntity.ok().build();
     }

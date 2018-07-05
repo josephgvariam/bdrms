@@ -132,6 +132,7 @@ public class StorageTypesCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("storagetypes/list");
     }
 
@@ -139,6 +140,7 @@ public class StorageTypesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<StorageType>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<StorageType> storageTypes = getStorageTypeService().findAll(search, pageable);
         long totalStorageTypesCount = storageTypes.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -152,6 +154,7 @@ public class StorageTypesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<StorageType>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<StorageType> storageTypes = getStorageTypeService().findAllByIdsIn(ids, search, pageable);
         long totalStorageTypesCount = storageTypes.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +168,7 @@ public class StorageTypesCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<StorageType>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<StorageType> storageTypes = getStorageTypeService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<StorageType> select2Data = new Select2DataWithConversion<StorageType>(storageTypes, idExpression, getConversionService());
@@ -174,6 +178,7 @@ public class StorageTypesCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2user", value = "/s2u")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<StorageType>> select2user(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2user");
         Page<StorageType> storageTypes = getStorageTypeService().findAllByCurrentUser(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<StorageType> select2Data = new Select2DataWithConversion<StorageType>(storageTypes, idExpression, getConversionService());
@@ -201,11 +206,14 @@ public class StorageTypesCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute StorageType storageType, BindingResult result, Model model) {
+        log.debug("create: {}", storageType);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", storageType, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("storagetypes/create");
         }
         StorageType newStorageType = getStorageTypeService().save(storageType);
+        log.debug("create saved: {}", storageType);
         UriComponents showURI = getItemLink().to(StorageTypesItemThymeleafLinkFactory.SHOW).with("storageType", newStorageType.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -213,6 +221,7 @@ public class StorageTypesCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("storageType", new StorageType());
         return new ModelAndView("storagetypes/create");
@@ -222,6 +231,7 @@ public class StorageTypesCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getStorageTypeService().delete(ids);
         return ResponseEntity.ok().build();
     }

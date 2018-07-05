@@ -101,6 +101,7 @@ public class RolesItemThymeleafController implements ConcurrencyManager<Role> {
 
     @ModelAttribute
     public Role getRole(@PathVariable("role") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         Role role = null;
         if (HttpMethod.PUT.equals(method)) {
             role = roleService.findOneForUpdate(id);
@@ -117,6 +118,7 @@ public class RolesItemThymeleafController implements ConcurrencyManager<Role> {
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Role role, Model model) {
+        log.debug("show: {}", role);
         model.addAttribute("role", role);
         return new ModelAndView("roles/show");
     }
@@ -186,6 +188,7 @@ public class RolesItemThymeleafController implements ConcurrencyManager<Role> {
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Role role, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("role", role);
         return new ModelAndView("roles/edit");
@@ -194,8 +197,10 @@ public class RolesItemThymeleafController implements ConcurrencyManager<Role> {
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Role role, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", role);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", role, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -206,7 +211,9 @@ public class RolesItemThymeleafController implements ConcurrencyManager<Role> {
 
             @Override
             public Role doInConcurrency(Role role) throws Exception {
-                return getRoleService().save(role);
+                Role updatedRole = getRoleService().save(role);
+                log.debug("update saved: {}", updatedRole);
+                return updatedRole;
             }
         });
         UriComponents showURI = getItemLink().to(RolesItemThymeleafLinkFactory.SHOW).with("role", savedRole.getId()).toUri();
@@ -217,6 +224,7 @@ public class RolesItemThymeleafController implements ConcurrencyManager<Role> {
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Role role) {
+        log.debug("delete: {}", role);
         getRoleService().delete(role);
         return ResponseEntity.ok().build();
     }

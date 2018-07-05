@@ -61,6 +61,7 @@ public class PermoutRequestsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute PermoutRequest permoutRequest) {
+        log.debug("show: {}", permoutRequest);
         return ResponseEntity.ok(permoutRequest);
     }
 
@@ -72,17 +73,21 @@ public class PermoutRequestsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute PermoutRequest storedPermoutRequest, @Valid @RequestBody PermoutRequest permoutRequest, BindingResult result) {
+        log.debug("update: {}", permoutRequest);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", permoutRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         permoutRequest.setId(storedPermoutRequest.getId());
-        getPermoutRequestService().save(permoutRequest);
+        PermoutRequest updatedPermoutRequest = getPermoutRequestService().save(permoutRequest);
+        log.debug("update saved: {}", updatedPermoutRequest);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute PermoutRequest permoutRequest) {
+        log.debug("delete: {}", permoutRequest);
         getPermoutRequestService().delete(permoutRequest);
         return ResponseEntity.ok().build();
     }

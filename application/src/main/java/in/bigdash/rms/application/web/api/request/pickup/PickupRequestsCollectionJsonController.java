@@ -5,6 +5,8 @@ import in.bigdash.rms.model.request.PickupRequest;
 import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.PickupRequestService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -61,6 +63,7 @@ public class PickupRequestsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<PickupRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<PickupRequest> pickupRequests = getPickupRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(pickupRequests);
     }
@@ -73,6 +76,7 @@ public class PickupRequestsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@RequestBody PickupRequest pickupRequest, BindingResult result, Authentication authentication) {
+        log.debug("create: {}", pickupRequest);
         pickupRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         pickupRequest.setStatus(RequestStatus.OPEN);
 
@@ -82,9 +86,11 @@ public class PickupRequestsCollectionJsonController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", pickupRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         PickupRequest newPickupRequest = getPickupRequestService().save(pickupRequest);
+        log.debug("create saved: {}", pickupRequest);
 
 //        UriComponents showURI = PickupRequestsItemJsonController.showURI(newPickupRequest);
 //        return ResponseEntity.created(showURI.toUri()).build();
@@ -95,26 +101,35 @@ public class PickupRequestsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<PickupRequest> pickupRequests, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(pickupRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(pickupRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getPickupRequestService().save(pickupRequests);
+
+        Collection savedBatch = getPickupRequestService().save(pickupRequests);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<PickupRequest> pickupRequests, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(pickupRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(pickupRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getPickupRequestService().save(pickupRequests);
+
+        Collection savedBatch = getPickupRequestService().save(pickupRequests);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getPickupRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

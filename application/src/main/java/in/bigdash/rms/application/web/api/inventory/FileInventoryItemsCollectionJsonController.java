@@ -4,6 +4,8 @@ import in.bigdash.rms.model.inventory.FileInventoryItem;
 
 import in.bigdash.rms.service.api.FileInventoryItemService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -61,6 +63,7 @@ public class FileInventoryItemsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<FileInventoryItem>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<FileInventoryItem> fileInventoryItems = getFileInventoryItemService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(fileInventoryItems);
     }
@@ -73,6 +76,7 @@ public class FileInventoryItemsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody FileInventoryItem fileInventoryItem, BindingResult result, Authentication authentication) {
+        log.debug("create: {}", fileInventoryItem);
 
         fileInventoryItem.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
 
@@ -82,9 +86,11 @@ public class FileInventoryItemsCollectionJsonController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", fileInventoryItem, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         FileInventoryItem newFileInventoryItem = getFileInventoryItemService().save(fileInventoryItem);
+        log.debug("create saved: {}", fileInventoryItem);
         UriComponents showURI = FileInventoryItemsItemJsonController.showURI(newFileInventoryItem);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -92,26 +98,35 @@ public class FileInventoryItemsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<FileInventoryItem> fileInventoryItems, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(fileInventoryItems.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(fileInventoryItems.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getFileInventoryItemService().save(fileInventoryItems);
+
+        Collection savedBatch = getFileInventoryItemService().save(fileInventoryItems);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<FileInventoryItem> fileInventoryItems, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(fileInventoryItems.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(fileInventoryItems.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getFileInventoryItemService().save(fileInventoryItems);
+
+        Collection savedBatch = getFileInventoryItemService().save(fileInventoryItems);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getFileInventoryItemService().delete(ids);
         return ResponseEntity.ok().build();
     }

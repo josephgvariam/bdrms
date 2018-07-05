@@ -12,6 +12,8 @@ import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.*;
 import io.springlets.web.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonComponent;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
@@ -27,6 +29,7 @@ import java.util.*;
 @JsonComponent
 public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<InventoryItem>> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private InventoryItemService inventoryItemService;
     private RequestService requestService;

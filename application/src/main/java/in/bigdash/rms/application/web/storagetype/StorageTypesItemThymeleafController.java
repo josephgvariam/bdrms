@@ -101,6 +101,7 @@ public class StorageTypesItemThymeleafController implements ConcurrencyManager<S
 
     @ModelAttribute
     public StorageType getStorageType(@PathVariable("storageType") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         StorageType storageType = null;
         if (HttpMethod.PUT.equals(method)) {
             storageType = storageTypeService.findOneForUpdate(id);
@@ -117,6 +118,7 @@ public class StorageTypesItemThymeleafController implements ConcurrencyManager<S
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute StorageType storageType, Model model) {
+        log.debug("show: {}", storageType);
         model.addAttribute("storageType", storageType);
         return new ModelAndView("storagetypes/show");
     }
@@ -186,6 +188,7 @@ public class StorageTypesItemThymeleafController implements ConcurrencyManager<S
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute StorageType storageType, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("storageType", storageType);
         return new ModelAndView("storagetypes/edit");
@@ -194,8 +197,10 @@ public class StorageTypesItemThymeleafController implements ConcurrencyManager<S
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute StorageType storageType, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", storageType);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", storageType, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -206,7 +211,9 @@ public class StorageTypesItemThymeleafController implements ConcurrencyManager<S
 
             @Override
             public StorageType doInConcurrency(StorageType storageType) throws Exception {
-                return getStorageTypeService().save(storageType);
+                StorageType updatedStorageType =  getStorageTypeService().save(storageType);
+                log.debug("update saved: {}", updatedStorageType);
+                return updatedStorageType;
             }
         });
         UriComponents showURI = getItemLink().to(StorageTypesItemThymeleafLinkFactory.SHOW).with("storageType", savedStorageType.getId()).toUri();
@@ -217,6 +224,7 @@ public class StorageTypesItemThymeleafController implements ConcurrencyManager<S
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute StorageType storageType) {
+        log.debug("delete: {}", storageType);
         getStorageTypeService().delete(storageType);
         return ResponseEntity.ok().build();
     }

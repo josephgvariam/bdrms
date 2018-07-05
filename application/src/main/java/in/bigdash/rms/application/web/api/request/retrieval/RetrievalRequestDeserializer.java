@@ -1,6 +1,8 @@
 package in.bigdash.rms.application.web.api.request.retrieval;
 import in.bigdash.rms.model.request.RetrievalRequest;
 import in.bigdash.rms.service.api.RetrievalRequestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -16,6 +18,7 @@ import org.springframework.boot.jackson.JsonComponent;
 @JsonComponent
 public class RetrievalRequestDeserializer extends JsonObjectDeserializer<RetrievalRequest> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private RetrievalRequestService retrievalRequestService;
 

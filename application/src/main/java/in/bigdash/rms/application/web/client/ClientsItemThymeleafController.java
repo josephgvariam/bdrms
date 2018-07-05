@@ -109,6 +109,7 @@ public class ClientsItemThymeleafController implements ConcurrencyManager<Client
 
     @ModelAttribute
     public Client getClient(@PathVariable("client") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         Client client = null;
         if (HttpMethod.PUT.equals(method)) {
             client = clientService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class ClientsItemThymeleafController implements ConcurrencyManager<Client
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Client client, Model model) {
+        log.debug("show: {}", client);
         model.addAttribute("client", client);
         return new ModelAndView("clients/show");
     }
@@ -196,6 +198,7 @@ public class ClientsItemThymeleafController implements ConcurrencyManager<Client
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Client client, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("client", client);
         return new ModelAndView("clients/edit");
@@ -204,8 +207,10 @@ public class ClientsItemThymeleafController implements ConcurrencyManager<Client
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Client client, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", client);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", client, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -216,7 +221,9 @@ public class ClientsItemThymeleafController implements ConcurrencyManager<Client
 
             @Override
             public Client doInConcurrency(Client client) throws Exception {
-                return getClientService().save(client);
+                Client updatedClient =  getClientService().save(client);
+                log.debug("update saved: {}", updatedClient);
+                return updatedClient;
             }
         });
         UriComponents showURI = getItemLink().to(ClientsItemThymeleafLinkFactory.SHOW).with("client", savedClient.getId()).toUri();
@@ -227,6 +234,7 @@ public class ClientsItemThymeleafController implements ConcurrencyManager<Client
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Client client) {
+        log.debug("delete: {}", client);
         getClientService().delete(client);
         return ResponseEntity.ok().build();
     }

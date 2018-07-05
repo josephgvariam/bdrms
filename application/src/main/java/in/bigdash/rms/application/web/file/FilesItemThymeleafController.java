@@ -109,6 +109,7 @@ public class FilesItemThymeleafController implements ConcurrencyManager<File> {
 
     @ModelAttribute
     public File getFile(@PathVariable("file") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         File file = null;
         if (HttpMethod.PUT.equals(method)) {
             file = fileService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class FilesItemThymeleafController implements ConcurrencyManager<File> {
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute File file, Model model) {
+        log.debug("show: {}", file);
         model.addAttribute("file", file);
         return new ModelAndView("files/show");
     }
@@ -197,6 +199,7 @@ public class FilesItemThymeleafController implements ConcurrencyManager<File> {
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute File file, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("file", file);
         return new ModelAndView("files/edit");
@@ -205,8 +208,10 @@ public class FilesItemThymeleafController implements ConcurrencyManager<File> {
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute File file, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", file);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", file, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -217,7 +222,9 @@ public class FilesItemThymeleafController implements ConcurrencyManager<File> {
 
             @Override
             public File doInConcurrency(File file) throws Exception {
-                return getFileService().save(file);
+                File updatedFile =  getFileService().save(file);
+                log.debug("update saved: {}", updatedFile);
+                return updatedFile;
             }
         });
         UriComponents showURI = getItemLink().to(FilesItemThymeleafLinkFactory.SHOW).with("file", savedFile.getId()).toUri();
@@ -228,6 +235,7 @@ public class FilesItemThymeleafController implements ConcurrencyManager<File> {
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute File file) {
+        log.debug("delete: {}", file);
         getFileService().delete(file);
         return ResponseEntity.ok().build();
     }

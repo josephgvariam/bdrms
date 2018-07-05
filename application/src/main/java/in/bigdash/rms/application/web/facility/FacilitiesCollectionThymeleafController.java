@@ -145,6 +145,7 @@ public class FacilitiesCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("facilities/list");
     }
 
@@ -152,6 +153,7 @@ public class FacilitiesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Facility>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<Facility> facilities = getFacilityService().findAll(search, pageable);
         long totalFacilitiesCount = facilities.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +167,7 @@ public class FacilitiesCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Facility>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<Facility> facilities = getFacilityService().findAllByIdsIn(ids, search, pageable);
         long totalFacilitiesCount = facilities.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -178,6 +181,7 @@ public class FacilitiesCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Facility>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<Facility> facilities = getFacilityService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<Facility> select2Data = new Select2DataWithConversion<Facility>(facilities, idExpression, getConversionService());
@@ -208,11 +212,14 @@ public class FacilitiesCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Facility facility, BindingResult result, Model model) {
+        log.debug("create: {}", facility);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", facility, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("facilities/create");
         }
         Facility newFacility = getFacilityService().save(facility);
+        log.debug("create saved: {}", facility);
         UriComponents showURI = getItemLink().to(FacilitiesItemThymeleafLinkFactory.SHOW).with("facility", newFacility.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -220,6 +227,7 @@ public class FacilitiesCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("facility", new Facility());
         return new ModelAndView("facilities/create");
@@ -229,6 +237,7 @@ public class FacilitiesCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getFacilityService().delete(ids);
         return ResponseEntity.ok().build();
     }

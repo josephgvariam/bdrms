@@ -3,6 +3,8 @@ import in.bigdash.rms.model.File;
 
 import in.bigdash.rms.service.api.FileService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class FilesCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<File>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<File> files = getFileService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(files);
     }
@@ -66,13 +69,16 @@ public class FilesCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody File file, BindingResult result) {
+        log.debug("create: {}", file);
         if (file.getId() != null || file.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", file, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         File newFile = getFileService().save(file);
+        log.debug("create saved: {}", file);
         UriComponents showURI = FilesItemJsonController.showURI(newFile);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,26 +86,35 @@ public class FilesCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<File> files, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(files.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(files.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getFileService().save(files);
+
+        Collection savedBatch = getFileService().save(files);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<File> files, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(files.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(files.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getFileService().save(files);
+
+        Collection savedBatch = getFileService().save(files);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getFileService().delete(ids);
         return ResponseEntity.ok().build();
     }

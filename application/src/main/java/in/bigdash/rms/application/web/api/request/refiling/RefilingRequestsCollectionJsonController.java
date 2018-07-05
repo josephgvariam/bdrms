@@ -3,6 +3,8 @@ import in.bigdash.rms.model.request.RefilingRequest;
 
 import in.bigdash.rms.service.api.RefilingRequestService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class RefilingRequestsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<RefilingRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<RefilingRequest> refilingRequests = getRefilingRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(refilingRequests);
     }
@@ -66,13 +69,16 @@ public class RefilingRequestsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody RefilingRequest refilingRequest, BindingResult result) {
+        log.debug("create: {}", refilingRequest);
         if (refilingRequest.getId() != null || refilingRequest.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", refilingRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         RefilingRequest newRefilingRequest = getRefilingRequestService().save(refilingRequest);
+        log.debug("create saved: {}", refilingRequest);
         UriComponents showURI = RefilingRequestsItemJsonController.showURI(newRefilingRequest);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,26 +86,35 @@ public class RefilingRequestsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<RefilingRequest> refilingRequests, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(refilingRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(refilingRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getRefilingRequestService().save(refilingRequests);
+
+        Collection savedBatch = getRefilingRequestService().save(refilingRequests);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<RefilingRequest> refilingRequests, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(refilingRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(refilingRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getRefilingRequestService().save(refilingRequests);
+
+        Collection savedBatch = getRefilingRequestService().save(refilingRequests);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getRefilingRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

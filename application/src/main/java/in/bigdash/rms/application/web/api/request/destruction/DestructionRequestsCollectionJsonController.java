@@ -3,6 +3,8 @@ import in.bigdash.rms.model.request.DestructionRequest;
 
 import in.bigdash.rms.service.api.DestructionRequestService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class DestructionRequestsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<DestructionRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<DestructionRequest> destructionRequests = getDestructionRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(destructionRequests);
     }
@@ -66,13 +69,16 @@ public class DestructionRequestsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody DestructionRequest destructionRequest, BindingResult result) {
+        log.debug("create: {}", destructionRequest);
         if (destructionRequest.getId() != null || destructionRequest.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", destructionRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         DestructionRequest newDestructionRequest = getDestructionRequestService().save(destructionRequest);
+        log.debug("create saved: {}", destructionRequest);
         UriComponents showURI = DestructionRequestsItemJsonController.showURI(newDestructionRequest);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,26 +86,35 @@ public class DestructionRequestsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<DestructionRequest> destructionRequests, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(destructionRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(destructionRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getDestructionRequestService().save(destructionRequests);
+
+        Collection savedBatch = getDestructionRequestService().save(destructionRequests);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<DestructionRequest> destructionRequests, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(destructionRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(destructionRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getDestructionRequestService().save(destructionRequests);
+
+        Collection savedBatch = getDestructionRequestService().save(destructionRequests);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getDestructionRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

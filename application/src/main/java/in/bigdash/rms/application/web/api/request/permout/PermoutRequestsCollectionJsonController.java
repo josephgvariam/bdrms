@@ -3,6 +3,8 @@ import in.bigdash.rms.model.request.PermoutRequest;
 
 import in.bigdash.rms.service.api.PermoutRequestService;
 import io.springlets.data.domain.GlobalSearch;
+
+import java.util.Arrays;
 import java.util.Collection;
 import javax.validation.Valid;
 
@@ -54,6 +56,7 @@ public class PermoutRequestsCollectionJsonController {
 
     @GetMapping(name = "list")
     public ResponseEntity<Page<PermoutRequest>> list(GlobalSearch globalSearch, Pageable pageable) {
+        log.debug("list");
         Page<PermoutRequest> permoutRequests = getPermoutRequestService().findAll(globalSearch, pageable);
         return ResponseEntity.ok(permoutRequests);
     }
@@ -66,13 +69,16 @@ public class PermoutRequestsCollectionJsonController {
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody PermoutRequest permoutRequest, BindingResult result) {
+        log.debug("create: {}", permoutRequest);
         if (permoutRequest.getId() != null || permoutRequest.getVersion() != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", permoutRequest, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         PermoutRequest newPermoutRequest = getPermoutRequestService().save(permoutRequest);
+        log.debug("create saved: {}", permoutRequest);
         UriComponents showURI = PermoutRequestsItemJsonController.showURI(newPermoutRequest);
         return ResponseEntity.created(showURI.toUri()).build();
     }
@@ -80,26 +86,35 @@ public class PermoutRequestsCollectionJsonController {
 
     @PostMapping(value = "/batch", name = "createBatch")
     public ResponseEntity<?> createBatch(@Valid @RequestBody Collection<PermoutRequest> permoutRequests, BindingResult result) {
+        log.debug("createBatch: {}", Arrays.toString(permoutRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("createBatch has errors: {}", result.getAllErrors(), Arrays.toString(permoutRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getPermoutRequestService().save(permoutRequests);
+
+        Collection savedBatch = getPermoutRequestService().save(permoutRequests);
+        log.debug("createBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.created(listURI().toUri()).build();
     }
 
 
     @PutMapping(value = "/batch", name = "updateBatch")
     public ResponseEntity<?> updateBatch(@Valid @RequestBody Collection<PermoutRequest> permoutRequests, BindingResult result) {
+        log.debug("updateBatch: {}", Arrays.toString(permoutRequests.toArray()));
         if (result.hasErrors()) {
+            log.debug("updateBatch has errors: {}", result.getAllErrors(), Arrays.toString(permoutRequests.toArray()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
-        getPermoutRequestService().save(permoutRequests);
+
+        Collection savedBatch = getPermoutRequestService().save(permoutRequests);
+        log.debug("updateBatch saved: {}", Arrays.toString(savedBatch.toArray()));
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", Arrays.toString(ids.toArray()));
         getPermoutRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

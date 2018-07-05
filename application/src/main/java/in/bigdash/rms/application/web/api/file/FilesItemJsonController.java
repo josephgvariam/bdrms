@@ -61,6 +61,7 @@ public class FilesItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute File file) {
+        log.debug("show: {}", file);
         return ResponseEntity.ok(file);
     }
 
@@ -72,17 +73,21 @@ public class FilesItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute File storedFile, @Valid @RequestBody File file, BindingResult result) {
+        log.debug("update: {}", file);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", file, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         file.setId(storedFile.getId());
-        getFileService().save(file);
+        File updatedFile = getFileService().save(file);
+        log.debug("update saved: {}", updatedFile);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute File file) {
+        log.debug("delete: {}", file);
         getFileService().delete(file);
         return ResponseEntity.ok().build();
     }

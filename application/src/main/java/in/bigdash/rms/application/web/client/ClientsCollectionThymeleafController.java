@@ -145,6 +145,7 @@ public class ClientsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("clients/list");
     }
 
@@ -152,6 +153,7 @@ public class ClientsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Client>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<Client> clients = getClientService().findAll(search, pageable);
         long totalClientsCount = clients.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -165,6 +167,7 @@ public class ClientsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Client>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<Client> clients = getClientService().findAllByIdsIn(ids, search, pageable);
         long totalClientsCount = clients.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -178,6 +181,7 @@ public class ClientsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<Client>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<Client> clients = getClientService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<Client> select2Data = new Select2DataWithConversion<Client>(clients, idExpression, getConversionService());
@@ -208,11 +212,14 @@ public class ClientsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@Valid @ModelAttribute Client client, BindingResult result, Model model) {
+        log.debug("create: {}", client);
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", client, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("clients/create");
         }
         Client newClient = getClientService().save(client);
+        log.debug("create saved: {}", client);
         UriComponents showURI = getItemLink().to(ClientsItemThymeleafLinkFactory.SHOW).with("client", newClient.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -220,6 +227,7 @@ public class ClientsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("client", new Client());
         return new ModelAndView("clients/create");
@@ -229,6 +237,7 @@ public class ClientsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getClientService().delete(ids);
         return ResponseEntity.ok().build();
     }

@@ -109,6 +109,7 @@ public class DocumentsItemThymeleafController implements ConcurrencyManager<Docu
 
     @ModelAttribute
     public Document getDocument(@PathVariable("document") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         Document document = null;
         if (HttpMethod.PUT.equals(method)) {
             document = documentService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class DocumentsItemThymeleafController implements ConcurrencyManager<Docu
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Document document, Model model) {
+        log.debug("show: {}", document);
         model.addAttribute("document", document);
         return new ModelAndView("documents/show");
     }
@@ -197,6 +199,7 @@ public class DocumentsItemThymeleafController implements ConcurrencyManager<Docu
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Document document, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("document", document);
         return new ModelAndView("documents/edit");
@@ -205,8 +208,10 @@ public class DocumentsItemThymeleafController implements ConcurrencyManager<Docu
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Document document, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", document);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", document, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -217,7 +222,9 @@ public class DocumentsItemThymeleafController implements ConcurrencyManager<Docu
 
             @Override
             public Document doInConcurrency(Document document) throws Exception {
-                return getDocumentService().save(document);
+                Document updatedDocument =  getDocumentService().save(document);
+                log.debug("update saved: {}", updatedDocument);
+                return updatedDocument;
             }
         });
         UriComponents showURI = getItemLink().to(DocumentsItemThymeleafLinkFactory.SHOW).with("document", savedDocument.getId()).toUri();
@@ -228,6 +235,7 @@ public class DocumentsItemThymeleafController implements ConcurrencyManager<Docu
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Document document) {
+        log.debug("delete: {}", document);
         getDocumentService().delete(document);
         return ResponseEntity.ok().build();
     }

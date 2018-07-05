@@ -109,6 +109,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
 
     @ModelAttribute
     public RefilingRequest getRefilingRequest(@PathVariable("refilingRequest") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         RefilingRequest refilingRequest = null;
         if (HttpMethod.PUT.equals(method)) {
             refilingRequest = refilingRequestService.findOneForUpdate(id);
@@ -125,6 +126,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute RefilingRequest refilingRequest, Model model) {
+        log.debug("show: {}", refilingRequest);
         model.addAttribute("refilingRequest", refilingRequest);
         return new ModelAndView("refilingrequests/show");
     }
@@ -194,6 +196,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute RefilingRequest refilingRequest, Model model) {
+        log.debug("get edit form");
         populateForm(model);
         model.addAttribute("refilingRequest", refilingRequest);
         return new ModelAndView("refilingrequests/edit");
@@ -202,8 +205,10 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute RefilingRequest refilingRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", refilingRequest);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", refilingRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -214,7 +219,9 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
 
             @Override
             public RefilingRequest doInConcurrency(RefilingRequest refilingRequest) throws Exception {
-                return getRefilingRequestService().save(refilingRequest);
+                RefilingRequest updatedRefilingRequest =  getRefilingRequestService().save(refilingRequest);
+                log.debug("update saved: {}", updatedRefilingRequest);
+                return updatedRefilingRequest;
             }
         });
         UriComponents showURI = getItemLink().to(RefilingRequestsItemThymeleafLinkFactory.SHOW).with("refilingRequest", savedRefilingRequest.getId()).toUri();
@@ -225,6 +232,7 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
     @ResponseBody
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute RefilingRequest refilingRequest) {
+        log.debug("delete: {}", refilingRequest);
         getRefilingRequestService().delete(refilingRequest);
         return ResponseEntity.ok().build();
     }

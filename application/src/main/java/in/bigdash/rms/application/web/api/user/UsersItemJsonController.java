@@ -61,6 +61,7 @@ public class UsersItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute User user) {
+        log.debug("show: {}", user);
         return ResponseEntity.ok(user);
     }
 
@@ -72,17 +73,21 @@ public class UsersItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute User storedUser, @Valid @RequestBody User user, BindingResult result) {
+        log.debug("update: {}", user);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", user, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         user.setId(storedUser.getId());
-        getUserService().save(user);
+        User updatedUser = getUserService().save(user);
+        log.debug("update saved: {}", updatedUser);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute User user) {
+        log.debug("delete: {}", user);
         getUserService().delete(user);
         return ResponseEntity.ok().build();
     }

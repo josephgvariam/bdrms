@@ -112,6 +112,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
     @ModelAttribute
     public Request getRequest(@PathVariable("request") Long id, Locale locale, HttpMethod method) {
+        log.debug("{} {}", method, id);
         Request request = null;
         if (HttpMethod.PUT.equals(method)) {
             request = requestService.findOneForUpdate(id);
@@ -128,6 +129,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
     @GetMapping(name = "show")
     public ModelAndView show(@ModelAttribute Request request, Model model) {
+        log.debug("show: {}", request);
         return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId());
     }
 
@@ -196,6 +198,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Request request, Model model) {
+        log.debug("get edit form");
         return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId() + "/edit-form");
     }
 
@@ -217,8 +220,10 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute Request request, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
+        log.debug("update: {}", request);
         // Check if provided form contain errors
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", request, result.getAllErrors());
             populateForm(model);
             return new ModelAndView(getEditViewPath());
         }
@@ -229,7 +234,9 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
             @Override
             public Request doInConcurrency(Request request) throws Exception {
-                return getRequestService().save(request);
+                Request updatedRequest =  getRequestService().save(request);
+                log.debug("update saved: {}", updatedRequest);
+                return updatedRequest;
             }
         });
         UriComponents showURI = getItemLink().to(RequestsItemThymeleafLinkFactory.SHOW).with("request", savedRequest.getId()).toUri();
@@ -243,6 +250,7 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
         if(request.getStatus() != RequestStatus.OPEN){
             throw new RuntimeException("Cannot delete non-open requests");
         }
+        log.debug("delete: {}", request);
         getRequestService().delete(request);
         return ResponseEntity.ok().build();
     }

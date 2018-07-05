@@ -61,6 +61,7 @@ public class InventoryItemsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute InventoryItem inventoryItem) {
+        log.debug("show: {}", inventoryItem);
         return ResponseEntity.ok(inventoryItem);
     }
 
@@ -72,17 +73,21 @@ public class InventoryItemsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute InventoryItem storedInventoryItem, @Valid @RequestBody InventoryItem inventoryItem, BindingResult result) {
+        log.debug("update: {}", inventoryItem);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", inventoryItem, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         inventoryItem.setId(storedInventoryItem.getId());
-        getInventoryItemService().save(inventoryItem);
+        InventoryItem updatedInventoryItem = getInventoryItemService().save(inventoryItem);
+        log.debug("update saved: {}", updatedInventoryItem);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute InventoryItem inventoryItem) {
+        log.debug("delete: {}", inventoryItem);
         getInventoryItemService().delete(inventoryItem);
         return ResponseEntity.ok().build();
     }

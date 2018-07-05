@@ -2,6 +2,8 @@ package in.bigdash.rms.application.web.api.user;
 import in.bigdash.rms.model.User;
 import in.bigdash.rms.service.api.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.context.annotation.Lazy;
@@ -17,6 +19,7 @@ import org.springframework.boot.jackson.JsonComponent;
 @JsonComponent
 public class UserDeserializer extends JsonObjectDeserializer<User> {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private UserService userService;
 

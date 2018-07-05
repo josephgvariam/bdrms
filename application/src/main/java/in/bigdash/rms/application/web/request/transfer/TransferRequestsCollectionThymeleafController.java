@@ -150,6 +150,7 @@ public class TransferRequestsCollectionThymeleafController {
 
     @GetMapping(name = "list")
     public ModelAndView list(Model model) {
+        log.debug("list");
         return new ModelAndView("transferrequests/list");
     }
 
@@ -157,6 +158,7 @@ public class TransferRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatables", value = "/dt")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<TransferRequest>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatables");
         Page<TransferRequest> transferRequests = getTransferRequestService().findAll(search, pageable);
         long totalTransferRequestsCount = transferRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -170,6 +172,7 @@ public class TransferRequestsCollectionThymeleafController {
     @GetMapping(produces = Datatables.MEDIA_TYPE, name = "datatablesByIdsIn", value = "/dtByIdsIn")
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<TransferRequest>> datatablesByIdsIn(@RequestParam("ids") List<Long> ids, DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
+        log.debug("datatablesByIdsIn");
         Page<TransferRequest> transferRequests = getTransferRequestService().findAllByIdsIn(ids, search, pageable);
         long totalTransferRequestsCount = transferRequests.getTotalElements();
         if (search != null && StringUtils.isNotBlank(search.getText())) {
@@ -183,6 +186,7 @@ public class TransferRequestsCollectionThymeleafController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, name = "select2", value = "/s2")
     @ResponseBody
     public ResponseEntity<Select2DataSupport<TransferRequest>> select2(GlobalSearch search, Pageable pageable, Locale locale) {
+        log.debug("select2");
         Page<TransferRequest> transferRequests = getTransferRequestService().findAll(search, pageable);
         String idExpression = "#{id}";
         Select2DataSupport<TransferRequest> select2Data = new Select2DataWithConversion<TransferRequest>(transferRequests, idExpression, getConversionService());
@@ -212,6 +216,7 @@ public class TransferRequestsCollectionThymeleafController {
 
     @PostMapping(name = "create")
     public ModelAndView create(@ModelAttribute TransferRequest transferRequest, BindingResult result, Model model, Authentication authentication) {
+        log.debug("create: {}", transferRequest);
         transferRequest.setUserCreated(((JpaUserDetails)authentication.getPrincipal()).getUser());
         transferRequest.setStatus(RequestStatus.OPEN);
 
@@ -219,10 +224,12 @@ public class TransferRequestsCollectionThymeleafController {
 
 
         if (result.hasErrors()) {
+            log.debug("create {} has errors: {}", transferRequest, result.getAllErrors());
             populateForm(model);
             return new ModelAndView("transferrequests/create");
         }
         TransferRequest newTransferRequest = getTransferRequestService().save(transferRequest);
+        log.debug("create saved: {}", transferRequest);
         UriComponents showURI = getItemLink().to(TransferRequestsItemThymeleafLinkFactory.SHOW).with("transferRequest", newTransferRequest.getId()).toUri();
         return new ModelAndView("redirect:" + showURI.toUriString());
     }
@@ -230,6 +237,7 @@ public class TransferRequestsCollectionThymeleafController {
 
     @GetMapping(value = "/create-form", name = "createForm")
     public ModelAndView createForm(Model model) {
+        log.debug("get create form");
         populateForm(model);
         model.addAttribute("transferRequest", new TransferRequest());
         return new ModelAndView("transferrequests/create");
@@ -239,6 +247,7 @@ public class TransferRequestsCollectionThymeleafController {
     @DeleteMapping(value = "/batch/{ids}", name = "deleteBatch")
     @ResponseBody
     public ResponseEntity<?> deleteBatch(@PathVariable("ids") Collection<Long> ids) {
+        log.debug("deleteBatch: {}", ids);
         getTransferRequestService().delete(ids);
         return ResponseEntity.ok().build();
     }

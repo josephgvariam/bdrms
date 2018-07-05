@@ -61,6 +61,7 @@ public class ShelvesItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Shelf shelf) {
+        log.debug("show: {}", shelf);
         return ResponseEntity.ok(shelf);
     }
 
@@ -72,17 +73,21 @@ public class ShelvesItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Shelf storedShelf, @Valid @RequestBody Shelf shelf, BindingResult result) {
+        log.debug("update: {}", shelf);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", shelf, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         shelf.setId(storedShelf.getId());
-        getShelfService().save(shelf);
+        Shelf updatedShelf = getShelfService().save(shelf);
+        log.debug("update saved: {}", updatedShelf);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Shelf shelf) {
+        log.debug("delete: {}", shelf);
         getShelfService().delete(shelf);
         return ResponseEntity.ok().build();
     }

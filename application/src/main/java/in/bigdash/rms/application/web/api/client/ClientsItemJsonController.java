@@ -61,6 +61,7 @@ public class ClientsItemJsonController {
 
     @GetMapping(name = "show")
     public ResponseEntity<?> show(@ModelAttribute Client client) {
+        log.debug("show: {}", client);
         return ResponseEntity.ok(client);
     }
 
@@ -72,17 +73,21 @@ public class ClientsItemJsonController {
 
     @PutMapping(name = "update")
     public ResponseEntity<?> update(@ModelAttribute Client storedClient, @Valid @RequestBody Client client, BindingResult result) {
+        log.debug("update: {}", client);
         if (result.hasErrors()) {
+            log.debug("update {} has errors: {}", client, result.getAllErrors());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         client.setId(storedClient.getId());
-        getClientService().save(client);
+        Client updatedClient = getClientService().save(client);
+        log.debug("update saved: {}", updatedClient);
         return ResponseEntity.ok().build();
     }
 
 
     @DeleteMapping(name = "delete")
     public ResponseEntity<?> delete(@ModelAttribute Client client) {
+        log.debug("delete: {}", client);
         getClientService().delete(client);
         return ResponseEntity.ok().build();
     }
