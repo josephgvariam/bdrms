@@ -10,21 +10,21 @@
             inputStream: {
                 type : "LiveStream",
                 constraints: {
-                    width: {min: 640},
-                    height: {min: 480},
-                    aspectRatio: {min: 1, max: 100},
+                    width: 640,
+                    height: 480,
                     facingMode: "environment"
                 }
             },
             locator: {
                 patchSize: "medium",
-                halfSample: false
+                halfSample: true
             },
             numOfWorkers: (navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4),
             decoder: {
                 readers: [
                     'code_128_reader'
-                ]
+                ],
+                multiple: false
             },
             locate: true
         };
