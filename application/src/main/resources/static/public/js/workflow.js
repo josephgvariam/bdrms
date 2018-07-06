@@ -568,7 +568,7 @@
         getBarcode: function(e){
             e.preventDefault();
             cameraBarcodeScanner.init('#boxBarcode');
-            $('#livestream_scanner').modal('show')
+            $('#livestream_scanner').modal('show');
         },
 
         focusBack: function(){
