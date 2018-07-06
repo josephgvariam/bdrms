@@ -18,7 +18,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     boolean disableConcurrency = true;
 
     // Don't make final to allow test cases faking them
-    private static String DEFAULT_POLICY_DIRECTIVES = "script-src 'self' 'unsafe-inline' 'unsafe-eval'";
+    private static String DEFAULT_POLICY_DIRECTIVES = "script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src blob:";
 
     private static String CONTENT_SECURITY_POLICY_HEADER = "Content-Security-Policy";
 

@@ -127,3 +127,24 @@
 
 .top-buffer { margin-top:10px; }
 .bottom-buffer { margin-bottom:10px; }
+
+
+
+#interactive.viewport {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    text-align: center;
+}
+
+#interactive.viewport > canvas, #interactive.viewport > video {
+    max-width: 100%;
+    width: 100%;
+}
+
+canvas.drawing, canvas.drawingBuffer {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
