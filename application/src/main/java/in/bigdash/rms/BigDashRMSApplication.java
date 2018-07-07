@@ -10,7 +10,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class BigDashRMSApplication {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final static Logger log = LoggerFactory.getLogger(BigDashRMSApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(BigDashRMSApplication.class, args);

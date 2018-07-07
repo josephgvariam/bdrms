@@ -198,18 +198,19 @@ public class RequestsItemThymeleafController implements ConcurrencyManager<Reque
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute Request request, Model model) {
-        log.debug("get edit form");
+        log.debug("get edit form: {}", request);
         return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId() + "/edit-form");
     }
 
     @GetMapping(value = "/workflow/**", name = "workflow")
     public ModelAndView workflow(@ModelAttribute Request request, Model model) {
-        model.addAttribute("request", request);
-        return new ModelAndView("requests/workflow");
+        log.debug("get workflow: {}", request);
+        return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId() + "/workflow");
     }
 
     @GetMapping(value = "/loadchart", name = "loadchart")
     public ModelAndView loadchart(@ModelAttribute Request request, Model model) {
+        log.debug("get loadchart: {}", request);
         if(request.getType().equals("PICKUP")) {
             return new ModelAndView("forward:/" + request.getType().toLowerCase() + "requests/" + request.getId() + "/loadchart");
         }

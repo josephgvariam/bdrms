@@ -8,6 +8,7 @@ import in.bigdash.rms.model.inventory.DocumentInventoryItem;
 import in.bigdash.rms.model.inventory.FileInventoryItem;
 import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.model.request.PickupRequest;
+import in.bigdash.rms.model.request.Request;
 import io.springlets.data.domain.GlobalSearch;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
 
@@ -218,7 +219,7 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
 
     @GetMapping(value = "/edit-form", name = "editForm")
     public ModelAndView editForm(@ModelAttribute PickupRequest pickupRequest, Model model) {
-        log.debug("get edit form");
+        log.debug("get edit form: {}", pickupRequest);
         populateForm(model);
         model.addAttribute("pickupRequest", pickupRequest);
         return new ModelAndView("pickuprequests/edit");
@@ -258,6 +259,13 @@ public class PickupRequestsItemThymeleafController implements ConcurrencyManager
         getPickupRequestService().delete(pickupRequest);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(value = "/workflow/**", name = "workflow")
+    public ModelAndView workflow(@ModelAttribute PickupRequest pickupRequest, Model model) {
+        log.debug("get workflow: {}", pickupRequest);
+        return new ModelAndView("pickuprequests/workflow");
+    }
+
 
     @GetMapping(name = "/loadchart", value = "loadchart")
     @ResponseBody
