@@ -202,6 +202,12 @@ public class RefilingRequestsItemThymeleafController implements ConcurrencyManag
         return new ModelAndView("refilingrequests/edit");
     }
 
+    @GetMapping(value = "/workflow/**", name = "workflow")
+    public ModelAndView workflow(@ModelAttribute RefilingRequest refilingRequest, Model model) {
+        log.debug("get workflow: {}", refilingRequest);
+        return new ModelAndView("refilingrequests/workflow");
+    }
+
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute RefilingRequest refilingRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {

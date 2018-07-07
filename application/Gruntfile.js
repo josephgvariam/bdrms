@@ -4,7 +4,15 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
-            files: ['src/main/resources/static/public/js/workflow.js'],
+            files: [
+                'src/main/resources/static/public/js/workflow-destruction.js',
+                'src/main/resources/static/public/js/workflow-insertion.js',
+                'src/main/resources/static/public/js/workflow-permout.js',
+                'src/main/resources/static/public/js/workflow-pickup.js',
+                'src/main/resources/static/public/js/workflow-refiling.js',
+                'src/main/resources/static/public/js/workflow-retrieval.js',
+                'src/main/resources/static/public/js/workflow-transfer.js'
+            ],
             options: {
                 globals: {
                     jQuery: true,
@@ -13,17 +21,17 @@ module.exports = function(grunt) {
                 }
             }
         },
-        uglify: {
+        uglifyPickup: {
             build: {
-                src: 'src/main/resources/static/public/js/workflow.js',
-                dest: 'src/main/resources/static/public/js/workflow.min.js'
+                src: 'src/main/resources/static/public/js/workflow-pickup.js',
+                dest: 'src/main/resources/static/public/js/workflow-pickup.min.js'
             }
         },
-        rev: {
+        revPickup: {
             assets: {
                 files: [{
                     src: [
-                        'src/main/resources/static/public/js/workflow.min.js',
+                        'src/main/resources/static/public/js/workflow-pickup.min.js',
                     ]
                 }]
             }
@@ -37,7 +45,8 @@ module.exports = function(grunt) {
     //grunt.loadNpmTasks('grunt-filerev-replace');
     // see https://martinsonesson.wordpress.com/tag/filerev/
 
-    grunt.registerTask('default', ['jshint', 'uglify', 'rev']);
+    //grunt.registerTask('default', ['jshint', 'uglifyPickup', 'revPickup']);
+    grunt.registerTask('default', ['jshint']);
 
 
 

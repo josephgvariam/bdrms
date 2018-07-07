@@ -203,6 +203,13 @@ public class TransferRequestsItemThymeleafController implements ConcurrencyManag
     }
 
 
+    @GetMapping(value = "/workflow/**", name = "workflow")
+    public ModelAndView workflow(@ModelAttribute TransferRequest transferRequest, Model model) {
+        log.debug("get workflow: {}", transferRequest);
+        return new ModelAndView("transferrequests/workflow");
+    }
+
+
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute TransferRequest transferRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
         log.debug("update: {}", transferRequest);

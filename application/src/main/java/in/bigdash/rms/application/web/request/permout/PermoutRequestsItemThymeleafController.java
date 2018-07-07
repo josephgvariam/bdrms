@@ -202,6 +202,12 @@ public class PermoutRequestsItemThymeleafController implements ConcurrencyManage
         return new ModelAndView("permoutrequests/edit");
     }
 
+    @GetMapping(value = "/workflow/**", name = "workflow")
+    public ModelAndView workflow(@ModelAttribute PermoutRequest permoutRequest, Model model) {
+        log.debug("get workflow: {}", permoutRequest);
+        return new ModelAndView("permoutrequests/workflow");
+    }
+
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute PermoutRequest permoutRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {

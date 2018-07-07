@@ -1,4 +1,5 @@
 package in.bigdash.rms.application.web.request.retrieval;
+import in.bigdash.rms.model.request.PickupRequest;
 import in.bigdash.rms.model.request.RetrievalRequest;
 import io.springlets.web.mvc.util.concurrency.ConcurrencyManager;
 
@@ -200,6 +201,12 @@ public class RetrievalRequestsItemThymeleafController implements ConcurrencyMana
         populateForm(model);
         model.addAttribute("retrievalRequest", retrievalRequest);
         return new ModelAndView("retrievalrequests/edit");
+    }
+
+    @GetMapping(value = "/workflow/**", name = "workflow")
+    public ModelAndView workflow(@ModelAttribute RetrievalRequest retrievalRequest, Model model) {
+        log.debug("get workflow: {}", retrievalRequest);
+        return new ModelAndView("retrievalrequests/workflow");
     }
 
 

@@ -202,6 +202,12 @@ public class DestructionRequestsItemThymeleafController implements ConcurrencyMa
         return new ModelAndView("destructionrequests/edit");
     }
 
+    @GetMapping(value = "/workflow/**", name = "workflow")
+    public ModelAndView workflow(@ModelAttribute DestructionRequest destructionRequest, Model model) {
+        log.debug("get workflow: {}", destructionRequest);
+        return new ModelAndView("destructionrequests/workflow");
+    }
+
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute DestructionRequest destructionRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {

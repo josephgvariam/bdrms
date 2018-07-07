@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html lang="en" data-layout-decorate="~{layouts/default-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Workflow</title>
+
+    <!-- DateTimePicker -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.min.css" data-th-href="@{/webjars/datetimepicker/build/jquery.datetimepicker.min.css}" />
+    <link href="/public/css/sweetalert.css" rel="stylesheet">
+    <link href="/public/css/workflow.css" rel="stylesheet">
+
+</head>
+<body>
+
+<header role="banner">
+</header>
+
+<div class="container bg-container">
+    <section data-layout-fragment="content">
+
+        <div id="app">
+        </div>
+
+        <div id="loading"></div>
+
+        <div id="infoModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Info</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>modal</p>
+                        <p class="text-warning"><small>modal</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+<footer class="container">
+</footer>
+
+
+<div data-layout-fragment="javascript">
+
+    <!-- DateTimePicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full.min.js" data-th-src="@{/webjars/datetimepicker/build/jquery.datetimepicker.full.min.js}"></script>
+    <script src="../../static/public/js/datetimepicker-defaults.js" data-th-src="@{/public/js/datetimepicker-defaults.js}"></script>
+
+    <!-- jquery.inputmask -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.1/jquery.inputmask.bundle.min.js" data-th-src="@{/webjars/jquery.inputmask/min/jquery.inputmask.bundle.min.js}"></script>
+    <script type="text/javascript" data-th-inline="javascript">
+        (function(jQuery) {
+            jQuery(document)
+                .ready(
+                    function() {
+                        Inputmask
+                            .extendAliases({
+                                'numeric' : {
+                                    'groupSeparator' : '.',
+                                    'radixPoint' : ','
+                                },
+                                'currency' : {
+                                    'prefix' : '',
+                                    'suffix' : ' ₹'
+                                }
+                            });
+                    });
+        })(jQuery);
+    </script>
+    <script src="../../static/public/js/inputmask-defaults.js" data-th-src="@{/public/js/inputmask-defaults.js}"></script>
+
+    <!-- JQuery Validation -->
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js" data-th-src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}">
+    </script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.min.js" data-th-src="@{/webjars/jquery-validation/dist/additional-methods.min.js}">
+    </script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/localization/messages_es.js" data-th-src="@{/webjars/jquery-validation/src/localization/messages_}+${#locale.language}+'.js'" data-th-if="${#locale.language} != 'en'">
+    </script>
+    <script src="../../static/public/js/validation-defaults.js" data-th-src="@{/public/js/validation-defaults.js}">
+    </script>
+
+    <script type="text/javascript" data-th-inline="javascript">
+        (function(jQuery) {
+            jQuery(document)
+                .ready(
+                    function() {
+                        jQuery
+                            .extend(
+                                jQuery.validator.messages,
+                                {
+                                    'dateformat' : /*[[#{error_invalid_date}]]*/'Please enter a correct date/time',
+                                    'inputmask' : /*[[#{error_invalid_maskValue}]]*/'Please enter a valid value',
+                                });
+                    });
+        })(jQuery);
+    </script>
+
+    <script id="before-process-request-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %></h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><%= title %></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <p class="lead"><%= msg %></p>
+                                <button id="startProcessRequestButton" type="button" class="btn btn-primary">Proceed</button>
+                                <button id="cancelProcessRequestButton" type="button" class="btn btn-default">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </script>
+
+
+    <script src="/public/js/underscore.min.js"></script>
+    <script src="/public/js/backbone.min.js"></script>
+    <script src="/public/js/backbone.localStorage.min.js" type="text/javascript"></script>
+    <script src="/public/js/marionette.min.js"></script>
+    <script src="/public/js/spin.min.js"></script>
+    <script src="/public/js/sweetalert.min.js"></script>
+    <script src="/public/js/webrtc-adapter.min.js"></script>
+    <script src="/public/js/quagga.min.js"></script>
+    <script src="/public/js/workflow-insertion.js"></script>
+
+</div>
+
+</body>
+</html>

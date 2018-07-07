@@ -46,6 +46,9 @@ public class RefilingRequestsItemThymeleafLinkFactory implements MethodLinkFacto
         if (methodName.equals(DELETE)) {
             return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).delete(null)).buildAndExpand(pathVariables);
         }
+        if (methodName.equals("workflow")) {
+            return SpringletsMvcUriComponentsBuilder.fromMethodCall(SpringletsMvcUriComponentsBuilder.on(getControllerClass()).workflow(null, null)).buildAndExpand(pathVariables);
+        }
         throw new IllegalArgumentException("Invalid method name: " + methodName);
     }
 }

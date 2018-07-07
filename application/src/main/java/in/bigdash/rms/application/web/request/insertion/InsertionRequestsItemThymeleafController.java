@@ -202,6 +202,12 @@ public class InsertionRequestsItemThymeleafController implements ConcurrencyMana
         return new ModelAndView("insertionrequests/edit");
     }
 
+    @GetMapping(value = "/workflow/**", name = "workflow")
+    public ModelAndView workflow(@ModelAttribute InsertionRequest insertionRequest, Model model) {
+        log.debug("get workflow: {}", insertionRequest);
+        return new ModelAndView("insertionrequests/workflow");
+    }
+
 
     @PutMapping(name = "update")
     public ModelAndView update(@Valid @ModelAttribute InsertionRequest insertionRequest, BindingResult result, @RequestParam("version") Long version, @RequestParam(value = "concurrency", required = false, defaultValue = "") String concurrencyControl, Model model) {
