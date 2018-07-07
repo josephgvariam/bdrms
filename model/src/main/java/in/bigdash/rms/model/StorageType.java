@@ -151,7 +151,7 @@ public class StorageType {
 
 
     public String toString() {
-        return "StorageType {" + "id='" + id + '\'' + ", name='" + name + '\'' + "}";
+        return "StorageType {id=" + id + ", name=" + name + "}";
     }
 
 

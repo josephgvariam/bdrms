@@ -343,7 +343,7 @@ public class User {
 
 
     public String toString() {
-        return "User {" + "id='" + id + '\'' + ", username='" + username + '\'' + "}";
+        return "User {id=" + id + ", username=" + username + "}";
     }
 
 

@@ -280,7 +280,7 @@ public class Request {
 
 
     public String toString() {
-        return "Request {" + "id='" + id + '\'' + ", type='" + type + '\'' + "}";
+        return "Request {id=" + id + ", type=" + type + "}";
     }
 
 

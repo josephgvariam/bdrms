@@ -250,7 +250,7 @@ public class File {
 
 
     public String toString() {
-        return "File {" + "id='" + id + '\'' + ", barcode='" + barcode + '\'' + "}";
+        return "File {id=" + id + ", barcode=" + barcode + "}";
     }
 
 

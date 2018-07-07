@@ -244,6 +244,6 @@ public class InventoryItem {
 
 
     public String toString() {
-        return "InventoryItem {" + "id='" + id + '\'' + ", type='" + type + '\'' + ", ref1='" + ref1  + '\'' + "}";
+        return "InventoryItem {id=" + id + ", type=" + type + ", ref1=" + ref1 + "}";
     }
 }

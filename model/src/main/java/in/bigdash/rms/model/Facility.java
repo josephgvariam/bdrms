@@ -215,7 +215,7 @@ public class Facility {
 
 
     public String toString() {
-        return "Facility {" + "id='" + id + '\'' + ", name='" + name + '\'' + "}";
+        return "Facility {id=" + id + ", name=" + name + "}";
     }
 
 

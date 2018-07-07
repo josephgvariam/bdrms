@@ -229,7 +229,7 @@ public class Document {
 
 
     public String toString() {
-        return "Document {" + "id='" + id + '\''  + ", barcode='" + barcode + '\'' + "}";
+        return "Document {id=" + id + ", barcode=" + barcode + "}";
     }
 
 

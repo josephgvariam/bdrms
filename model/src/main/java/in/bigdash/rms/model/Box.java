@@ -249,7 +249,7 @@ public class Box {
 
 
     public String toString() {
-        return "Box {" + "id='" + id + '\'' + ", barcode='" + barcode + '\'' + "}";
+        return "Box {id=" + id +  ", barcode=" + barcode  + "}";
     }
 
 

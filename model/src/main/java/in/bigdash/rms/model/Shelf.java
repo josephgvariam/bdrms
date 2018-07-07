@@ -155,7 +155,7 @@ public class Shelf {
 
 
     public String toString() {
-        return "Shelf {" + "id='" + id + '\'' + ", barcode='" + barcode + '\'' + "}";
+        return "Shelf {id=" + id + ", barcode=" + barcode + "}";
     }
 
 
