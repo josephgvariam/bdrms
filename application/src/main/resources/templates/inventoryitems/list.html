@@ -31,13 +31,13 @@
                 <caption class="sr-only" data-th-text="#{label_list_entity(#{label_inventoryitem_plural})}">InventoryItem List</caption>
                 <thead>
                   <tr>
-                    <th data-data="id" data-checkboxes="true"></th>
-                    <th data-data="id">ID</th>
-                    <th data-data="type">Type</th>
-                    <th data-data="status">Status</th>
-                    <th data-data="location">Location</th>
-                    <th sec:authorize="hasRole('OPERATOR')" data-data="client">Client</th>
-                    <th sec:authorize="hasRole('OPERATOR')" data-data="department">Dept</th>
+                    <th data-data="id" data-checkboxes="true" data-orderable="false" data-searchable="false"></th>
+                    <th data-data="id" data-orderable="false" data-searchable="false">ID</th>
+                    <th data-data="type" data-orderable="false" data-searchable="false">Type</th>
+                    <th data-data="status" data-orderable="false" data-searchable="false">Status</th>
+                    <th data-data="location" data-orderable="false" data-searchable="false">Location</th>
+                    <th sec:authorize="hasRole('OPERATOR')" data-data="client" data-orderable="false" data-searchable="false">Client</th>
+                    <th sec:authorize="hasRole('OPERATOR')" data-data="department" data-orderable="false" data-searchable="false">Dept</th>
                     <th data-data="documentBarcode">Document Barcode</th>
                     <th data-data="fileBarcode">File Barcode</th>
                     <th data-data="boxBarcode">Box Barcode</th>
