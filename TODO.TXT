@@ -25,3 +25,10 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 
 
 - figure out this datatables search and the indexing of all fields. but box barcode search of inventory dont happen?
+
+- fix incorrecxt user created for new inventory when items stored
+
+- add db indexes for datatables searches. For eg: search in inventoryItems databale list: index for inventory barcodes (box, file, doc, shelf) and refs (inventory items)
+- datatables search should not run on each key press,  button maybe or min length?
+
+- optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched

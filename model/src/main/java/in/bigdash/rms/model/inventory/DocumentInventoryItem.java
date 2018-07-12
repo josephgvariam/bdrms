@@ -1,4 +1,5 @@
 package in.bigdash.rms.model.inventory;
+import com.querydsl.core.annotations.QueryInit;
 import in.bigdash.rms.model.Document;
 import io.springlets.format.EntityFormat;
 import org.hibernate.envers.Audited;
@@ -17,6 +18,7 @@ public class DocumentInventoryItem extends InventoryItem {
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "DOCUMENT_ID")
     @EntityFormat
+    @QueryInit("file.box")
     private Document document;
 
 
