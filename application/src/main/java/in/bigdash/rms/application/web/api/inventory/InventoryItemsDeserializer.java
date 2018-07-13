@@ -114,16 +114,14 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
             }
         }
 
-        User user = getCurrentUser();
-        for(InventoryItem i : inventoryItems){
-            i.setUserCreated(user);
-        }
-
-        //Request request = (Request) jsonParser.getCurrentValue();
         Long requestId = ((Request)jsonParser.getCurrentValue()).getId();
         Request request = requestService.findOne(requestId);
-        request.setInventoryItems(new HashSet<>());
 
+        for(InventoryItem i : inventoryItems){
+            i.setUserCreated(request.getUserCreated());
+        }
+
+        request.setInventoryItems(new HashSet<>());
         request.addToInventoryItems(inventoryItems);
 
         return inventoryItems;

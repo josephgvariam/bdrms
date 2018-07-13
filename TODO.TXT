@@ -1,34 +1,34 @@
-1. add global exception handler for database sql exceptions like unique constraint violated
+- add global exception handler for database sql exceptions like unique constraint violated
 https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
 
-2. filter entities by user in views
+- filter entities by user in views
 https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
 
-3. implement history of various entitys. eg: file, file inventory item, etc
-
-4. better logging format
-
-5. encrypt passwds
-
-6. remove @CreatedDate annotation for Box/File/Doc and set it in form to persist real creation times
-
-7. figure out the cache added by roo
-
-24 JUNE TODOS:
+- implement history of various entitys. eg: file, file inventory item, etc
+- remove @CreatedDate annotation for Box/File/Doc and set it in form to persist real creation times
+- figure out the cache added by roo
 - retention start and dates on inventory items
 - possibility to add rules/constraints to shelves when storing boxes (eg: only allow 16 boxes per shelf)
-- generate load chart with total number of boxes and files (just a summary)
 - generic barcode search to give entity details (like when boxes mixed up so find its request number)
-- fix verify barcode
-- automated tests
 - implicit barcode format (u can tell what kind of barcode it is by just looking at it eg: its a box barcode)
-
-
-- figure out this datatables search and the indexing of all fields. but box barcode search of inventory dont happen?
-
-- fix incorrecxt user created for new inventory when items stored
-
 - add db indexes for datatables searches. For eg: search in inventoryItems databale list: index for inventory barcodes (box, file, doc, shelf) and refs (inventory items)
 - datatables search should not run on each key press,  button maybe or min length?
-
 - optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched
+
+
+
+
+
+
+
+
+
+DONE
+====
+- better logging format
+- fix incorrecxt user created for new inventory when items stored
+- encrypt passwds
+- generate load chart with total number of boxes and files (just a summary)
+- fix verify barcode
+- automated tests
+- figure out this datatables search and the indexing of all fields. but box barcode search of inventory dont happen?
