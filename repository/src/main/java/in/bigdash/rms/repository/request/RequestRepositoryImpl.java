@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 
 @Transactional(readOnly = true)
@@ -65,9 +66,9 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
             query.where(request.userCreated.client.eq(currentUser.getClient()));
         }
 
-        Path<?>[] paths = new Path<?>[] { request.userCreated, request.userAssigned, request.storageType, request.status, request.notes, request.createdDate, request.createdBy, request.modifiedDate, request.modifiedBy };
+        Path<?>[] paths = new Path<?>[] { request.userAssigned.name, request.userCreated.name, request.userCreated.client.name,  request.notes     };
         applyGlobalSearch(globalSearch, query, paths);
-        AttributeMappingBuilder mapping = buildMapper().map(USER_CREATED, request.userCreated).map(USER_ASSIGNED, request.userAssigned).map(STORAGE_TYPE, request.storageType).map(STATUS, request.status).map(NOTES, request.notes).map(CREATED_DATE, request.createdDate).map(CREATED_BY, request.createdBy).map(MODIFIED_DATE, request.modifiedDate).map(MODIFIED_BY, request.modifiedBy);
+        AttributeMappingBuilder mapping = buildMapper().map("id", request.id);
         applyPagination(pageable, query, mapping);
         applyOrderById(query);
         return loadPage(query, pageable, request);
