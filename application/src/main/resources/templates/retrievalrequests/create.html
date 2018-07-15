@@ -168,11 +168,23 @@
           <td>
               <div class="media">
                   <a href="#" class="pull-left">
+                      <% if (type === 'BOX') { %>
+                      <img src="/public/img/box.png" class="media-photo">
+                      <% } else if (type === 'FILE') { %>
+                      <img src="/public/img/file.png" class="media-photo">
+                      <% } else { %>
                       <img src="/public/img/doc.png" class="media-photo">
+                      <% } %>
                   </a>
 
                   <div>
-                      <h4 class="title">ID: <%= id %>, boxBarcode: <%= boxBarcode %>, fileBarcode: <%= fileBarcode %>, documentBarcode: <%= documentBarcode %> <br/> ref1: <%= ref1 %>, ref2: <%= ref2 %>, ref3: <%= ref3 %>, ref4: <%= ref4 %>, ref5: <%= ref5 %></h4>
+                      <% if (type === 'BOX') { %>
+                      <h4 class="title">ID: <%= id %>, Barcode: <%= boxBarcode %><br/> Ref1: <%= ref1 %>, Ref2: <%= ref2 %>, Ref3: <%= ref3 %>, Ref4: <%= ref4 %>, Ref5: <%= ref5 %></h4>
+                      <% } else if (type === 'FILE') { %>
+                      <h4 class="title">ID: <%= id %>, Barcode: <%= fileBarcode %><br/> Ref1: <%= ref1 %>, Ref2: <%= ref2 %>, Ref3: <%= ref3 %>, Ref4: <%= ref4 %>, Ref5: <%= ref5 %></h4>
+                      <% } else { %>
+                      <h4 class="title">ID: <%= id %>, Barcode: <%= documentBarcode %><br/> Ref1: <%= ref1 %>, Ref2: <%= ref2 %>, Ref3: <%= ref3 %>, Ref4: <%= ref4 %>, Ref5: <%= ref5 %></h4>
+                      <% } %>
                   </div>
               </div>
           </td>
@@ -213,15 +225,13 @@
                                       <thead>
                                       <tr>
                                           <th>id</th>
-                                          <th>id</th>
-                                          <th>boxBarcode</th>
-                                          <th>fileBarcode</th>
-                                          <th>documentBarcode</th>
-                                          <th>ref1</th>
-                                          <th>ref2</th>
-                                          <th>ref3</th>
-                                          <th>ref4</th>
-                                          <th>ref5</th>
+                                          <th>Id</th>
+                                          <th>Barcode</th>
+                                          <th>Ref1</th>
+                                          <th>Ref2</th>
+                                          <th>Ref3</th>
+                                          <th>Ref4</th>
+                                          <th>Ref5</th>
                                       </tr>
                                       </thead>
                                   </table>

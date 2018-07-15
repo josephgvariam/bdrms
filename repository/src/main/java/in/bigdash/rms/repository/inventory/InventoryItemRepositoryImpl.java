@@ -99,6 +99,19 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
     }
 
 
+    public List<InventoryItem> findByStorageType(String storageType){
+        QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
+        JPQLQuery<InventoryItem> query = from(inventoryItem);
+
+        User currentUser = getCurrentUser();
+
+        query.where(inventoryItem.userCreated.client.eq(currentUser.getClient()));
+        query.where(inventoryItem.type.eq(storageType));
+
+        applyOrderById(query);
+
+        return query.fetch();
+    }
 
 
     public Page<InventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {

@@ -107,6 +107,10 @@ public class InventoryItemServiceImpl implements InventoryItemService {
         return getInventoryItemRepository().findAll(globalSearch, pageable);
     }
 
+    public List<InventoryItem> findAllByStorageType(String storageType) {
+        return getInventoryItemRepository().findByStorageType(storageType);
+    }
+
 
     public Page<InventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         return getInventoryItemRepository().findAllByIdsIn(ids, globalSearch, pageable);

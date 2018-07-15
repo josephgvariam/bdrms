@@ -73,24 +73,24 @@
             if(storageTypeSelection){
                 var storageType = storageTypeSelection.text;
 
-                $('#recordsModal').modal('show');
+                $('#recordsModal').modal({
+                    show: true,
+                    backdrop: 'static',
+                    keyboard: false
+                });
 
                 var datatable = $('#recordsDataTable').DataTable( {
                     retrieve: true,
-                    searching: false,
+                    searching: true,
                     ordering: false,
                     ajax : {
-                        url : "/api/inventoryitems",
-                        dataSrc : function (json) {
-                            return json.content;
-                        }
+                        url : "/api/inventoryitems?storageType=" + storageType,
+                        dataSrc : ''
                     },
                     columns: [
                         { data: "id" },
                         { data: "id" },
-                        { data: "boxBarcode" },
-                        { data: "fileBarcode" },
-                        { data: "documentBarcode" },
+                        { data: storageType.toLowerCase() +"Barcode" },
                         { data: "ref1" },
                         { data: "ref2" },
                         { data: "ref3" },
@@ -139,5 +139,14 @@
 
     var app = new App();
     app.start();
+
+
+    $('#storagetypesselect2').on('select2:select', function (e) {
+        if ( $.fn.DataTable.isDataTable( '#recordsDataTable' ) ) {
+            var dataTable = $('#recordsDataTable').DataTable();
+            dataTable.destroy();
+            inventoryItems.reset();
+        }
+    });
 
 })();

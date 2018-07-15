@@ -5,8 +5,10 @@ import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.service.api.InventoryItemService;
 import io.springlets.data.domain.GlobalSearch;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -20,14 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
@@ -64,6 +59,13 @@ public class InventoryItemsCollectionJsonController {
     public ResponseEntity<Page<InventoryItem>> list(GlobalSearch globalSearch, Pageable pageable) {
         log.debug("list");
         Page<InventoryItem> inventoryItems = getInventoryItemService().findAll(globalSearch, pageable);
+        return ResponseEntity.ok(inventoryItems);
+    }
+
+    @GetMapping(params = "storageType")
+    public ResponseEntity<List<InventoryItem>> getByStorageType(@RequestParam("storageType") String storageType) {
+        log.debug("getByStorageType");
+        List<InventoryItem> inventoryItems = getInventoryItemService().findAllByStorageType(storageType);
         return ResponseEntity.ok(inventoryItems);
     }
 

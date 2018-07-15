@@ -41,6 +41,7 @@ public interface InventoryItemService extends EntityResolver<InventoryItem, Long
 
     public abstract Page<InventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable);
 
+    public abstract List<InventoryItem> findAllByStorageType(String storageType);
 
     public abstract Page<InventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable);
 
