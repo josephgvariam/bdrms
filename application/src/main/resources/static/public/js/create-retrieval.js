@@ -56,10 +56,21 @@
             var dataTable = $('#recordsDataTable').DataTable();
             var rowsSelected = dataTable.rows(['.selected']).data().toArray();
 
+            var form = $('#createRetrievalForm');
+
             inventoryItems.reset();
-            _.each(rowsSelected, function(row){
+            _.each(rowsSelected, function(row, i){
                 var inventoryItem = new InventoryItem(row);
                 inventoryItems.add(inventoryItem);
+
+
+                $(form).append(
+                    $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'inventoryItems['+ i +'].id')
+                        .val(row.id)
+                );
+
             }, this);
 
             $('#recordsModal').modal('hide');

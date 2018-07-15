@@ -36,7 +36,7 @@
           <h1 data-th-text="#{label_create_entity(#{label_retrievalrequest})}">Create RetrievalRequest</h1>
 
           <!-- FORM -->
-          <form class="form-horizontal validate" method="POST" data-th-object="${retrievalRequest}" data-th-action="${collectionLink.to('create').with('retrievalRequest', retrievalRequest.id)}" autocomplete="off">
+          <form id="createRetrievalForm" class="form-horizontal validate" method="POST" data-th-object="${retrievalRequest}" data-th-action="${collectionLink.to('create').with('retrievalRequest', retrievalRequest.id)}" autocomplete="off">
 
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_retrievalrequest})}">RetrievalRequest data </legend>
@@ -77,8 +77,8 @@
           </form>
           <!-- /FORM -->
 
-            <div id="app">
-            </div>
+            <div id="app"></div>
+            <div id="loading"></div>
 
         </div>
 
