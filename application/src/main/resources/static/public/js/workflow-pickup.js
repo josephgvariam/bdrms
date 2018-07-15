@@ -1726,7 +1726,7 @@
 
     });
 
-    var EmptyVerifyRecordsRowView = Mn.View.extend({
+    var EmptyVerifyRecordsRowView = Marionette.View.extend({
         template: _.template('No Boxes.')
     });
 
@@ -1911,7 +1911,7 @@
         }
     });
 
-    var EmptyStoreRecordsRowView = Mn.View.extend({
+    var EmptyStoreRecordsRowView = Marionette.View.extend({
         template: _.template('No Boxes. Start scanning boxes & shelves.')
     });
 
