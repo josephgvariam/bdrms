@@ -38,6 +38,8 @@
           <!-- FORM -->
           <form id="createRetrievalForm" class="form-horizontal validate" method="POST" data-th-object="${retrievalRequest}" data-th-action="${collectionLink.to('create').with('retrievalRequest', retrievalRequest.id)}" autocomplete="off">
 
+            <input id="inventoryItemsField" type="hidden" name="inventoryItems" />
+
             <fieldset id="containerFields">
               <legend class="sr-only" data-th-text="#{label_data_entity(#{label_retrievalrequest})}">RetrievalRequest data </legend>
 
