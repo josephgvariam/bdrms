@@ -259,15 +259,6 @@ public class Request {
         return type;
     }
 
-    public String getInventoryItemsString() {
-        List<String> inventoryItemsStringList = new ArrayList<>();
-        for(InventoryItem i : this.getInventoryItems()){
-            inventoryItemsStringList.add(i.getId().toString());
-        }
-
-        return String.join(", ", inventoryItemsStringList);
-    }
-
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

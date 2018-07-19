@@ -7,7 +7,7 @@
             ref3: '',
             ref4: '',
             ref5: '',
-            status: 'NOTSTORED',
+            status: null,
             type: null
         }
     });
