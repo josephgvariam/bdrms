@@ -107,6 +107,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
 
         query.where(inventoryItem.userCreated.client.eq(currentUser.getClient()));
         query.where(inventoryItem.type.eq(storageType));
+        query.where(inventoryItem.status.eq(InventoryItemStatus.STORED));
 
         applyOrderById(query);
 
