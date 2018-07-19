@@ -8,6 +8,12 @@
     <!-- DateTimePicker -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.min.css" data-th-href="@{/webjars/datetimepicker/2.5.4/build/jquery.datetimepicker.min.css}" />
 
+      <link data-th-href="@{/webjars/datatables/media/css/jquery.dataTables.css}" rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.css" />
+      <link data-th-href="@{/webjars/datatables.net-bs/css/dataTables.bootstrap.css}" rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.css" />
+      <link data-th-href="@{/webjars/jquery-datatables-checkboxes/css/dataTables.checkboxes.css}" rel="stylesheet" type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.1.2/css/dataTables.checkboxes.css" />
+      <link href="/public/css/sweetalert.css" rel="stylesheet">
+      <link href="/public/css/workflow.css" rel="stylesheet">
+
   </head>
   
 
@@ -34,6 +40,8 @@
           <form class="form-horizontal validate" method="POST" data-th-object="${insertionRequest}" data-th-action="${itemLink.to('update').with('insertionRequest', insertionRequest.id)}">
             <input type="hidden" name="_method" value="PUT" />
             	<input type="hidden" name="version" data-th-value="*{version}" />
+
+              <input id="inventoryItemsField" type="hidden" name="inventoryItems" data-th-value="*{inventoryItemsString}"/>
 
             <!-- CONCURRENCY CONTROL -->
             <div data-th-replace="~{fragments/concurrency-control :: concurrency-control(editFormUrl = ${itemLink.to('editForm').with('insertionRequest', insertionRequest.id)})}"></div>
@@ -67,18 +75,16 @@
 
               <!-- buttons form -->
               <div class="form-group">
-                <div class="col-md-12">
-                  <div class="pull-left">
-                    <button type="reset" class="btn btn-default" onclick="location.href='/requests'" data-th-text="#{label_reset}">Cancel</button>
+                  <div class="col-md-9 col-md-offset-3">
+                      <button type="reset" class="btn btn-default" onclick="location.href='/requests'" data-th-text="#{label_reset}">Cancel</button>
+                      <button type="submit" class="btn btn-primary" data-th-text="#{label_save}">Save</button>
                   </div>
-                  <div class="pull-right">
-                    <button type="submit" class="btn btn-primary" data-th-text="#{label_save}">Save</button>
-                  </div>
-                </div>
               </div>
 
           </form>
           <!-- /FORM -->
+
+            <div id="app"></div>
 
         </div>
 
@@ -156,6 +162,122 @@
               });
 
           });
+      </script>
+
+      <script id="record-row-template" type="text/template">
+          <td>
+              <div class="media">
+                  <a href="#" class="pull-left">
+                      <% if (type === 'BOX') { %>
+                      <img src="/public/img/box.png" class="media-photo">
+                      <% } else if (type === 'FILE') { %>
+                      <img src="/public/img/file.png" class="media-photo">
+                      <% } else { %>
+                      <img src="/public/img/doc.png" class="media-photo">
+                      <% } %>
+                  </a>
+
+                  <div>
+                      <% if (type === 'BOX') { %>
+                      <h4 class="title">ID: <%= id %>, Barcode: <%= boxBarcode %><br/> Ref1: <%= ref1 %>, Ref2: <%= ref2 %>, Ref3: <%= ref3 %>, Ref4: <%= ref4 %>, Ref5: <%= ref5 %></h4>
+                      <% } else if (type === 'FILE') { %>
+                      <h4 class="title">ID: <%= id %>, Barcode: <%= fileBarcode %><br/> Ref1: <%= ref1 %>, Ref2: <%= ref2 %>, Ref3: <%= ref3 %>, Ref4: <%= ref4 %>, Ref5: <%= ref5 %></h4>
+                      <% } else { %>
+                      <h4 class="title">ID: <%= id %>, Barcode: <%= documentBarcode %><br/> Ref1: <%= ref1 %>, Ref2: <%= ref2 %>, Ref3: <%= ref3 %>, Ref4: <%= ref4 %>, Ref5: <%= ref5 %></h4>
+                      <% } %>
+                  </div>
+              </div>
+          </td>
+      </script>
+
+      <script id="records-template" type="text/template">
+          <div class="row">
+              <div class="col-md-10 col-md-offset-1">
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">Add Records</h3>
+                      </div>
+                      <div class="panel-body">
+                          <div>
+                              <p class="lead">Add records to this request.</p>
+                              <button id="addRecordsButton" type="button" class="btn btn-primary bottom-buffer">Add Records</button>
+                          </div>
+                          <div id="documentTableRegion" class="table-container">
+                              <table class="table table-filter">
+                                  <tbody>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div id="recordsModal" class="modal fade">
+              <div class="modal-dialog" style="width:90%">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <h4 class="modal-title">Add Records</h4>
+                      </div>
+                      <div class="modal-body">
+                          <div class="table-responsive">
+                              <table id="recordsDataTable" style="width:100%" class="table table-striped table-hover">
+                                  <thead>
+                                  <tr>
+                                      <th>id</th>
+                                      <th>Id</th>
+                                      <th>Barcode</th>
+                                      <th>Ref1</th>
+                                      <th>Ref2</th>
+                                      <th>Ref3</th>
+                                      <th>Ref4</th>
+                                      <th>Ref5</th>
+                                  </tr>
+                                  </thead>
+                              </table>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button id="cancelModalButton" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                          <button id="okModalButton" type="button" class="btn btn-primary">OK</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </script>
+
+      <script type="text/javascript" charset="utf8"
+              src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.js"
+              data-th-src="@{/webjars/datatables/media/js/jquery.dataTables.js}"></script>
+
+      <script type="text/javascript" charset="utf8"
+              src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.js"
+              data-th-src="@{/webjars/datatables.net-select/js/dataTables.select.js}"></script>
+
+      <script type="text/javascript" charset="utf8"
+              src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.1.2/js/dataTables.checkboxes.min.js"
+              data-th-src="@{/webjars/jquery-datatables-checkboxes/js/dataTables.checkboxes.min.js}"></script>
+
+      <script src="/public/js/underscore.min.js"></script>
+      <script src="/public/js/backbone.min.js"></script>
+      <script src="/public/js/marionette.min.js"></script>
+      <script src="/public/js/sweetalert.min.js"></script>
+      <script src="/public/js/create-request.js"></script>
+
+
+      <script th:inline="javascript">
+          /*<![CDATA[*/
+
+          $(function() {
+
+              /*[# th:each="item : ${retrievalRequest.inventoryItems}"]*/
+              bdRequest.inventoryItems.add(new bdRequest.InventoryItem({id: /*[[${item.id}]]*/, type: /*[[${item.type}]]*/, boxBarcode: /*[[${item.boxBarcode}]]*/, fileBarcode: /*[[${item.fileBarcode}]]*/, documentBarcode: /*[[${item.documentBarcode}]]*/, ref1: /*[[${item.ref1}]]*/, ref2: /*[[${item.ref2}]]*/, ref3: /*[[${item.ref3}]]*/, ref4: /*[[${item.ref4}]]*/, ref5: /*[[${item.ref5}]]*/}));
+              bdRequest.selectedInventoryItems.push(/*[[${item.id}]]*/);
+              /*[/]*/
+
+          });
+
+          /*]]>*/
       </script>
 
     </div>

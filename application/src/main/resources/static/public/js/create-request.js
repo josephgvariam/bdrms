@@ -1,4 +1,4 @@
-(function() {
+var bdRequest = (function() {
 
     var InventoryItem = Backbone.Model.extend({
         defaults: {
@@ -17,6 +17,7 @@
     });
 
     var inventoryItems = new InventoryItems();
+    var selectedInventoryItems = [];
 
     var RecordRowView = Marionette.View.extend({
         tagName: 'tr',
@@ -88,6 +89,7 @@
                     retrieve: true,
                     searching: true,
                     ordering: false,
+                    rowId: 'id',
                     ajax : {
                         url : "/api/inventoryitems?storageType=" + storageType,
                         dataSrc : ''
@@ -118,6 +120,12 @@
                 $('#recordsModal').on('shown.bs.modal', function() {
                     var dataTable = $('#recordsDataTable').DataTable();
                     dataTable.columns.adjust();
+
+                    if(selectedInventoryItems){
+                        _.each(selectedInventoryItems, function (i) {
+                            dataTable.row('#'+i).select();
+                        });
+                    }
                 });
             }
             else{
@@ -145,13 +153,25 @@
     var app = new App();
     app.start();
 
+    return {
+        InventoryItem: InventoryItem,
+        inventoryItems: inventoryItems,
+        selectedInventoryItems: selectedInventoryItems
+    }
 
+
+
+
+})();
+
+$(function() {
     $('#storagetypesselect2').on('select2:select', function (e) {
         if ( $.fn.DataTable.isDataTable( '#recordsDataTable' ) ) {
             var dataTable = $('#recordsDataTable').DataTable();
             dataTable.destroy();
-            inventoryItems.reset();
+            bdRequest.inventoryItems.reset();
         }
     });
 
-})();
+
+});
