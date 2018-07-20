@@ -99,7 +99,8 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
     }
 
 
-    public List<InventoryItem> findByStorageType(String storageType){
+    public List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType){
+        //TODO different query for different request types?
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
         JPQLQuery<InventoryItem> query = from(inventoryItem);
 

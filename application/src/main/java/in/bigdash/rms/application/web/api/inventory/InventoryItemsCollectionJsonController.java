@@ -62,10 +62,10 @@ public class InventoryItemsCollectionJsonController {
         return ResponseEntity.ok(inventoryItems);
     }
 
-    @GetMapping(params = "storageType")
-    public ResponseEntity<List<InventoryItem>> getByStorageType(@RequestParam("storageType") String storageType) {
-        log.debug("getByStorageType");
-        List<InventoryItem> inventoryItems = getInventoryItemService().findAllByStorageType(storageType);
+    @GetMapping(params = {"storageType", "requestType"})
+    public ResponseEntity<List<InventoryItem>> getByRequestTypeAndStorageType(@RequestParam("requestType") String requestType, @RequestParam("storageType") String storageType) {
+        log.debug("getByRequestTypeAndStorageType");
+        List<InventoryItem> inventoryItems = getInventoryItemService().findByRequestTypeAndStorageType(requestType, storageType);
         return ResponseEntity.ok(inventoryItems);
     }
 

@@ -18,6 +18,7 @@ var bdRequest = (function() {
 
     var inventoryItems = new InventoryItems();
     var selectedInventoryItems = [];
+    var requestType = '';
 
     var RecordRowView = Marionette.View.extend({
         tagName: 'tr',
@@ -91,7 +92,7 @@ var bdRequest = (function() {
                     ordering: false,
                     rowId: 'id',
                     ajax : {
-                        url : "/api/inventoryitems?storageType=" + storageType,
+                        url : "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType,
                         dataSrc : ''
                     },
                     columns: [
@@ -156,7 +157,9 @@ var bdRequest = (function() {
     return {
         InventoryItem: InventoryItem,
         inventoryItems: inventoryItems,
-        selectedInventoryItems: selectedInventoryItems
+        selectedInventoryItems: selectedInventoryItems,
+        requestType: requestType
+
     };
 
 
