@@ -11,7 +11,8 @@ module.exports = function(grunt) {
                 'src/main/resources/static/public/js/workflow-pickup.js',
                 'src/main/resources/static/public/js/workflow-refiling.js',
                 'src/main/resources/static/public/js/workflow-retrieval.js',
-                'src/main/resources/static/public/js/workflow-transfer.js'
+                'src/main/resources/static/public/js/workflow-transfer.js',
+                'src/main/resources/static/public/js/request.js',
             ],
             options: {
                 globals: {
@@ -36,17 +37,25 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        cssmin : {
+            target : {
+                src : ['src/main/resources/static/public/css/sweetalert.css'],
+                dest : 'src/main/resources/static/public/css/sweetalert.min.css'
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-file-rev');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     //grunt.loadNpmTasks('grunt-filerev-replace');
     //grunt.loadNpmTasks('grunt-filerev-replace');
     // see https://martinsonesson.wordpress.com/tag/filerev/
 
     //grunt.registerTask('default', ['jshint', 'uglifyPickup', 'revPickup']);
     grunt.registerTask('default', ['jshint']);
+    //grunt.registerTask('default', ['cssmin']);
 
 
 

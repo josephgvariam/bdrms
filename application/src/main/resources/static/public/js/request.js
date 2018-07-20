@@ -157,7 +157,7 @@ var bdRequest = (function() {
         InventoryItem: InventoryItem,
         inventoryItems: inventoryItems,
         selectedInventoryItems: selectedInventoryItems
-    }
+    };
 
 
 
