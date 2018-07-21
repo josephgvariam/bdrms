@@ -81,7 +81,7 @@ public class RefilingRequestsItemJsonController {
         refilingRequest.setId(storedRefilingRequest.getId());
         RefilingRequest updatedRefilingRequest = getRefilingRequestService().save(refilingRequest);
         log.debug("update saved: {}", updatedRefilingRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updatedRefilingRequest);
     }
 
 

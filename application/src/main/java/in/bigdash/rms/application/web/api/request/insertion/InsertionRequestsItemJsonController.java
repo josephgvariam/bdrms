@@ -81,7 +81,7 @@ public class InsertionRequestsItemJsonController {
         insertionRequest.setId(storedInsertionRequest.getId());
         InsertionRequest updatedInsertionRequest = getInsertionRequestService().save(insertionRequest);
         log.debug("update saved: {}", updatedInsertionRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updatedInsertionRequest);
     }
 
 

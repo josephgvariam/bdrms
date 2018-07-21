@@ -81,7 +81,7 @@ public class TransferRequestsItemJsonController {
         transferRequest.setId(storedTransferRequest.getId());
         TransferRequest updatedTransferRequest = getTransferRequestService().save(transferRequest);
         log.debug("update saved: {}", updatedTransferRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updatedTransferRequest);
     }
 
 

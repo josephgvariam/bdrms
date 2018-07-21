@@ -1553,7 +1553,7 @@
         handleSave: function(e){
             e.preventDefault();
 
-            if(!this.$('#userAssigned').val().trim()){
+            if(!this.$('#userAssigned').val()){
                 this.showValidationError('userAssigned', 'may not be null');
                 return;
             }
@@ -1584,8 +1584,7 @@
         },
 
         handleSaveError: function(model, response){
-            //console.log('error', response);
-
+            console.log(model, response);
             if(response.responseJSON) {
                 _.each(response.responseJSON.errors, function (val, key) {
                     this.showValidationError(key, val);

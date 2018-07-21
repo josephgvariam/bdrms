@@ -130,6 +130,56 @@
         </div>
     </script>
 
+    <script id="assign-user-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Assign User</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+
+            <form class="form-horizontal validate" autocomplete="off">
+                <fieldset id="containerFields">
+                    <div class="form-group" data-z="2b9dd0a4" id="request-userassigned-field">
+                        <label for="userAssigned" class="col-md-3 control-label">User Assigned</label>
+                        <div class="col-md-6">
+                            <select id="userAssigned" class="form-control dropdown-select-ajax" data-allow-clear="true" data-ajax--url="/users/s2o" data-ajax--cache="true" data-ajax--delay="250" data-ajax--data-type="json" data-placeholder="Select an option" name="userAssigned"></select>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <button id="save-button" type="submit" class="btn btn-primary">Assign</button>
+                        <button id="cancel-button" type="reset" class="btn btn-default" data-th-onclick="'location.href=\'' + @{${collectionLink.to('list')}} + '\''" data-th-text="#{label_reset}">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </script>
+
+    <script id="close-request-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Request Closed</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Request Closed</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <p class="lead">This request is closed!</p>
+                                <button id="cancelButton" type="button" class="btn btn-default">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
 
     <script src="/public/js/underscore.min.js"></script>
     <script src="/public/js/backbone.min.js"></script>
@@ -139,7 +189,7 @@
     <script src="/public/js/sweetalert.min.js"></script>
     <script src="/public/js/webrtc-adapter.min.js"></script>
     <script src="/public/js/quagga.min.js"></script>
-    <script src="/public/js/1448daa5.workflow-refiling.min.js"></script>
+    <script src="/public/js/b2ae8065.workflow-refiling.min.js"></script>
 
 </div>
 

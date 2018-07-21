@@ -81,7 +81,7 @@ public class RetrievalRequestsItemJsonController {
         retrievalRequest.setId(storedRetrievalRequest.getId());
         RetrievalRequest updatedRetrievalRequest = getRetrievalRequestService().save(retrievalRequest);
         log.debug("update saved: {}", updatedRetrievalRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updatedRetrievalRequest);
     }
 
 

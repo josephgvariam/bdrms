@@ -81,7 +81,7 @@ public class DestructionRequestsItemJsonController {
         destructionRequest.setId(storedDestructionRequest.getId());
         DestructionRequest updatedDestructionRequest = getDestructionRequestService().save(destructionRequest);
         log.debug("update saved: {}", updatedDestructionRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updatedDestructionRequest);
     }
 
 

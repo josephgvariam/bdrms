@@ -81,7 +81,7 @@ public class PermoutRequestsItemJsonController {
         permoutRequest.setId(storedPermoutRequest.getId());
         PermoutRequest updatedPermoutRequest = getPermoutRequestService().save(permoutRequest);
         log.debug("update saved: {}", updatedPermoutRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updatedPermoutRequest);
     }
 
 
