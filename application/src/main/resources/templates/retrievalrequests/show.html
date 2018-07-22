@@ -96,7 +96,7 @@
 
 
           <div class="clearfix">
-            <div class="pull-right">
+            <div th:if="${retrievalRequest.status.name() == 'OPEN'}" class="pull-right">
              <a id="RetrievalRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('RetrievalRequestsItemThymeleafController').to('editForm').with('retrievalRequest', retrievalRequest.id)}" data-th-text="#{label_edit}">Edit</a>
             </div>
 

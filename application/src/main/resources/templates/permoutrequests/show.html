@@ -96,7 +96,7 @@
 
 
           <div class="clearfix">
-            <div class="pull-right">
+            <div th:if="${permoutRequest.status.name() == 'OPEN'}" class="pull-right">
              <a id="PermoutRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('PermoutRequestsItemThymeleafController').to('editForm').with('permoutRequest', permoutRequest.id)}" data-th-text="#{label_edit}">Edit</a>
             </div>
 
