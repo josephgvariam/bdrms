@@ -68,23 +68,21 @@
                               <thead>
                               <tr>
                                   <th>Id</th>
-                                  <th>Barcode</th>
-                                  <th>Ref1</th>
-                                  <th>Ref2</th>
-                                  <th>Ref3</th>
-                                  <th>Ref4</th>
-                                  <th>Ref5</th>
+                                  <th>Type</th>
+                                  <th th:if="*{storageType.name == 'DOCUMENT'}">Doc Barcode</th>
+                                  <th th:if="*{storageType.name == 'DOCUMENT' or storageType.name == 'FILE'}">File Barcode</th>
+                                  <th>Box Barcode</th>
+                                  <th sec:authorize="hasRole('OPERATOR')">Shelf Barcode</th>
                               </tr>
                               </thead>
                               <tbody>
                               <tr th:each="item : *{inventoryItems}">
                                   <td th:text="${item?.id}">1</td>
+                                  <td th:text="${item?.type}">type</td>
+                                  <td th:if="*{storageType.name == 'DOCUMENT'}" th:text="${item?.documentBarcode}">barcode</td>
+                                  <td th:if="*{storageType.name == 'DOCUMENT' or storageType.name == 'FILE'}" th:text="${item?.fileBarcode}">barcode</td>
                                   <td th:text="${item?.boxBarcode}">barcode</td>
-                                  <td th:text="${item?.ref1}">Ref</td>
-                                  <td th:text="${item?.ref2}">Ref</td>
-                                  <td th:text="${item?.ref3}">Ref</td>
-                                  <td th:text="${item?.ref4}">Ref</td>
-                                  <td th:text="${item?.ref5}">Ref</td>
+                                  <td sec:authorize="hasRole('OPERATOR')" th:text="${item?.shelfBarcode}">barcode</td>
                               </tr>
                               </tbody>
                           </table>
@@ -96,7 +94,7 @@
 
 
           <div class="clearfix">
-            <div cth:if="${refilingRequest.status.name() == 'OPEN'}" lass="pull-right">
+            <div th:if="${refilingRequest.status.name() == 'OPEN'}" class="pull-right">
              <a id="RefilingRequest_edit" href="edit.html" class="btn btn-primary" data-th-title="#{label_goEdit}" data-th-href="${@linkBuilder.of('RefilingRequestsItemThymeleafController').to('editForm').with('refilingRequest', refilingRequest.id)}" data-th-text="#{label_edit}">Edit</a>
             </div>
 
