@@ -51,6 +51,15 @@
 	                  <li><a href="/facilities" data-th-href="@{/facilities}" data-th-utext="#{label_list_entity(#{label_facility_plural})}">List Facility</a></li>
                  </ul>
                 </li>
+
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown" id="shelf-entry" data-z="fbc69b15">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_shelf})}">Shelf<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                      <li><a href="/shelves/create-form" data-th-href="@{/shelves/create-form}" data-th-utext="#{label_create_entity(#{label_shelf})}">Create Shelf</a></li>
+                      <li><a href="/shelves" data-th-href="@{/shelves}" data-th-utext="#{label_list_entity(#{label_shelf_plural})}">List Shelf</a></li>
+                  </ul>
+                </li>
+
                 <li class="dropdown" id="inventoryitem-entry" data-z="d307a4b6">
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_inventoryitem})}">InventoryItem<span class="caret"></span></a>
                  <ul class="dropdown-menu">
