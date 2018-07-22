@@ -7,7 +7,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - implement history of various entitys. eg: file, file inventory item, etc
 - remove @CreatedDate annotation for Box/File/Doc and set it in form to persist real creation times
 - figure out the cache added by roo
-- retention start and dates on inventory items
+- retention start and end dates on inventory items
 - possibility to add rules/constraints to shelves when storing boxes (eg: only allow 16 boxes per shelf)
 - generic barcode search to give entity details (like when boxes mixed up so find its request number)
 - implicit barcode format (u can tell what kind of barcode it is by just looking at it eg: its a box barcode)
@@ -15,8 +15,11 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - datatables search should not run on each key press,  button maybe or min length?
 - optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched
 
-
-
+- multiple operators work on single request parallely (eg: parallele add of records to pickup)
+- option to choose storage type while doing incoming validation (another feature :- content validation)
+- fix dataTables.checkboxes.js minimized (no column error)
+- filter request list by type, date, status
+- remove unused controller actions (eg: https://localhost:8443/inventoryitems/107/edit-form)
 
 
 
