@@ -1731,7 +1731,7 @@
 
     var VerifyRecordsListView = Marionette.CollectionView.extend({
         tagName: 'ul',
-        className: 'list-group boxlist',
+        className: 'list-group recordlist',
         childView: VerifyRecordsRowView,
         emptyView: EmptyVerifyRecordsRowView,
 
@@ -1916,7 +1916,7 @@
 
     var StoreRecordsListView = Marionette.CollectionView.extend({
         tagName: 'ul',
-        className: 'list-group boxlist',
+        className: 'list-group recordlist',
         childView: StoreRecordsRowView,
         emptyView: EmptyStoreRecordsRowView,
 
