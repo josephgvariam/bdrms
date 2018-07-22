@@ -24,8 +24,8 @@ module.exports = function(grunt) {
         },
         cssmin : {
             target : {
-                src : ['src/main/resources/static/public/css/sweetalert.css'],
-                dest : 'src/main/resources/static/public/css/sweetalert.min.css'
+                src : ['src/main/resources/static/public/css/theme.css'],
+                dest : 'src/main/resources/static/public/css/theme.min.css'
             }
         },
         uglify: {
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
     //grunt.loadNpmTasks('grunt-filerev-replace');
     // see https://martinsonesson.wordpress.com/tag/filerev/
 
-    grunt.registerTask('default', ['jshint']);
+    //grunt.registerTask('default', ['jshint']);
     grunt.registerTask('default', ['jshint', 'uglify', 'rev']);
     //grunt.registerTask('default', ['cssmin']);
 
