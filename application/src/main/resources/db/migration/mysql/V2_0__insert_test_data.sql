@@ -3,6 +3,7 @@ insert into bdrms.bd_facility( id, address, created_by, created_date, modified_b
 insert into bdrms.bd_role ( id, description, name, version ) values (1 , 'user', 'ROLE_USER', 0);
 insert into bdrms.bd_role ( id, description, name, version ) values (2 , 'operator', 'ROLE_OPERATOR', 0);
 insert into bdrms.bd_role ( id, description, name, version ) values (3 , 'administrator', 'ROLE_ADMIN', 0);
+insert into bdrms.bd_role ( id, description, name, version ) values (4 , 'supervisor', 'ROLE_SUPERVISOR', 0);
 insert into bdrms.bd_client( id, address, created_by, created_date, department, modified_by, modified_date, name, version ) values ( 1, 'pune', 'system', current_timestamp, 'na', 'system', current_timestamp, 'Big Dash', 0);
 insert into bdrms.bd_client( id, address, created_by, created_date, department, modified_by, modified_date, name, version ) values ( 2, 'pune', 'system', current_timestamp, 'hr', 'system', current_timestamp, 'Flower Motors', 0);
 insert into bdrms.bd_client( id, address, created_by, created_date, department, modified_by, modified_date, name, version ) values ( 3, 'pune', 'system', current_timestamp, 'finance', 'system', current_timestamp, 'Globe Bank', 0);
