@@ -70,13 +70,13 @@
                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-th-utext="#{label_menu_entry(#{label_request})}">Request<span class="caret"></span></a>
                  <ul class="dropdown-menu">
                      <li><a href="/requests" data-th-href="@{/requests}" data-th-utext="#{label_list_entity(#{label_request_plural})}">List Request</a></li>
-                     <li><a href="/pickuprequests/create-form" data-th-href="@{/pickuprequests/create-form}" data-th-utext="#{label_create_entity(#{label_pickuprequest})}">Create PickupRequest</a></li>
-                     <li><a href="/retrievalrequests/create-form" data-th-href="@{/retrievalrequests/create-form}" data-th-utext="#{label_create_entity(#{label_retrievalrequest})}">Create RetrievalRequest</a></li>
-                     <li><a href="/refilingrequests/create-form" data-th-href="@{/refilingrequests/create-form}" data-th-utext="#{label_create_entity(#{label_refilingrequest})}">Create RefilingRequest</a></li>
+                     <li sec:authorize="!hasRole('ROLE_OPERATOR')"><a href="/pickuprequests/create-form" data-th-href="@{/pickuprequests/create-form}" data-th-utext="#{label_create_entity(#{label_pickuprequest})}">Create PickupRequest</a></li>
+                     <li sec:authorize="!hasRole('ROLE_OPERATOR')"><a href="/retrievalrequests/create-form" data-th-href="@{/retrievalrequests/create-form}" data-th-utext="#{label_create_entity(#{label_retrievalrequest})}">Create RetrievalRequest</a></li>
+                     <li sec:authorize="!hasRole('ROLE_OPERATOR')"><a href="/refilingrequests/create-form" data-th-href="@{/refilingrequests/create-form}" data-th-utext="#{label_create_entity(#{label_refilingrequest})}">Create RefilingRequest</a></li>
                      <li sec:authorize="hasRole('ROLE_OPERATOR')" ><a href="/transferrequests/create-form" data-th-href="@{/transferrequests/create-form}" data-th-utext="#{label_create_entity(#{label_transferrequest})}">Create TransferRequest</a></li>
-                     <li><a href="/permoutrequests/create-form" data-th-href="@{/permoutrequests/create-form}" data-th-utext="#{label_create_entity(#{label_permoutrequest})}">Create PermoutRequest</a></li>
-                     <li><a href="/destructionrequests/create-form" data-th-href="@{/destructionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_destructionrequest})}">Create DestructionRequest</a></li>
-                     <li><a href="/insertionrequests/create-form" data-th-href="@{/insertionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_insertionrequest})}">Create InsertionRequest</a></li>
+                     <li sec:authorize="!hasRole('ROLE_OPERATOR')"><a href="/permoutrequests/create-form" data-th-href="@{/permoutrequests/create-form}" data-th-utext="#{label_create_entity(#{label_permoutrequest})}">Create PermoutRequest</a></li>
+                     <li sec:authorize="!hasRole('ROLE_OPERATOR')"><a href="/destructionrequests/create-form" data-th-href="@{/destructionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_destructionrequest})}">Create DestructionRequest</a></li>
+                     <li sec:authorize="!hasRole('ROLE_OPERATOR')"><a href="/insertionrequests/create-form" data-th-href="@{/insertionrequests/create-form}" data-th-utext="#{label_create_entity(#{label_insertionrequest})}">Create InsertionRequest</a></li>
                  </ul>
                 </li>
                 <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown" id="user-entry" data-z="a49e5768">
