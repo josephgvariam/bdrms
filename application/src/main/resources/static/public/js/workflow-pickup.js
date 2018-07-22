@@ -1788,7 +1788,7 @@
             this.$('#incomingBoxBarcode').val('');
             this.$('#incomingBoxBarcode').focus();
 
-            console.log(e,barcode);
+            //console.log(e,barcode);
 
             if(barcode) {
 
