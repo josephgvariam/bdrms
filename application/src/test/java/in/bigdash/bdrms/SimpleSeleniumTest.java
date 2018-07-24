@@ -202,6 +202,21 @@ public class SimpleSeleniumTest {
         Thread.sleep(1000);
         driver.findElement(By.cssSelector("button.confirm")).click();
         driver.findElement(By.id("Request_workflow")).click();
+
+        driver.findElement(By.id("validatedBoxBarcode")).sendKeys("B1"+id+Keys.ENTER);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("(//input[@type='text'])[2]")).sendKeys("shelf1"+Keys.ENTER);
+
+        driver.findElement(By.id("validatedBoxBarcode")).sendKeys("B2"+id+Keys.ENTER);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("(//input[@type='text'])[2]")).sendKeys("shelf1"+Keys.ENTER);
+
+        driver.findElement(By.id("validatedBoxBarcode")).sendKeys("B3"+id+Keys.ENTER);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("(//input[@type='text'])[2]")).sendKeys("shelf1"+Keys.ENTER);
+
+        Thread.sleep(1000);
+        driver.findElement(By.cssSelector("button.confirm")).click();
     }
 
     private String getId(){
