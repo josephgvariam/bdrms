@@ -2,6 +2,7 @@ package in.bigdash.bdrms;
 
 import java.net.URL;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.*;
@@ -19,7 +20,7 @@ public class SimpleSeleniumTest {
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("webdriver.chrome.driver","/home/joppu/lib/chromedriver");
+        System.setProperty("webdriver.chrome.driver","/Users/joppu/lib/chromedriver");
 
         ChromeOptions chromeOptions = new ChromeOptions();
         //chromeOptions.addArguments("--headless");
@@ -28,6 +29,7 @@ public class SimpleSeleniumTest {
 
 
         driver = new ChromeDriver(chromeOptions);
+        driver.manage().timeouts().implicitlyWait(2000, TimeUnit.MILLISECONDS);
     }
 
     @Test
@@ -190,9 +192,7 @@ public class SimpleSeleniumTest {
         driver.findElement(By.cssSelector("button.confirm")).click();
         driver.findElement(By.id("Request_workflow")).click();
         driver.findElement(By.id("startProcessRequestButton")).click();
-        // ERROR: Caught exception [ERROR: Unsupported command [setText | id=incomingBoxBarcode | B1]]
-        // ERROR: Caught exception [ERROR: Unsupported command [setText | id=incomingBoxBarcode | B2]]
-        // ERROR: Caught exception [ERROR: Unsupported command [setText | id=incomingBoxBarcode | B3]]
+
         Thread.sleep(1000);
         driver.findElement(By.id("incomingBoxBarcode")).sendKeys("B1"+id+Keys.ENTER);
         driver.findElement(By.id("incomingBoxBarcode")).sendKeys("B2"+id+Keys.ENTER);
