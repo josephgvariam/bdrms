@@ -27,3 +27,4 @@ insert into bdrms.bd_client_storage_types( storage_type_id, client_id ) values (
 insert into bdrms.bd_client_storage_types( storage_type_id, client_id ) values (1 , 3);
 insert into bdrms.bd_client_storage_types ( storage_type_id, client_id ) values (2 , 3);
 insert into bdrms.bd_client_storage_types( storage_type_id, client_id ) values (3 , 3);
+insert into bdrms.bd_shelf(id, barcode, status, version, facility_id) values ( 1, 'shelf1', 'ACTIVE', 1, 1);
