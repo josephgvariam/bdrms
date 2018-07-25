@@ -219,6 +219,49 @@ public class SimpleSeleniumTest {
         driver.findElement(By.cssSelector("button.confirm")).click();
     }
 
+    @Test
+    public void newRetrievalRequest() throws Exception {
+        String id="B3A715F";
+
+        driver.get("http://localhost:8080/login");
+        driver.findElement(By.name("username")).sendKeys("user1");
+        driver.findElement(By.name("password")).sendKeys("user1");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.get("http://localhost:8080/retrievalrequests/create-form");
+        driver.findElement(By.id("select2-storagetypesselect2-container")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(2)")).click();
+        driver.findElement(By.id("addRecordsButton")).click();
+
+        Thread.sleep(1000);
+        driver.findElement(By.cssSelector("tr[data-barcode='" + "F2" + id + "']")).click();
+        driver.findElement(By.cssSelector("tr[data-barcode='" + "F4" + id + "']")).click();
+        driver.findElement(By.cssSelector("tr[data-barcode='" + "F6" + id + "']")).click();
+
+        driver.findElement(By.id("okModalButton")).click();
+        Thread.sleep(500);
+        driver.findElement(By.id("saveRequestButton")).click();
+
+        String requestId = getRequestIdFromUrl(driver.findElement(By.id("RetrievalRequest_edit")).getAttribute("href"));
+        driver.get("http://localhost:8080/login");
+        driver.findElement(By.name("username")).sendKeys("operator");
+        driver.findElement(By.name("password")).sendKeys("operator");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.get("http://localhost:8080/requests/" + requestId + "/workflow");
+
+
+        driver.findElement(By.id("select2-userAssigned-container")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.cssSelector("li.select2-results__option:nth-of-type(1)")).click();
+        driver.findElement(By.id("save-button")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.cssSelector("button.confirm")).click();
+        driver.findElement(By.id("Request_workflow")).click();
+        driver.findElement(By.id("startProcessRequestButton")).click();
+        Thread.sleep(50000);
+
+    }
+
     private String getId(){
         //return DigestUtils.sha1Hex(UUID.randomUUID().toString());
         return UUID.randomUUID().toString().replaceAll("-","").substring(0,7).toUpperCase();
