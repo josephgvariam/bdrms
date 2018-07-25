@@ -116,6 +116,21 @@ var bdRequest = (function() {
                     select: {
                         style: 'multi'
                     },
+                    createdRow: function( row, data, dataIndex ) {
+                        var barcode = '';
+                        if(data.type === 'DOCUMENT'){
+                            barcode = data.documentBarcode;
+                        }
+                        else if(data.type === 'FILE'){
+                            barcode = data.fileBarcode;
+                        }
+                        else {
+                            barcode = data.boxBarcode;
+                        }
+
+                        $(row).attr('data-barcode', barcode);
+
+                    },
                 } );
 
                 $('#recordsModal').on('shown.bs.modal', function() {

@@ -179,6 +179,67 @@
         </div>
     </script>
 
+    <script id="retrieve-records-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Retrieve Records</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+            <div>
+                <div id="alert"></div>
+                <div class="row" style="display:flex; align-items:center;">
+                    <div class="col-md-6 form-group">
+                        <input id="recordBarcode" type="text" class="form-control"  placeholder="Record Barcode" autofocus>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress">
+                            <div class="progress-bar recordProgressbar" id="recordsProgressbar">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">Scanned Records</h3>
+                            </div>
+                            <ul id="scannedRecordsRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">System Records</h3>
+                            </div>
+                            <ul id="systemRecordsRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="retrieve-records-row-template" type="text/template">
+        <%= id %><% if (!isSystemRecordsView){ %><i class="fa fa-remove fa-2x pull-right deleteScannedRecord" style="color: red;"></i><%}%>
+        <% if (isSystemRecordsView){ %>
+            <br/>
+            <small><b>Shelf:</b> <%= shelfBarcode %></small>
+
+            <% if(type === 'DOCUMENT'){ %>
+                <small><b>Box:</b> <%= boxBarcode %></small>
+                <small><b>File:</b> <%= fileBarcode %></small>
+            <%} else if(type === 'FILE' || type === 'DOCUMENT'){ %>
+                <small><b>Box:</b> <%= boxBarcode %></small>
+            <%}%>
+        <%}%>
+
+    </script>
+
+
 
 
     <script src="/public/js/underscore.min.js"></script>
@@ -189,7 +250,7 @@
     <script src="/public/js/sweetalert.min.js"></script>
     <script src="/public/js/webrtc-adapter.min.js"></script>
     <script src="/public/js/quagga.min.js"></script>
-    <script src="/public/js/1262ccd3.workflow-retrieval.min.js"></script>
+    <script src="/public/js/workflow-retrieval.js"></script>
 
 </div>
 
