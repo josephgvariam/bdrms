@@ -78,9 +78,20 @@ public class SimpleSeleniumTest {
     }
 
     @Test
-    public void newPickupRequestTillStore() throws Exception {
+    public void newPickupRequest() throws Exception {
         String id = getId();
+        doNewPickupRequest(id);
+    }
 
+    @Test
+    public void newRetrievalRequest() throws Exception {
+        String id = getId();
+        doNewPickupRequest(id);
+        doNewRetrievalRequest(id);
+    }
+
+
+    public void doNewPickupRequest(String id) throws Exception {
         driver.get("http://localhost:8080/login");
         driver.findElement(By.name("username")).sendKeys("user1");
         driver.findElement(By.name("password")).sendKeys("user1");
@@ -219,9 +230,8 @@ public class SimpleSeleniumTest {
         driver.findElement(By.cssSelector("button.confirm")).click();
     }
 
-    @Test
-    public void newRetrievalRequest() throws Exception {
-        String id="B3A715F";
+    public void doNewRetrievalRequest(String id) throws Exception {
+        String[] filePres = {"F1","F2","F3"};
 
         driver.get("http://localhost:8080/login");
         driver.findElement(By.name("username")).sendKeys("user1");
@@ -234,9 +244,14 @@ public class SimpleSeleniumTest {
         driver.findElement(By.id("addRecordsButton")).click();
 
         Thread.sleep(1000);
-        driver.findElement(By.cssSelector("tr[data-barcode='" + "F2" + id + "']")).click();
-        driver.findElement(By.cssSelector("tr[data-barcode='" + "F4" + id + "']")).click();
-        driver.findElement(By.cssSelector("tr[data-barcode='" + "F6" + id + "']")).click();
+        driver.findElement(By.xpath("//input[@type='search']")).clear();
+        driver.findElement(By.xpath("//input[@type='search']")).sendKeys(id);
+        Thread.sleep(1000);
+
+        for(String filePre : filePres){
+            driver.findElement(By.cssSelector("tr[data-barcode='" + filePre + id + "']")).click();
+            Thread.sleep(250);
+        }
 
         driver.findElement(By.id("okModalButton")).click();
         Thread.sleep(500);
@@ -258,7 +273,16 @@ public class SimpleSeleniumTest {
         driver.findElement(By.cssSelector("button.confirm")).click();
         driver.findElement(By.id("Request_workflow")).click();
         driver.findElement(By.id("startProcessRequestButton")).click();
-        Thread.sleep(50000);
+
+
+        for(String filePre : filePres){
+            driver.findElement(By.id("recordBarcode")).sendKeys(filePre + id + Keys.ENTER);
+            Thread.sleep(500);
+        }
+
+        driver.findElement(By.cssSelector("button.confirm")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.cssSelector("button.confirm")).click();
 
     }
 
