@@ -2,12 +2,14 @@ package in.bigdash.rms.repository.inventory;
 import com.querydsl.core.BooleanBuilder;
 import in.bigdash.rms.model.*;
 import in.bigdash.rms.model.inventory.*;
+import in.bigdash.rms.model.request.RequestStatus;
 import io.springlets.data.jpa.repository.support.QueryDslRepositorySupportExt;
 import com.querydsl.core.types.Path;
 import com.querydsl.jpa.JPQLQuery;
 import in.bigdash.rms.model.request.Request;
 import io.springlets.data.domain.GlobalSearch;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -109,6 +111,9 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
         query.where(inventoryItem.userCreated.client.eq(currentUser.getClient()));
         query.where(inventoryItem.type.eq(storageType));
         query.where(inventoryItem.status.eq(InventoryItemStatus.STORED));
+
+        List<RequestStatus> inactiveRequestStatus = Arrays.asList(RequestStatus.CLOSED, RequestStatus.CANCELLED);
+        query.where(inventoryItem.requests.any().status.in(inactiveRequestStatus));
 
         applyOrderById(query);
 

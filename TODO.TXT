@@ -21,7 +21,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - filter request list by type, date, status
 - remove unused controller actions (eg: https://localhost:8443/inventoryitems/107/edit-form)
 
-- cannot choose same inventory item if already part of another active request
+
 
 
 
@@ -37,3 +37,4 @@ DONE
 - fix verify barcode
 - automated tests
 - figure out this datatables search and the indexing of all fields. but box barcode search of inventory dont happen?
+- cannot choose same inventory item if already part of another active request (can only choose inventory items of inactive requests)
