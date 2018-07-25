@@ -21,7 +21,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - filter request list by type, date, status
 - remove unused controller actions (eg: https://localhost:8443/inventoryitems/107/edit-form)
 
-
+- Notifications
 
 
 
