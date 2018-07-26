@@ -211,6 +211,12 @@
     var RetrieveRecordsView = Marionette.View.extend({
         template: '#retrieve-records-template',
 
+        templateContext: function(){
+            return {
+                title: this.options.title
+            };
+        },
+
         events: {
             'change #recordBarcode' : 'addScanned',
             'blur #recordBarcode': 'focusBack'
@@ -285,12 +291,14 @@
         },
 
         updateRequest: function(){
-            _.each(this.model.get('inventoryItems'), function(inventoryItem) {
-                inventoryItem.status = 'FETCHED';
-            });
+            if(this.options.inventoryItemNextStatus) {
+                _.each(this.model.get('inventoryItems'), function (inventoryItem) {
+                    inventoryItem.status = this.options.inventoryItemNextStatus;
+                }, this);
+            }
 
             this.model.save({
-                status: 'FETCHED'
+                status: this.options.requestNextStatus
             }, {
                 wait: true,
                 success: this.handleSaveSuccess,
@@ -427,6 +435,76 @@
 
     });
 
+    var AssignRetrievalDeskUserView = Marionette.View.extend({
+        template: '#assign-retrievaldesk-user-template',
+
+        initialize: function(){
+            _.bindAll(this, "handleSaveSuccess", "handleSaveError");
+        },
+
+        events: {
+            'click #save-button': 'handleSave'
+        },
+
+        onRender: function(){
+            this.$('.dropdown-select-ajax').select2({debug : false, theme : 'bootstrap', allowClear : true});
+        },
+
+        handleSave: function(e){
+            e.preventDefault();
+
+            if(!this.$('#userAssigned').val()){
+                this.showValidationError('userAssigned', 'may not be null');
+                return;
+            }
+
+            this.model.save({
+                    userAssigned: {id: this.$('#userAssigned').val().trim()},
+                    status: 'ASSIGNED_RETRIEVAL_DESK'
+                },
+                {
+                    wait: true,
+                    success: this.handleSaveSuccess,
+                    error: this.handleSaveError
+                });
+
+        },
+
+        handleSaveSuccess: function(model, response)
+        {
+            swal({
+                title: 'Request Updated!',
+                text: 'User has been assigned successfully.',
+                type: 'success'
+
+            },function(){
+                window.location.href='/requests/' + response.id;
+            });
+        },
+
+        handleSaveError: function(model, response){
+            console.log(model, response);
+            if(response.responseJSON) {
+                _.each(response.responseJSON.errors, function (val, key) {
+                    this.showValidationError(key, val);
+                });
+            }
+        },
+
+        clearValidationErrors: function(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showValidationError: function (key, val) {
+            var $key = this.$('#'+key);
+            $key.closest('.form-group').addClass('has-error has-feedback');
+            $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
+        }
+
+    });
+
+
 
     var CloseRequestView = Marionette.View.extend({
         template: '#close-request-template',
@@ -461,16 +539,20 @@
         },
 
         showVerifyRecordsView: function (request) {
-            this.showChildView('main', new RetrieveRecordsView({model: request, rootView: this}));
+            this.showChildView('main', new RetrieveRecordsView({model: request, rootView: this, inventoryItemNextStatus: 'FETCHED', requestNextStatus: 'FETCHED', title: 'Retrieve Records'}));
         },
 
         showUpdateLocationView: function (request) {
             this.showChildView('main', new UpdateLocationView({model: request, rootView: this}));
         },
 
-        dummyFun: function(){
-            window.location.href='/requests/';
-        }
+        showAssignRetrievalDeskUserView: function (request) {
+            this.showChildView('main', new AssignRetrievalDeskUserView({model: request, rootView: this}));
+        },
+
+        showRetrievalDeskVerifyRecordsView: function (request) {
+            this.showChildView('main', new RetrieveRecordsView({model: request, rootView: this, inventoryItemNextStatus: null, requestNextStatus: 'ASSIGNED_LOGISTICS_DESK', title: 'Validate Records'}));
+        },
 
     });
 
@@ -501,6 +583,13 @@
                 else if (status === 'FETCHED' ){
                     rootView.showUpdateLocationView(request);
                 }
+                else if (status === 'PACKED' ){
+                    rootView.showAssignRetrievalDeskUserView(request);
+                }
+                else if (status === 'ASSIGNED_RETRIEVAL_DESK' ){
+                    rootView.showRetrievalDeskVerifyRecordsView(request);
+                }
+
                 else if (status === 'CLOSED' ){
                     rootView.showCloseRequestView(request);
                 }

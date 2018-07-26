@@ -65,9 +65,9 @@ public class UserRepositoryImpl extends QueryDslRepositorySupportExt<User> imple
     public Page<User> findAll(GlobalSearch globalSearch, Pageable pageable) {
         QUser user = QUser.user;
         JPQLQuery<User> query = from(user);
-        Path<?>[] paths = new Path<?>[] { user.username, user.password, user.name, user.phone, user.email, user.employeeNumber, user.locked, user.client, user.createdDate, user.createdBy, user.modifiedDate, user.modifiedBy };
+        Path<?>[] paths = new Path<?>[] { user.username, user.name };
         applyGlobalSearch(globalSearch, query, paths);
-        AttributeMappingBuilder mapping = buildMapper().map(USERNAME, user.username).map(PASSWORD, user.password).map(NAME, user.name).map(PHONE, user.phone).map(EMAIL, user.email).map(EMPLOYEE_NUMBER, user.employeeNumber).map(LOCKED, user.locked).map(CLIENT, user.client).map(CREATED_DATE, user.createdDate).map(CREATED_BY, user.createdBy).map(MODIFIED_DATE, user.modifiedDate).map(MODIFIED_BY, user.modifiedBy);
+        AttributeMappingBuilder mapping = buildMapper().map(USERNAME, user.username);
         applyPagination(pageable, query, mapping);
         applyOrderById(query);
         return loadPage(query, pageable, user);
@@ -89,13 +89,13 @@ public class UserRepositoryImpl extends QueryDslRepositorySupportExt<User> imple
     public Page<User> findAllOperators(GlobalSearch globalSearch, Pageable pageable) {
         QUser user = QUser.user;
         JPQLQuery<User> query = from(user);
-        Path<?>[] paths = new Path<?>[] { user.username, user.password, user.name, user.phone, user.email, user.employeeNumber, user.locked, user.client, user.createdDate, user.createdBy, user.modifiedDate, user.modifiedBy };
+        Path<?>[] paths = new Path<?>[] { user.username, user.name };
         applyGlobalSearch(globalSearch, query, paths);
 
 
         query.where(user.roles.any().name.eq("ROLE_OPERATOR"));
 
-        AttributeMappingBuilder mapping = buildMapper().map(USERNAME, user.username).map(PASSWORD, user.password).map(NAME, user.name).map(PHONE, user.phone).map(EMAIL, user.email).map(EMPLOYEE_NUMBER, user.employeeNumber).map(LOCKED, user.locked).map(CLIENT, user.client).map(CREATED_DATE, user.createdDate).map(CREATED_BY, user.createdBy).map(MODIFIED_DATE, user.modifiedDate).map(MODIFIED_BY, user.modifiedBy);
+        AttributeMappingBuilder mapping = buildMapper().map(USERNAME, user.username);
         applyPagination(pageable, query, mapping);
         applyOrderById(query);
         return loadPage(query, pageable, user);

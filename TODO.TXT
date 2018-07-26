@@ -18,8 +18,12 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - multiple operators work on single request parallely (eg: parallele add of records to pickup)
 - option to choose storage type while doing incoming validation (another feature :- content validation)
 - fix dataTables.checkboxes.js minimized (no column error)
-- filter request list by type, date, status
+- filter request list by type, date, status (also "assigned to me")
 - remove unused controller actions (eg: https://localhost:8443/inventoryitems/107/edit-form)
+
+- fix select2 searchs for eg: assign user (prob is query text not used so replace global text by query param)
+- review placeholder texts eg: assign user placeholder is "select an option"
+
 
 - Notifications
 
