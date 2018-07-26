@@ -72,7 +72,8 @@
                                   <th th:if="*{storageType.name == 'DOCUMENT'}">Doc Barcode</th>
                                   <th th:if="*{storageType.name == 'DOCUMENT' or storageType.name == 'FILE'}">File Barcode</th>
                                   <th>Box Barcode</th>
-                                  <th sec:authorize="hasRole('OPERATOR')">Shelf Barcode</th>
+                                  <th sec:authorize="hasRole('OPERATOR')">Location</th>
+                                  <th sec:authorize="hasRole('OPERATOR')">Status</th>
                               </tr>
                               </thead>
                               <tbody>
@@ -82,7 +83,8 @@
                                   <td th:if="*{storageType.name == 'DOCUMENT'}" th:text="${item?.documentBarcode}">barcode</td>
                                   <td th:if="*{storageType.name == 'DOCUMENT' or storageType.name == 'FILE'}" th:text="${item?.fileBarcode}">barcode</td>
                                   <td th:text="${item?.boxBarcode}">barcode</td>
-                                  <td sec:authorize="hasRole('OPERATOR')" th:text="${item?.shelfBarcode}">barcode</td>
+                                  <td sec:authorize="hasRole('OPERATOR')" th:text="${item?.location}">location</td>
+                                  <td sec:authorize="hasRole('OPERATOR')" th:text="${item?.status}">status</td>
                               </tr>
                               </tbody>
                           </table>
