@@ -144,7 +144,14 @@
 
         start: function(e){
             e.preventDefault();
-            this.model.save({'status': this.options.nextStatus}, {wait: true, success: this.handleSaveSuccess, error: this.handleSaveError});
+
+            if(this.options.inventoryItemNextStatus) {
+                _.each(this.model.get('inventoryItems'), function (inventoryItem) {
+                    inventoryItem.status = this.options.inventoryItemNextStatus;
+                }, this);
+            }
+
+            this.model.save({'status': this.options.requestNextStatus}, {wait: true, success: this.handleSaveSuccess, error: this.handleSaveError});
         },
 
         cancel: function(e){
@@ -442,6 +449,68 @@
 
     });
 
+    var DeliverySignoffView = Marionette.View.extend({
+        template: '#delivery-signoff-template',
+
+        initialize: function(){
+            _.bindAll(this, "handleSaveSuccess", "handleSaveError");
+        },
+
+        events: {
+            'click #save-button': 'handleSave'
+        },
+
+        handleSave: function(e){
+            e.preventDefault();
+
+            if(!this.$('#clientOtp').val()){
+                this.showValidationError('clientOtp', 'may not be empty');
+                return;
+            }
+
+            _.each(this.model.get('inventoryItems'), function (inventoryItem) {
+                inventoryItem.status = 'ATCLIENT';
+            }, this);
+
+            this.model.save({
+                    status: 'DELIVERED'
+                },
+                {
+                    wait: true,
+                    success: this.handleSaveSuccess,
+                    error: this.handleSaveError
+                });
+        },
+
+        handleSaveSuccess: function(data, status, jqXHR)
+        {
+            swal({
+                title: 'Request Updated!',
+                text: 'Request been updated successfully.',
+                type: 'success'
+
+            },function(){
+                window.location.href='/requests/' + data.id;
+            });
+        },
+
+        handleSaveError: function(jqXHR, status, errorMsg){
+            console.log(jqXHR, status, errorMsg);
+        },
+
+        clearValidationErrors: function(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showValidationError: function (key, val) {
+            var $key = this.$('#'+key);
+            $key.closest('.form-group').addClass('has-error has-feedback');
+            $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
+        }
+
+    });
+
 
     var CloseRequestView = Marionette.View.extend({
         template: '#close-request-template',
@@ -467,12 +536,8 @@
             this.showChildView('main', new AssignUserView({model: request, rootView: this, title: 'Assign User', label: 'User', requestNextStatus: 'ASSIGNED'}));
         },
 
-        showBeforeProcessRequestView: function(request, title, msg, nextStatus, nextViewFunction, navText){
-            this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, nextStatus: nextStatus, nextViewFunction: nextViewFunction, navText: navText}));
-        },
-
-        showCloseRequestView: function (request) {
-            this.showChildView('main', new CloseRequestView({model: request, rootView: this}));
+        showBeforeProcessRequestView: function(request, title, msg, requestNextStatus, inventoryItemNextStatus, nextViewFunction, navText){
+            this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, requestNextStatus: requestNextStatus, inventoryItemNextStatus: inventoryItemNextStatus, nextViewFunction: nextViewFunction, navText: navText}));
         },
 
         showVerifyRecordsView: function (request) {
@@ -495,6 +560,13 @@
             this.showChildView('main', new AssignUserView({model: request, rootView: this, title: 'Assign Delivery User', label: 'Delivery User', requestNextStatus: 'ASSIGNED_DELIVERY'}));
         },
 
+        showDeliverySignoffView: function (request) {
+            this.showChildView('main', new DeliverySignoffView({model: request, rootView: this}));
+        },
+
+        showCloseRequestView: function (request) {
+            this.showChildView('main', new CloseRequestView({model: request, rootView: this}));
+        },
     });
 
 
@@ -516,7 +588,7 @@
                     rootView.showAssignUserView(request);
                 }
                 else if (status === 'ASSIGNED') {
-                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'INPROGRESS', rootView.showVerifyRecordsView, 'verifyRecords');
+                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'INPROGRESS', null,  rootView.showVerifyRecordsView, 'verifyRecords');
                 }
                 else if (status === 'INPROGRESS') {
                     rootView.showVerifyRecordsView(request);
@@ -532,6 +604,15 @@
                 }
                 else if (status === 'ASSIGNED_LOGISTICS_DESK' ){
                     rootView.showAssignDeliveryUserView(request);
+                }
+                else if (status === 'ASSIGNED_DELIVERY' ){
+                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'TRANSIT', 'TRANSIT',  rootView.showDeliverySignoffView, 'deliverySignoff');
+                }
+                else if (status === 'TRANSIT' ){
+                    rootView.showDeliverySignoffView(request);
+                }
+                else if (status === 'DELIVERED' ){
+                    rootView.showBeforeProcessRequestView(request, 'Close Request', 'Proceed with closing this request?', 'CLOSED', null, rootView.showCloseRequestView, '');
                 }
                 else if (status === 'CLOSED' ){
                     rootView.showCloseRequestView(request);

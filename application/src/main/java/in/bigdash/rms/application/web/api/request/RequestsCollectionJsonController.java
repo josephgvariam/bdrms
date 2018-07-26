@@ -1,9 +1,6 @@
 package in.bigdash.rms.application.web.api.request;
 import in.bigdash.rms.model.StorageType;
-import in.bigdash.rms.model.inventory.BoxInventoryItem;
-import in.bigdash.rms.model.inventory.DocumentInventoryItem;
-import in.bigdash.rms.model.inventory.FileInventoryItem;
-import in.bigdash.rms.model.inventory.InventoryItem;
+import in.bigdash.rms.model.inventory.*;
 import in.bigdash.rms.model.request.Request;
 
 import in.bigdash.rms.model.request.RequestStatus;
@@ -73,6 +70,7 @@ public class RequestsCollectionJsonController {
 
         for (InventoryItem inventoryItem : request.getInventoryItems()){
             inventoryItem.setLocation(locationBarcode);
+            inventoryItem.setStatus(InventoryItemStatus.PACKED);
         }
 
         request.setStatus(RequestStatus.PACKED);
