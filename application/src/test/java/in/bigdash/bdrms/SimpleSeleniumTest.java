@@ -228,6 +228,9 @@ public class SimpleSeleniumTest {
 
         Thread.sleep(1000);
         driver.findElement(By.cssSelector("button.confirm")).click();
+
+        driver.findElement(By.id("Request_workflow")).click();
+        driver.findElement(By.id("startProcessRequestButton")).click();
     }
 
     public void doNewRetrievalRequest(String id) throws Exception {
