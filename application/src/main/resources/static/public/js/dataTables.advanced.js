@@ -1114,6 +1114,32 @@
         };
     }
 
+    function filterColumns(columns){
+        columns.every(function () {
+            var column = this;
+
+            var select = $('<select><option value=""></option></select>')
+                .appendTo($(column.footer()).empty())
+                .on('change', function () {
+                    var val = $(this).val();
+
+                    column
+                        .search(val, true, false)
+                        .draw();
+                });
+
+            column.data().unique().sort().each(function (d, j) {
+                if(d) {
+                    if (column.search() === d) {
+                        select.append('<option value="' + d + '" selected="selected">' + d + '</option>')
+                    } else {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    }
+                }
+            });
+        });
+    }
+
     /**
      * This function will be called when DataTables has been fully
      * initialised and data loaded.
@@ -1125,29 +1151,16 @@
         // Register checkboxes
         registerCheckBoxesEvents(datatables);
 
-        if(oSettings.sTableId && oSettings.sTableId === 'request-entity-table') {
-            this.api().columns([1, 2, 3, 5, 6]).every(function () {
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.footer()).empty())
-                    .on('change', function () {
-                        var val = $(this).val();
-
-                        column
-                            .search(val, true, false)
-                            .draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    if(d) {
-                        if (column.search() === d) {
-                            select.append('<option value="' + d + '" selected="selected">' + d + '</option>')
-                        } else {
-                            select.append('<option value="' + d + '">' + d + '</option>')
-                        }
-                    }
-                });
+        if(oSettings.sTableId === 'request-entity-table') {
+            var columnNames = ['Type', 'Status', 'Client', 'Created By', 'Assigned To'];
+            var columnNums = [];
+            this.api().columns().every(function (i) {
+                var columnName = this.header().innerHTML;
+                if(columnNames.indexOf(columnName) > -1){
+                    columnNums.push(i);
+                }
             });
+            filterColumns(this.api().columns(columnNums));
         }
     }
 

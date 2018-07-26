@@ -12,25 +12,18 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - generic barcode search to give entity details (like when boxes mixed up so find its request number)
 - implicit barcode format (u can tell what kind of barcode it is by just looking at it eg: its a box barcode)
 - add db indexes for datatables searches. For eg: search in inventoryItems databale list: index for inventory barcodes (box, file, doc, shelf) and refs (inventory items)
-- datatables search should not run on each key press,  button maybe or min length?
+- datatables search should not run on each key press,  button maybe or min length or a time delay?
 - optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched
 
 - multiple operators work on single request parallely (eg: parallele add of records to pickup)
 - option to choose storage type while doing incoming validation (another feature :- content validation)
 - fix dataTables.checkboxes.js minimized (no column error)
-- filter request list by type, date, status (also "assigned to me")
 - remove unused controller actions (eg: https://localhost:8443/inventoryitems/107/edit-form)
-
 - fix select2 searchs for eg: assign user (prob is query text not used so replace global text by query param)
 - review placeholder texts eg: assign user placeholder is "select an option"
-
-- disable pagination state of datatables
 - review all list columns, ordering, searchable, etc
 
 - Notifications
-
-
-
 
 
 
@@ -44,3 +37,5 @@ DONE
 - automated tests
 - figure out this datatables search and the indexing of all fields. but box barcode search of inventory dont happen?
 - cannot choose same inventory item if already part of another active request (can only choose inventory items of inactive requests)
+- filter request list by type, date, status (also "assigned to me")
+- disable pagination/search state of datatables
