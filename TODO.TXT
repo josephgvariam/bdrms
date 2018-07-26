@@ -25,6 +25,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - review placeholder texts eg: assign user placeholder is "select an option"
 
 - disable pagination state of datatables
+- review all list columns, ordering, searchable, etc
 
 - Notifications
 

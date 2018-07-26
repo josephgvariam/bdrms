@@ -31,14 +31,15 @@
                 <caption class="sr-only" data-th-text="#{label_list_entity(#{label_request_plural})}">Request List</caption>
                 <thead>
                   <tr>
-                    <th data-data="id" data-orderable="false" data-searchable="false">ID</th>
-                    <th data-data="type" data-orderable="false" data-searchable="false">Type</th>
-                    <th data-data="status" data-orderable="false" data-searchable="false">Status</th>
-                    <th data-data="client" data-orderable="false" >Client</th>
-                    <th data-data="department" data-orderable="false" data-searchable="false">Department</th>
+                    <th data-data="id" data-orderable="true" data-searchable="false">ID</th>
+                    <th data-data="type" data-orderable="false" data-searchable="false" data-name="type">Type</th>
+                    <th data-data="status" data-orderable="false" data-searchable="false" data-name="status">Status</th>
+                    <th data-data="client" data-orderable="false" data-searchable="false" data-name="client">Client</th>
                     <th data-data="storageType" data-orderable="false" data-searchable="false">Storage Type</th>
-                    <th data-data="userCreated" data-orderable="false" >Created By</th>
-                    <th data-data="userAssigned" data-orderable="false" >Assigned To</th>
+                    <th data-data="userCreated" data-orderable="false" data-searchable="false" data-name="createdBy">Created By</th>
+                    <th data-data="userAssigned" data-orderable="false" data-searchable="false" data-name="userAssigned">Assigned To</th>
+                    <th data-data="createdDate" data-orderable="true" data-searchable="false">Created Date</th>
+                    <th data-data="modifiedDate" data-orderable="true" data-searchable="false">Modified Date</th>
                     <th data-data="id" data-orderable="false" data-searchable="false" class="dttools" data-th-text="#{label_tools}">Tools</th>
                   </tr>
                 </thead>
@@ -48,13 +49,28 @@
                     <td>type</td>
                     <td>status</td>
                     <td>client</td>
-                    <td>department</td>
                     <td>storageType</td>
                     <td>userCreated</td>
                     <td>userAssigned</td>
+                    <td>createdDate</td>
+                    <td>modifiedDate</td>
                     <td data-th-text="#{label_tools}">Tools</td>
                   </tr>
                 </tbody>
+                <tfoot style="display: table-header-group;">
+                  <tr>
+                    <th></th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Client</th>
+                    <th></th>
+                    <th>Created By</th>
+                    <th>Assigned To</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
               </table>
                 <!-- content replaced by modal-confirm fragment of modal-confirm.html -->
                 <div data-th-replace="~{fragments/modal-confirm-delete :: modalConfirmDelete(tableId='request-entity-table',

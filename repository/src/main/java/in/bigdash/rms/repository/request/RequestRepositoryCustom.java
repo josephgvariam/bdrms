@@ -4,6 +4,8 @@ import in.bigdash.rms.model.StorageType;
 import in.bigdash.rms.model.User;
 import io.springlets.data.domain.GlobalSearch;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,6 +23,7 @@ public interface RequestRepositoryCustom {
 
 
     public abstract Page<Request> findAll(GlobalSearch globalSearch, Pageable pageable);
+    public abstract Page<Request> findAll(Map<String, String> filter, Pageable pageable);
 
 
     public abstract Page<Request> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable);

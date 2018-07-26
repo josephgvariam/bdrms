@@ -23,11 +23,7 @@ import io.springlets.data.web.validation.GenericValidator;
 import io.springlets.web.mvc.util.ControllerMethodLinkBuilderFactory;
 import io.springlets.web.mvc.util.MethodLinkBuilderFactory;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -157,9 +153,24 @@ public class RequestsCollectionThymeleafController {
     @ResponseBody
     public ResponseEntity<ConvertedDatatablesData<Request>> datatables(DatatablesColumns datatablesColumns, GlobalSearch search, DatatablesPageable pageable, @RequestParam("draw") Integer draw) {
         log.debug("datatables");
-        Page<Request> requests = getRequestService().findAll(search, pageable);
+
+        Map<String, String> filter = new HashMap<>();
+        for(DatatablesColumns.Column column : datatablesColumns.getColumns()){
+            if(StringUtils.isNotBlank(column.getSearch())){
+                filter.put(column.getName(), column.getSearch());
+            }
+        }
+
+        Page<Request> requests;
+        if(filter.size() != 0){
+            requests = getRequestService().findAll(filter, pageable);
+        }else{
+            requests = getRequestService().findAll(search, pageable);
+        }
+
+
         long totalRequestsCount = requests.getTotalElements();
-        if (search != null && StringUtils.isNotBlank(search.getText())) {
+        if ((search != null && StringUtils.isNotBlank(search.getText())) || filter.size() != 0) {
             totalRequestsCount = getRequestService().count();
         }
         ConvertedDatatablesData<Request> datatablesData = new ConvertedDatatablesData<Request>(requests, totalRequestsCount, draw, getConversionService(), datatablesColumns);

@@ -178,6 +178,10 @@ public class RequestServiceImpl implements RequestService {
         return getRequestRepository().findAll(globalSearch, pageable);
     }
 
+    public Page<Request> findAll(Map<String, String> filter, Pageable pageable){
+        return getRequestRepository().findAll(filter, pageable);
+    }
+
 
     public Page<Request> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable) {
         return getRequestRepository().findAllByIdsIn(ids, globalSearch, pageable);

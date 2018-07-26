@@ -1124,6 +1124,31 @@
         saveSelectedRowToState(datatables, oSettings, json);
         // Register checkboxes
         registerCheckBoxesEvents(datatables);
+
+        if(oSettings.sTableId && oSettings.sTableId === 'request-entity-table') {
+            this.api().columns([1, 2, 3, 5, 6]).every(function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function () {
+                        var val = $(this).val();
+
+                        column
+                            .search(val, true, false)
+                            .draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    if(d) {
+                        if (column.search() === d) {
+                            select.append('<option value="' + d + '" selected="selected">' + d + '</option>')
+                        } else {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        }
+                    }
+                });
+            });
+        }
     }
 
     /**
@@ -1160,6 +1185,14 @@
      * @param data DataTable object data
      */
     function loadFromState(settings, data) {
+        //dont load saved state for pagination and search
+        data.search.search = "";
+        data.start = 0;
+
+        for (var i = 0; i < data.columns.length; i++) {
+            data.columns[i].search.search = "";
+        }
+
         var datatables = this.DataTable();
         loadSelectedRowFromState(datatables, data);
     }

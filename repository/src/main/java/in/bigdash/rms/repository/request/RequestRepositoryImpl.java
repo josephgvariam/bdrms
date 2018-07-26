@@ -1,4 +1,8 @@
 package in.bigdash.rms.repository.request;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.StringPath;
 import in.bigdash.rms.model.QUser;
 import in.bigdash.rms.model.Role;
 import io.springlets.data.jpa.repository.support.QueryDslRepositorySupportExt;
@@ -10,7 +14,10 @@ import in.bigdash.rms.model.User;
 import in.bigdash.rms.model.request.QRequest;
 import io.springlets.data.domain.GlobalSearch;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -68,6 +75,58 @@ public class RequestRepositoryImpl extends QueryDslRepositorySupportExt<Request>
 
         Path<?>[] paths = new Path<?>[] { request.userAssigned.name, request.userCreated.name, request.userCreated.client.name,  request.notes     };
         applyGlobalSearch(globalSearch, query, paths);
+        AttributeMappingBuilder mapping = buildMapper().map("id", request.id);
+        applyPagination(pageable, query, mapping);
+        applyOrderById(query);
+        return loadPage(query, pageable, request);
+    }
+
+    public Page<Request> findAll(Map<String, String> filter, Pageable pageable) {
+        QRequest request = QRequest.request;
+        JPQLQuery<Request> query = from(request);
+
+        User currentUser = getCurrentUser();
+        if(!userHasRole(currentUser, "ROLE_OPERATOR")) {
+            query.where(request.userCreated.client.eq(currentUser.getClient()));
+        }
+
+        Map<String, Path> paths = new HashMap();
+        paths.put("type", request.type);
+        paths.put("status", request.status);
+        paths.put("createdBy", request.createdBy);
+        paths.put("userAssigned", request.userAssigned.username);
+
+
+        BooleanBuilder searchCondition = new BooleanBuilder();
+
+        for (Map.Entry<String, String> entry : filter.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue();
+
+            if(key.equals("client")){
+                String[] strs = val.split("-");
+                if(strs.length == 2) {
+                    String client = strs[0].trim();
+                    String dept = strs[1].trim();
+
+                    searchCondition.and(request.userCreated.client.name.eq(client));
+                    searchCondition.and(request.userCreated.client.department.eq(dept));
+                }
+            }
+            else {
+                Path path = paths.get(key);
+                if (path instanceof StringPath) {
+                    StringPath stringPath = (StringPath) path;
+                    searchCondition.and(stringPath.eq(val));
+                } else if (path instanceof EnumPath) {
+                    EnumPath enumPath = (EnumPath) path;
+                    searchCondition.and(enumPath.stringValue().eq(val));
+                }
+            }
+        }
+
+        query.where(searchCondition);
+
         AttributeMappingBuilder mapping = buildMapper().map("id", request.id);
         applyPagination(pageable, query, mapping);
         applyOrderById(query);
