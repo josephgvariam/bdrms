@@ -226,6 +226,10 @@ public class InventoryItem {
         return null;
     }
 
+    public void setLocation(String location){
+        //noop
+    }
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

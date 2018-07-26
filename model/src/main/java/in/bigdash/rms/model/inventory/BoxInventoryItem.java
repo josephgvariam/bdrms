@@ -44,4 +44,11 @@ public class BoxInventoryItem extends InventoryItem {
     public String getLocation() {
         return box != null ? box.getLocation() : null;
     }
+
+    @Override
+    public void setLocation(String location) {
+        if (box != null) {
+            box.setLocation(location);
+        }
+    }
 }

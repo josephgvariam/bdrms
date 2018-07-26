@@ -62,4 +62,11 @@ public class DocumentInventoryItem extends InventoryItem {
     public String getLocation() {
         return document != null ? document.getLocation() : null;
     }
+
+    @Override
+    public void setLocation(String location) {
+        if (document != null) {
+            document.setLocation(location);
+        }
+    }
 }

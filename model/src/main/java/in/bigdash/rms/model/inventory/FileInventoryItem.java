@@ -49,4 +49,11 @@ public class FileInventoryItem extends InventoryItem {
     public String getLocation() {
         return file != null ? file.getLocation() : null;
     }
+
+    @Override
+    public void setLocation(String location) {
+        if (file != null) {
+            file.setLocation(location);
+        }
+    }
 }

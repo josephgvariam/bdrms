@@ -1,6 +1,12 @@
 package in.bigdash.rms.application.web.api.request;
+import in.bigdash.rms.model.StorageType;
+import in.bigdash.rms.model.inventory.BoxInventoryItem;
+import in.bigdash.rms.model.inventory.DocumentInventoryItem;
+import in.bigdash.rms.model.inventory.FileInventoryItem;
+import in.bigdash.rms.model.inventory.InventoryItem;
 import in.bigdash.rms.model.request.Request;
 
+import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.service.api.RequestService;
 import io.springlets.data.domain.GlobalSearch;
 
@@ -17,14 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
@@ -66,6 +65,22 @@ public class RequestsCollectionJsonController {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(RequestsCollectionJsonController.class).list(null, null)).build().encode();
     }
 
+    @PostMapping(value = "/updateLocation", name = "updateLocation")
+    public ResponseEntity<?> updateLocation(@RequestParam("requestId") Long requestId, @RequestParam("locationBarcode") String locationBarcode) {
+        log.debug("updateLocation: requestId={}, locationBarcode={}", requestId, locationBarcode);
+
+        Request request = requestService.findOne(requestId);
+
+        for (InventoryItem inventoryItem : request.getInventoryItems()){
+            inventoryItem.setLocation(locationBarcode);
+        }
+
+        request.setStatus(RequestStatus.PACKED);
+
+        getRequestService().save(request);
+
+        return ResponseEntity.ok(request);
+    }
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@Valid @RequestBody Request request, BindingResult result) {

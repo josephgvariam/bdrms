@@ -367,6 +367,66 @@
         }
     });
 
+    var UpdateLocationView = Marionette.View.extend({
+        template: '#update-location-template',
+
+        events: {
+            'click #save-button': 'handleSave'
+        },
+
+
+        handleSave: function(e){
+            e.preventDefault();
+
+            if(!this.$('#locationBarcode').val()){
+                this.showValidationError('locationBarcode', 'may not be empty');
+                return;
+            }
+
+            var data = {
+                requestId: this.model.get('id'),
+                locationBarcode: this.$('#locationBarcode').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/requests/updateLocation',
+                data: data,
+                success: this.handleSaveSuccess,
+                error: this.handleSaveError
+            });
+
+        },
+
+        handleSaveSuccess: function(data, status, jqXHR)
+        {
+            swal({
+                title: 'Request Updated!',
+                text: 'Location has been updated successfully.',
+                type: 'success'
+
+            },function(){
+                window.location.href='/requests/' + response.id;
+            });
+        },
+
+        handleSaveError: function(jqXHR, status, errorMsg){
+            console.log(jqXHR, status, errorMsg);
+        },
+
+        clearValidationErrors: function(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showValidationError: function (key, val) {
+            var $key = this.$('#'+key);
+            $key.closest('.form-group').addClass('has-error has-feedback');
+            $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
+        }
+
+    });
+
 
     var CloseRequestView = Marionette.View.extend({
         template: '#close-request-template',
@@ -404,6 +464,10 @@
             this.showChildView('main', new RetrieveRecordsView({model: request, rootView: this}));
         },
 
+        showUpdateLocationView: function (request) {
+            this.showChildView('main', new UpdateLocationView({model: request, rootView: this}));
+        },
+
         dummyFun: function(){
             window.location.href='/requests/';
         }
@@ -433,6 +497,9 @@
                 }
                 else if (status === 'INPROGRESS') {
                     rootView.showVerifyRecordsView(request);
+                }
+                else if (status === 'FETCHED' ){
+                    rootView.showUpdateLocationView(request);
                 }
                 else if (status === 'CLOSED' ){
                     rootView.showCloseRequestView(request);
