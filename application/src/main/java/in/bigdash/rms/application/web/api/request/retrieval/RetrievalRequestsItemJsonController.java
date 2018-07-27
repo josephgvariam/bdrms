@@ -1,6 +1,8 @@
 package in.bigdash.rms.application.web.api.request.retrieval;
+import in.bigdash.rms.model.request.RequestStatus;
 import in.bigdash.rms.model.request.RetrievalRequest;
 
+import in.bigdash.rms.service.api.OtpService;
 import in.bigdash.rms.service.api.RetrievalRequestService;
 import io.springlets.web.NotFoundException;
 import javax.validation.Valid;
@@ -32,10 +34,12 @@ public class RetrievalRequestsItemJsonController {
 
     private RetrievalRequestService retrievalRequestService;
 
+    private OtpService otpService;
 
     @Autowired
-    public RetrievalRequestsItemJsonController(RetrievalRequestService retrievalRequestService) {
+    public RetrievalRequestsItemJsonController(RetrievalRequestService retrievalRequestService, OtpService otpService) {
         this.retrievalRequestService = retrievalRequestService;
+        this.otpService = otpService;
     }
 
 
@@ -80,6 +84,12 @@ public class RetrievalRequestsItemJsonController {
         }
         retrievalRequest.setId(storedRetrievalRequest.getId());
         RetrievalRequest updatedRetrievalRequest = getRetrievalRequestService().save(retrievalRequest);
+
+        if(updatedRetrievalRequest.getStatus().equals(RequestStatus.TRANSIT)){
+            String otp = otpService.generateOtp(updatedRetrievalRequest.getId());
+            log.debug("OTP generated for requestId: {}, otp: {}", updatedRetrievalRequest.getId(), otp);
+        }
+
         log.debug("update saved: {}", updatedRetrievalRequest);
         return ResponseEntity.ok(updatedRetrievalRequest);
     }

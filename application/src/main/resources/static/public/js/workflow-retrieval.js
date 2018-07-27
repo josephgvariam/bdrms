@@ -468,18 +468,41 @@
                 return;
             }
 
-            _.each(this.model.get('inventoryItems'), function (inventoryItem) {
-                inventoryItem.status = 'ATCLIENT';
-            }, this);
+            var data = {
+                requestId: this.model.get('id'),
+                clientOtp: this.$('#clientOtp').val()
+            };
 
-            this.model.save({
-                    status: 'DELIVERED'
-                },
-                {
-                    wait: true,
-                    success: this.handleSaveSuccess,
-                    error: this.handleSaveError
-                });
+            $.ajax({
+                context: this,
+                type: 'POST',
+                url: '/api/requests/verifyOtp',
+                data: data,
+                success: this.handleSaveSuccess0,
+                error: this.handleSaveError
+            });
+
+
+        },
+
+        handleSaveSuccess0: function(data, status, jqXHR)
+        {
+            if(data === 1){
+                _.each(this.model.get('inventoryItems'), function (inventoryItem) {
+                    inventoryItem.status = 'ATCLIENT';
+                }, this);
+
+                this.model.save({
+                        status: 'DELIVERED'
+                    },
+                    {
+                        wait: true,
+                        success: this.handleSaveSuccess,
+                        error: this.handleSaveError
+                    });
+            }else{
+                swal("Error!", "Invalid OTP!", "error");
+            }
         },
 
         handleSaveSuccess: function(data, status, jqXHR)

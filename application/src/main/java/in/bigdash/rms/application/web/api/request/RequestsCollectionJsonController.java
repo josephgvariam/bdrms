@@ -4,6 +4,7 @@ import in.bigdash.rms.model.inventory.*;
 import in.bigdash.rms.model.request.Request;
 
 import in.bigdash.rms.model.request.RequestStatus;
+import in.bigdash.rms.service.api.OtpService;
 import in.bigdash.rms.service.api.RequestService;
 import io.springlets.data.domain.GlobalSearch;
 
@@ -33,10 +34,13 @@ public class RequestsCollectionJsonController {
 
     private RequestService requestService;
 
+    private OtpService otpService;
+
 
     @Autowired
-    public RequestsCollectionJsonController(RequestService requestService) {
+    public RequestsCollectionJsonController(RequestService requestService, OtpService otpService) {
         this.requestService = requestService;
+        this.otpService = otpService;
     }
 
 
@@ -60,6 +64,13 @@ public class RequestsCollectionJsonController {
 
     public static UriComponents listURI() {
         return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(RequestsCollectionJsonController.class).list(null, null)).build().encode();
+    }
+
+    @PostMapping(value = "/verifyOtp", name = "verifyOtp")
+    public ResponseEntity<Integer> verifyOtp(@RequestParam("requestId") Long requestId, @RequestParam("clientOtp") String clientOtp) {
+        Boolean result = otpService.verifyOtp(clientOtp, requestId);
+        log.warn("OTP verification attempted. requestId: {}, otp: {}, result: {}", requestId, clientOtp, result);
+        return ResponseEntity.ok(result ? 1 : 0);
     }
 
     @PostMapping(value = "/updateLocation", name = "updateLocation")
