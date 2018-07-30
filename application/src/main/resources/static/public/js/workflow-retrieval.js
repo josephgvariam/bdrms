@@ -564,7 +564,7 @@
         },
 
         showVerifyRecordsView: function (request) {
-            this.showChildView('main', new VerifyRecordsView({model: request, rootView: this, inventoryItemNextStatus: 'FETCHED', requestNextStatus: 'FETCHED', title: 'Retrieve Records'}));
+            this.showChildView('main', new VerifyRecordsView({model: request, rootView: this, inventoryItemNextStatus: 'FETCHED', requestNextStatus: 'FETCHED', title: 'Fetch Records'}));
         },
 
         showUpdateLocationView: function (request) {

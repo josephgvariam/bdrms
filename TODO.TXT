@@ -27,7 +27,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 
 - Notifications
 
-
+-review all request states, make sure everything can me performance metric'ed - do acknowledgement states need to be added?
 
 DONE
 ====
