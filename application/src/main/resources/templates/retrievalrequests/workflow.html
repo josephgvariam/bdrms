@@ -179,7 +179,7 @@
         </div>
     </script>
 
-    <script id="retrieve-records-template" type="text/template">
+    <script id="verify-records-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
             <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - <%= title %></h1>
             <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
@@ -223,7 +223,7 @@
         </div>
     </script>
 
-    <script id="retrieve-records-row-template" type="text/template">
+    <script id="verify-records-row-template" type="text/template">
         <%= id %><% if (!isSystemRecordsView){ %><i class="fa fa-remove fa-2x pull-right deleteScannedRecord" style="color: red;"></i><%}%>
         <% if (isSystemRecordsView){ %>
             <br/>

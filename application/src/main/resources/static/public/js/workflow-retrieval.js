@@ -177,12 +177,12 @@
 
     });
 
-    var RetrieveRecordsRowView = Marionette.View.extend({
+    var VerifyRecordsRowView = Marionette.View.extend({
         tagName: 'li',
         className: function(){
             return 'list-group-item list-group-item-' + (this.model.get('verified') ? 'success' : 'danger');
         },
-        template:'#retrieve-records-row-template',
+        template:'#verify-records-row-template',
 
         templateContext: function(){
             return {
@@ -200,15 +200,15 @@
 
     });
 
-    var EmptyRetrieveRecordsRowView = Marionette.View.extend({
+    var EmptyVerifyRecordsRowView = Marionette.View.extend({
         template: _.template('No Records.')
     });
 
-    var RetrieveRecordsListView = Marionette.CollectionView.extend({
+    var VerifyRecordsListView = Marionette.CollectionView.extend({
         tagName: 'ul',
         className: 'list-group recordlist',
-        childView: RetrieveRecordsRowView,
-        emptyView: EmptyRetrieveRecordsRowView,
+        childView: VerifyRecordsRowView,
+        emptyView: EmptyVerifyRecordsRowView,
 
         childViewOptions: function(){
             return {
@@ -222,8 +222,8 @@
 
     });
 
-    var RetrieveRecordsView = Marionette.View.extend({
-        template: '#retrieve-records-template',
+    var VerifyRecordsView = Marionette.View.extend({
+        template: '#verify-records-template',
 
         templateContext: function(){
             return {
@@ -365,8 +365,8 @@
 
         onRender: function() {
             this.updateVerifyProgress();
-            this.showChildView('scannedRecordsRegion', new RetrieveRecordsListView({collection: this.scannedRecords, isSystemRecordsView: false}));
-            this.showChildView('systemRecordsRegion', new RetrieveRecordsListView({collection: this.systemRecords, isSystemRecordsView: true}));
+            this.showChildView('scannedRecordsRegion', new VerifyRecordsListView({collection: this.scannedRecords, isSystemRecordsView: false}));
+            this.showChildView('systemRecordsRegion', new VerifyRecordsListView({collection: this.systemRecords, isSystemRecordsView: true}));
         },
 
         onChildviewDeleteScannedRecord: function(scanRecord) {
@@ -564,7 +564,7 @@
         },
 
         showVerifyRecordsView: function (request) {
-            this.showChildView('main', new RetrieveRecordsView({model: request, rootView: this, inventoryItemNextStatus: 'FETCHED', requestNextStatus: 'FETCHED', title: 'Retrieve Records'}));
+            this.showChildView('main', new VerifyRecordsView({model: request, rootView: this, inventoryItemNextStatus: 'FETCHED', requestNextStatus: 'FETCHED', title: 'Retrieve Records'}));
         },
 
         showUpdateLocationView: function (request) {
@@ -576,7 +576,7 @@
         },
 
         showRetrievalDeskVerifyRecordsView: function (request) {
-            this.showChildView('main', new RetrieveRecordsView({model: request, rootView: this, inventoryItemNextStatus: null, requestNextStatus: 'ASSIGNED_LOGISTICS_DESK', title: 'Validate Records'}));
+            this.showChildView('main', new VerifyRecordsView({model: request, rootView: this, inventoryItemNextStatus: null, requestNextStatus: 'ASSIGNED_LOGISTICS_DESK', title: 'Validate Records'}));
         },
 
         showAssignDeliveryUserView: function (request) {
