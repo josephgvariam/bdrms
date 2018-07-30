@@ -1,6 +1,8 @@
 package in.bigdash.rms.application.web.api.request.permout;
 import in.bigdash.rms.model.request.PermoutRequest;
 
+import in.bigdash.rms.model.request.RequestStatus;
+import in.bigdash.rms.service.api.OtpService;
 import in.bigdash.rms.service.api.PermoutRequestService;
 import io.springlets.web.NotFoundException;
 import javax.validation.Valid;
@@ -32,10 +34,12 @@ public class PermoutRequestsItemJsonController {
 
     private PermoutRequestService permoutRequestService;
 
+    private OtpService otpService;
 
     @Autowired
-    public PermoutRequestsItemJsonController(PermoutRequestService permoutRequestService) {
+    public PermoutRequestsItemJsonController(PermoutRequestService permoutRequestService, OtpService otpService) {
         this.permoutRequestService = permoutRequestService;
+        this.otpService = otpService;
     }
 
 
@@ -80,6 +84,12 @@ public class PermoutRequestsItemJsonController {
         }
         permoutRequest.setId(storedPermoutRequest.getId());
         PermoutRequest updatedPermoutRequest = getPermoutRequestService().save(permoutRequest);
+
+        if(updatedPermoutRequest.getStatus().equals(RequestStatus.TRANSIT)){
+            String otp = otpService.generateOtp(updatedPermoutRequest.getId());
+            log.debug("OTP generated for requestId: {}, otp: {}", updatedPermoutRequest.getId(), otp);
+        }
+
         log.debug("update saved: {}", updatedPermoutRequest);
         return ResponseEntity.ok(updatedPermoutRequest);
     }

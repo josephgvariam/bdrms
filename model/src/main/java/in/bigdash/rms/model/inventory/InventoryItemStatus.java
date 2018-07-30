@@ -10,6 +10,7 @@ public enum InventoryItemStatus {
     VALIDATED,
     TRANSIT,
     PERMOUT,
+    DESTROYING,
     DESTROYED,
     ATCLIENT
 }
