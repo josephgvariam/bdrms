@@ -70,7 +70,7 @@
               <div class="form-group">
                 <div class="col-md-9 col-md-offset-3">
                     <button type="reset" class="btn btn-default" onclick="location.href='list.html'" data-th-onclick="'location.href=\'' + @{${collectionLink.to('list')}} + '\''" data-th-text="#{label_reset}">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-th-text="#{label_save}">Save</button>
+                    <button id="saveRequestButton" type="submit" class="btn btn-primary" data-th-text="#{label_save}">Save</button>
                 </div>
               </div>
 
