@@ -12,5 +12,6 @@ public enum InventoryItemStatus {
     PERMOUT,
     DESTROYING,
     DESTROYED,
-    ATCLIENT
+    ATCLIENT,
+    RESTORING
 }

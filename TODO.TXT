@@ -27,7 +27,15 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 
 - Notifications
 
--review all request states, make sure everything can me performance metric'ed - do acknowledgement states need to be added?
+- review all request states, make sure everything can me performance metric'ed - do acknowledgement states need to be added?
+- Uncaught TypeError: this.showAlert is not a function
+- cannot save request if no records selected
+- cannot choose record if already part of another request
+
+- need to use local storage more, for eg: with refiling request, when re-storing records: prevent data loss of completed actions. other examples: when many actions are carried out but they are not persisted (like validating records and if refresh is done by mistake)
+- review all error callbacks, as lazily put console.logs - but need to display errors to user well
+- put inventory item type icons whereever possible: like validation screens
+
 
 DONE
 ====

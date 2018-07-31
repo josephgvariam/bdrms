@@ -102,7 +102,19 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
 
 
     public List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType){
-        //TODO different query for different request types?
+        InventoryItemStatus inventoryItemStatus;
+
+        //request types: RETRIEVAL, PERMOUT, DESTRUCTION, TRANSFER, REFILING, PICKUP, INSERTION,
+        if( requestType.equals("RETRIEVAL") || requestType.equals("PERMOUT") || requestType.equals("DESTRUCTION") || requestType.equals("TRANSFER") ) {
+            inventoryItemStatus = InventoryItemStatus.STORED;
+        }
+        else if( requestType.equals("REFILING") ) {
+            inventoryItemStatus = InventoryItemStatus.ATCLIENT;
+        }
+        else{
+            throw new IllegalArgumentException("Invalid request type");
+        }
+
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
         JPQLQuery<InventoryItem> query = from(inventoryItem);
 
@@ -110,7 +122,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
 
         query.where(inventoryItem.userCreated.client.eq(currentUser.getClient()));
         query.where(inventoryItem.type.eq(storageType));
-        query.where(inventoryItem.status.eq(InventoryItemStatus.STORED));
+        query.where(inventoryItem.status.eq(inventoryItemStatus));
 
         List<RequestStatus> inactiveRequestStatus = Arrays.asList(RequestStatus.CLOSED, RequestStatus.CANCELLED);
         query.where(inventoryItem.requests.any().status.in(inactiveRequestStatus));
