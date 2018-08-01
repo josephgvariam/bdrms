@@ -47,6 +47,8 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
 
     public static final String REF_4 = "ref4";
 
+    private static List<RequestStatus> inactiveRequestStatus = Arrays.asList(RequestStatus.CLOSED, RequestStatus.CANCELLED);
+
     public Page<InventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable) {
 
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
@@ -101,7 +103,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
     }
 
 
-    public List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType){
+    public List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType, Long requestId){
         InventoryItemStatus inventoryItemStatus;
 
         //request types: RETRIEVAL, PERMOUT, DESTRUCTION, TRANSFER, REFILING, PICKUP, INSERTION,
@@ -120,12 +122,21 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
 
         User currentUser = getCurrentUser();
 
-        query.where(inventoryItem.userCreated.client.eq(currentUser.getClient()));
-        query.where(inventoryItem.type.eq(storageType));
-        query.where(inventoryItem.status.eq(inventoryItemStatus));
+        BooleanBuilder searchCondition = new BooleanBuilder()
+                .and(inventoryItem.userCreated.client.eq(currentUser.getClient()))
+                .and(inventoryItem.type.eq(storageType))
+                .and(inventoryItem.status.eq(inventoryItemStatus));
 
-        List<RequestStatus> inactiveRequestStatus = Arrays.asList(RequestStatus.CLOSED, RequestStatus.CANCELLED);
-        query.where(inventoryItem.requests.any().status.notIn(inactiveRequestStatus).not());
+        if(requestId == null){
+            searchCondition.and(inventoryItem.requests.any().status.notIn(inactiveRequestStatus).not());
+        }
+        else{
+            searchCondition.and(inventoryItem.requests.any().status.notIn(inactiveRequestStatus).not().or(inventoryItem.requests.any().id.eq(requestId)));
+        }
+
+
+
+        query.where(searchCondition);
 
         applyOrderById(query);
 

@@ -76,6 +76,14 @@ var bdRequest = (function() {
         showRecordsModal: function(e){
             e.preventDefault();
 
+            var requestId = '';
+            var wLocation = window.location.pathname;
+            if(wLocation.indexOf('requests/') !== -1 && wLocation.indexOf('edit-form') !== -1){
+                var i = wLocation.indexOf('requests/') + 9;
+                var j = wLocation.indexOf('/', i+1);
+                requestId = wLocation.substring(i,j);
+            }
+
             var storageTypeSelection = $('#storagetypesselect2').select2('data')[0];
             if(storageTypeSelection){
                 var storageType = storageTypeSelection.text;
@@ -92,7 +100,7 @@ var bdRequest = (function() {
                     ordering: false,
                     rowId: 'id',
                     ajax : {
-                        url : "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType,
+                        url : "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType + "&requestId=" + requestId,
                         dataSrc : ''
                     },
                     columns: [
