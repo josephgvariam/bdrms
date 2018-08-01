@@ -573,6 +573,10 @@
                         var type = validatedRecord.get('type');
                         modal.find('#verifyRestoreModalItemLabel').text(type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) + ' Barcode');
                         modal.find('#verifyRestoreModalItemBarcode').val(validatedRecord.get('id'));
+                        modal.find('#documentBarcode').val('');
+                        modal.find('#fileBarcode').val('');
+                        modal.find('#boxBarcode').val('');
+                        modal.find('#shelfBarcode').val('');
                     });
 
                     modal.on('hide.bs.modal', function (e) {
@@ -641,15 +645,27 @@
             }
 
             if(valid){
-                var validatedRecord = this.validatedRecords.get(inventoryItemBarcode);
-                validatedRecord.set('location', suppliedShelfBarcode );
-
-                this.storedRecords.add(validatedRecord);
-                this.validatedRecords.remove(validatedRecord);
-
                 modal.modal('hide');
+                var _this = this
+                swal({
+                    title: 'Restore Verified!',
+                    text: 'Record has been restored successfully.',
+                    type: 'success'
+                },function(){
 
-                this.updateStoreProgress();
+                    swal.close();
+
+                    var validatedRecord = _this.validatedRecords.get(inventoryItemBarcode);
+                    validatedRecord.set('location', suppliedShelfBarcode );
+
+                    _this.storedRecords.add(validatedRecord);
+                    _this.validatedRecords.remove(validatedRecord);
+
+
+
+
+                    _this.updateStoreProgress();
+                });
             }
 
         },

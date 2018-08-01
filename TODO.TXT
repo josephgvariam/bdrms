@@ -36,6 +36,8 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - review all error callbacks, as lazily put console.logs - but need to display errors to user well
 - put inventory item type icons whereever possible: like validation screens
 
+- enter key should close modals, submit forms - instead of clicking a button
+
 
 DONE
 ====
