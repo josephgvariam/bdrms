@@ -4,39 +4,35 @@ https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
 - filter entities by user in views
 https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
 
+
+- multiple operators work on single request parallely (eg: parallel add of records to pickup)
+- option to choose storage type while doing incoming validation (another feature :- content validation)
+- possibility to add rules/constraints to shelves when storing boxes (eg: only allow 16 boxes per shelf)
+
+- *optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched
+- add db indexes for datatables searches. For eg: search in inventoryItems databale list: index for inventory barcodes (box, file, doc, shelf) and refs (inventory items)
+
 - implement history of various entitys. eg: file, file inventory item, etc
 - remove @CreatedDate annotation for Box/File/Doc and set it in form to persist real creation times
 - figure out the cache added by roo
 - retention start and end dates on inventory items
-- possibility to add rules/constraints to shelves when storing boxes (eg: only allow 16 boxes per shelf)
 - generic barcode search to give entity details (like when boxes mixed up so find its request number)
 - implicit barcode format (u can tell what kind of barcode it is by just looking at it eg: its a box barcode)
-- add db indexes for datatables searches. For eg: search in inventoryItems databale list: index for inventory barcodes (box, file, doc, shelf) and refs (inventory items)
 - datatables search should not run on each key press,  button maybe or min length or a time delay?
-- *optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched
-
-- multiple operators work on single request parallely (eg: parallele add of records to pickup)
-- option to choose storage type while doing incoming validation (another feature :- content validation)
 - fix dataTables.checkboxes.js minimized (no column error)
 - remove unused controller actions (eg: https://localhost:8443/inventoryitems/107/edit-form)
 - fix select2 searchs for eg: assign user (prob is query text not used so replace global text by query param)
 - review placeholder texts eg: assign user placeholder is "select an option"
 - review all list columns, ordering, searchable, etc
-
 - Send OTP via SMS gateway
-
+- Get real HTTPS certificate
 - Notifications
-
 - review all request states, make sure everything can me performance metric'ed - do acknowledgement states need to be added?
-- Uncaught TypeError: this.showAlert is not a function - search & remove occurrunces of this.showAlert
-- cannot save request if no records selected
-
-
 - need to use local storage more, for eg: with refiling request, when re-storing records: prevent data loss of completed actions. other examples: when many actions are carried out but they are not persisted (like validating records and if refresh is done by mistake)
-- review all error callbacks, as lazily put console.logs - but need to display errors to user well
-- put inventory item type icons whereever possible: like validation screens
-
+- review all error callbacks, as I lazily put console.logs - but need to display errors to user well
+- put inventory item type icons whereever possible: like in validation screens
 - enter key should close modals, submit forms - instead of clicking a button
+- Uncaught TypeError: this.showAlert is not a function - search & remove occurrunces of this.showAlert
 
 
 DONE
@@ -52,3 +48,4 @@ DONE
 - filter request list by type, date, status (also "assigned to me")
 - disable pagination/search state of datatables
 - cannot choose record if already part of another request
+- cannot save request if no records selected
