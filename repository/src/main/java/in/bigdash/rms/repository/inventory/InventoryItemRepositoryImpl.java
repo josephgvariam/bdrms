@@ -125,7 +125,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
         query.where(inventoryItem.status.eq(inventoryItemStatus));
 
         List<RequestStatus> inactiveRequestStatus = Arrays.asList(RequestStatus.CLOSED, RequestStatus.CANCELLED);
-        query.where(inventoryItem.requests.any().status.in(inactiveRequestStatus));
+        query.where(inventoryItem.requests.any().status.notIn(inactiveRequestStatus).not());
 
         applyOrderById(query);
 

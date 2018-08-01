@@ -13,7 +13,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - implicit barcode format (u can tell what kind of barcode it is by just looking at it eg: its a box barcode)
 - add db indexes for datatables searches. For eg: search in inventoryItems databale list: index for inventory barcodes (box, file, doc, shelf) and refs (inventory items)
 - datatables search should not run on each key press,  button maybe or min length or a time delay?
-- optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched
+- *optimize hibernate queries - for eg inventory items search should not issue single query for each result, should be batched
 
 - multiple operators work on single request parallely (eg: parallele add of records to pickup)
 - option to choose storage type while doing incoming validation (another feature :- content validation)
@@ -28,9 +28,9 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - Notifications
 
 - review all request states, make sure everything can me performance metric'ed - do acknowledgement states need to be added?
-- Uncaught TypeError: this.showAlert is not a function
+- Uncaught TypeError: this.showAlert is not a function - search & remove occurrunces of this.showAlert
 - cannot save request if no records selected
-- cannot choose record if already part of another request
+
 
 - need to use local storage more, for eg: with refiling request, when re-storing records: prevent data loss of completed actions. other examples: when many actions are carried out but they are not persisted (like validating records and if refresh is done by mistake)
 - review all error callbacks, as lazily put console.logs - but need to display errors to user well
@@ -51,3 +51,4 @@ DONE
 - cannot choose same inventory item if already part of another active request (can only choose inventory items of inactive requests)
 - filter request list by type, date, status (also "assigned to me")
 - disable pagination/search state of datatables
+- cannot choose record if already part of another request
