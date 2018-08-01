@@ -646,7 +646,7 @@
 
             if(valid){
                 modal.modal('hide');
-                var _this = this
+                var _this = this;
                 swal({
                     title: 'Restore Verified!',
                     text: 'Record has been restored successfully.',

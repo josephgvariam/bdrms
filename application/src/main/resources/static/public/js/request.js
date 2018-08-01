@@ -191,5 +191,11 @@ $(function() {
         }
     });
 
+    $('#saveRequestButton').click(function(e){
+        if(!$('#inventoryItemsField').val()){
+            swal("No records", "Please select some records.", "error");
+            e.preventDefault();
+        }
+    });
 
 });
