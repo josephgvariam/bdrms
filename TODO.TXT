@@ -9,7 +9,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - option to choose storage type while doing incoming validation (another feature :- content validation)
 - possibility to add rules/constraints to shelves when storing boxes (eg: only allow 16 boxes per shelf)
 
-- *optimize hibernate queries - for eg inventory items search should not issue single query for each result (already added batchsize but not working) - seems to be because of eager fetches:
+- *optimize hibernate queries - for eg inventory items search should not issue single query for each result (already added batchsize but not working) - figured out its because of eager fetches: eg: FileInventoryItems -> File -> Box. Eager fetching is bad - get rid of it.
 - add db indexes for datatables searches. For eg: search in inventoryItems databale list: index for inventory barcodes (box, file, doc, shelf) and refs (inventory items)
 
 - implement history of various entitys. eg: file, file inventory item, etc
