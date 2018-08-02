@@ -103,7 +103,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
     }
 
 
-    public List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType, Long requestId){
+    public List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType, Long requestId, Long fromFacilityId){
         InventoryItemStatus inventoryItemStatus;
 
         //request types: RETRIEVAL, PERMOUT, DESTRUCTION, TRANSFER, REFILING, PICKUP, INSERTION,
@@ -120,12 +120,15 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
         QInventoryItem inventoryItem = QInventoryItem.inventoryItem;
         JPQLQuery<InventoryItem> query = from(inventoryItem);
 
-        User currentUser = getCurrentUser();
-
         BooleanBuilder searchCondition = new BooleanBuilder()
-                .and(inventoryItem.userCreated.client.eq(currentUser.getClient()))
                 .and(inventoryItem.type.eq(storageType))
                 .and(inventoryItem.status.eq(inventoryItemStatus));
+
+        User currentUser = getCurrentUser();
+        if(!userHasRole(currentUser, "ROLE_OPERATOR")) {
+            searchCondition.and(inventoryItem.userCreated.client.eq(currentUser.getClient()));
+        }
+
 
         if(requestId == null){
             searchCondition.and(inventoryItem.requests.any().status.notIn(inactiveRequestStatus).not());
@@ -134,6 +137,9 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
             searchCondition.and(inventoryItem.requests.any().status.notIn(inactiveRequestStatus).not().or(inventoryItem.requests.any().id.eq(requestId)));
         }
 
+        if(fromFacilityId != null){
+            searchCondition.and(inventoryItem.facility.id.eq(fromFacilityId));
+        }
 
 
         query.where(searchCondition);

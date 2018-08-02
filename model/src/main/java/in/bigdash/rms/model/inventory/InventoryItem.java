@@ -3,6 +3,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import in.bigdash.rms.model.Client;
+import in.bigdash.rms.model.Facility;
 import in.bigdash.rms.model.User;
 import in.bigdash.rms.model.request.Request;
 import java.util.HashSet;
@@ -74,6 +75,10 @@ public class InventoryItem {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "inventoryItems")
     private Set<Request> requests = new HashSet<Request>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "FACILITY_ID")
+    @EntityFormat
+    private Facility facility;
 
     public static final String ITERABLE_TO_ADD_CANT_BE_NULL_MESSAGE = "The given Iterable of items to add can't be null!";
 
@@ -228,6 +233,14 @@ public class InventoryItem {
 
     public void setLocation(String location){
         //noop
+    }
+
+    public Facility getFacility() {
+        return facility;
+    }
+
+    public void setFacility(Facility facility) {
+        this.facility = facility;
     }
 
     public boolean equals(Object obj) {

@@ -39,6 +39,7 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
     private BoxService boxService;
     private FileService fileService;
     private DocumentService documentService;
+    private FacilityService facilityService;
 
 
     private ConversionService conversionService;
@@ -53,6 +54,7 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
                                       @Lazy BoxService boxService,
                                       @Lazy FileService fileService,
                                       @Lazy DocumentService documentService,
+                                      @Lazy FacilityService facilityService,
                                       ConversionService conversionService) {
         this.inventoryItemService = inventoryItemService;
         this.requestService = requestService;
@@ -62,6 +64,7 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         this.boxService = boxService;
         this.fileService = fileService;
         this.documentService = documentService;
+        this.facilityService = facilityService;
         this.conversionService = conversionService;
     }
 
@@ -93,11 +96,13 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         Map<String, Box> boxMap = new HashMap<>();
         Map<String, File> fileMap = new HashMap<>();
         Map<String, Document> docMap = new HashMap<>();
+        Map<Long, Facility> facMap = new HashMap<>();
 
         Map<String, Map> xMap = new HashMap();
         xMap.put("box", boxMap);
         xMap.put("file", fileMap);
         xMap.put("doc", docMap);
+        xMap.put("fac", facMap);
 
         for (JsonNode node : nodes) {
             if(node.get("type").asText().equals("BOX")) {
@@ -161,6 +166,11 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         boxInventoryItem.setRef5(node.get("ref5").asText());
         boxInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
 
+        if(node.get("facility") != null && !node.get("facility").asText().equals("null")) {
+            Facility facility = getFacility(node.get("facility"), xMap);
+            boxInventoryItem.setFacility(facility);
+        }
+
         Box box = getBox(node.get("box"), xMap);
         box.addToInventoryItem(boxInventoryItem);
 
@@ -185,6 +195,11 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         fileInventoryItem.setRef4(node.get("ref4").asText());
         fileInventoryItem.setRef5(node.get("ref5").asText());
         fileInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
+
+        if(node.get("facility") != null && !node.get("facility").asText().equals("null")) {
+            Facility facility = getFacility(node.get("facility"), xMap);
+            fileInventoryItem.setFacility(facility);
+        }
 
         File file = getFile(node.get("file"), xMap);
         file.addToInventoryItem(fileInventoryItem);
@@ -211,12 +226,32 @@ public class InventoryItemsDeserializer extends JsonObjectDeserializer<Set<Inven
         docInventoryItem.setRef5(node.get("ref5").asText());
         docInventoryItem.setStatus(InventoryItemStatus.valueOf(node.get("status").asText()));
 
+        if(node.get("facility") != null && !node.get("facility").asText().equals("null")) {
+            Facility facility = getFacility(node.get("facility"), xMap);
+            docInventoryItem.setFacility(facility);
+        }
+
         Document document = getDocument(node.get("document"), xMap);
         document.addToInventoryItem(docInventoryItem);
 
         return docInventoryItem;
     }
 
+    private Facility getFacility(JsonNode node, Map<String, Map> xMap) {
+        Long id = getLong(node.get("id"));
+
+        Facility fac = (Facility) xMap.get("fac").get(id);
+        if(fac != null){
+            return fac;
+        }
+
+        fac = facilityService.findOne(id);
+
+        xMap.get("fac").put(fac.getId(), fac);
+
+        return fac;
+
+    }
 
     private Box getBox(JsonNode node, Map<String, Map> xMap) {
 

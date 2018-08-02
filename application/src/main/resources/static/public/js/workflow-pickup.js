@@ -2052,7 +2052,15 @@
             return box.get('location');
         },
 
-        handleSaveSuccess: function(){
+        getFacility: function(boxes, boxBarcode){
+            for (var i = 0; i < boxes.length; i++) {
+                if(boxes[i].barcode === boxBarcode){
+                    return boxes[i].shelf.facility;
+                }
+            }
+        },
+
+        handleSaveSuccess: function(boxes){
             var storageType = this.model.get('storageType').name;
 
             _.each(this.model.get('inventoryItems'), function(inventoryItem){
@@ -2060,10 +2068,13 @@
 
                 if(storageType === 'BOX'){
                     inventoryItem.box.location = this.getLocation(inventoryItem.box.barcode);
+                    inventoryItem.facility = this.getFacility(boxes, inventoryItem.box.barcode);
                 }else if (storageType === 'FILE'){
                     inventoryItem.file.location = this.getLocation(inventoryItem.file.box.barcode);
+                    inventoryItem.facility = this.getFacility(boxes, inventoryItem.file.box.barcode);
                 }else{
                     inventoryItem.document.location = this.getLocation(inventoryItem.document.file.box.barcode);
+                    inventoryItem.facility = this.getFacility(boxes, inventoryItem.document.file.box.barcode);
                 }
             }, this);
 

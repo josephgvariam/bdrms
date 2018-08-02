@@ -85,6 +85,22 @@ var bdRequest = (function() {
             }
 
             var storageTypeSelection = $('#storagetypesselect2').select2('data')[0];
+            var fromFacilitySelectionId = null;
+
+            if(bdRequest.requestType==='TRANSFER'){
+                var fromFacilitySelection = $('#fromfacilityselect2').select2('data')[0];
+                if(!fromFacilitySelection){
+                    swal("Error!", "Please select a From facility!", "error");
+                    return;
+                }
+
+                fromFacilitySelectionId = fromFacilitySelection.id;
+                if(!fromFacilitySelectionId){
+                    swal("Error!", "Please select a From facility!", "error");
+                    return;
+                }
+            }
+
             if(storageTypeSelection){
                 var storageType = storageTypeSelection.text;
 
@@ -94,13 +110,18 @@ var bdRequest = (function() {
                     keyboard: false
                 });
 
+                var url = "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType + "&requestId=" + requestId;
+                if(fromFacilitySelectionId){
+                    url = url + "&fromFacilityId=" + fromFacilitySelectionId;
+                }
+
                 var datatable = $('#recordsDataTable').DataTable( {
                     retrieve: true,
                     searching: true,
                     ordering: false,
                     rowId: 'id',
                     ajax : {
-                        url : "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType + "&requestId=" + requestId,
+                        url : url,
                         dataSrc : ''
                     },
                     columns: [
@@ -153,7 +174,7 @@ var bdRequest = (function() {
                 });
             }
             else{
-                swal("Error!", "Please select a Storage Type first!", "error");
+                swal("Error!", "Please select a Storage Type!", "error");
             }
 
         },
@@ -196,6 +217,7 @@ $(function() {
             var dataTable = $('#recordsDataTable').DataTable();
             dataTable.destroy();
             bdRequest.inventoryItems.reset();
+            $('#inventoryItemsField').val('')
         }
     });
 

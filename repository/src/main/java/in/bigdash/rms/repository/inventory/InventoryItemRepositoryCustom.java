@@ -15,7 +15,7 @@ public interface InventoryItemRepositoryCustom {
 
     public abstract Page<InventoryItem> findAll(GlobalSearch globalSearch, Pageable pageable);
 
-    public abstract List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType, Long requestId);
+    public abstract List<InventoryItem> findByRequestTypeAndStorageType(String requestType, String storageType, Long requestId, Long fromFacilityId);
 
     public abstract Page<InventoryItem> findAllByIdsIn(List<Long> ids, GlobalSearch globalSearch, Pageable pageable);
 }

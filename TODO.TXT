@@ -33,7 +33,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - put inventory item type icons whereever possible: like in validation screens
 - enter key should close modals, submit forms - instead of clicking a button
 - Uncaught TypeError: this.showAlert is not a function - search & remove occurrunces of this.showAlert
-
+- audit spring security http://www.baeldung.com/spring-boot-authentication-audit
 
 DONE
 ====
