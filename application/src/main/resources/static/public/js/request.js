@@ -217,7 +217,7 @@ $(function() {
             var dataTable = $('#recordsDataTable').DataTable();
             dataTable.destroy();
             bdRequest.inventoryItems.reset();
-            $('#inventoryItemsField').val('')
+            $('#inventoryItemsField').val('');
         }
     });
 
