@@ -164,123 +164,28 @@
           });
       </script>
 
-      <script id="record-row-template" type="text/template">
-          <td>
-              <div class="media">
-                  <a href="#" class="pull-left">
-                      <% if (type === 'BOX') { %>
-                      <img src="/public/img/box.png" class="media-photo">
-                      <% } else if (type === 'FILE') { %>
-                      <img src="/public/img/file.png" class="media-photo">
-                      <% } else { %>
-                      <img src="/public/img/doc.png" class="media-photo">
-                      <% } %>
-                  </a>
-
-                  <div>
-                      <% if (type === 'BOX') { %>
-                      <h4 class="title">ID: <%= id %>, Barcode: <%= boxBarcode %></h4>
-                      <% } else if (type === 'FILE') { %>
-                      <h4 class="title">ID: <%= id %>, Barcode: <%= fileBarcode %></h4>
-                      <% } else { %>
-                      <h4 class="title">ID: <%= id %>, Barcode: <%= documentBarcode %></h4>
-                      <% } %>
-                  </div>
-              </div>
-          </td>
-      </script>
-
-      <script id="records-template" type="text/template">
-          <div class="row">
-              <div class="col-md-10 col-md-offset-1">
-                  <div class="panel panel-default">
-                      <div class="panel-heading">
-                          <h3 class="panel-title">Add Records</h3>
-                      </div>
-                      <div class="panel-body">
-                          <div>
-                              <p class="lead">Add records to this request.</p>
-                              <button id="addRecordsButton" type="button" class="btn btn-primary bottom-buffer">Add Records</button>
-                          </div>
-                          <div id="documentTableRegion" class="table-container">
-                              <table class="table table-filter">
-                                  <tbody>
-                                  </tbody>
-                              </table>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div id="recordsModal" class="modal fade">
-              <div class="modal-dialog" style="width:90%">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title">Add Records</h4>
-                      </div>
-                      <div class="modal-body">
-                          <div class="table-responsive">
-                              <table id="recordsDataTable" style="width:100%" class="table table-striped table-hover">
-                                  <thead>
-                                  <tr>
-                                      <th>id</th>
-                                      <th>Id</th>
-                                      <th>Barcode</th>
-                                      <th>Ref1</th>
-                                      <th>Ref2</th>
-                                      <th>Ref3</th>
-                                      <th>Ref4</th>
-                                      <th>Ref5</th>
-                                  </tr>
-                                  </thead>
-                              </table>
-                          </div>
-                      </div>
-                      <div class="modal-footer">
-                          <button id="cancelModalButton" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                          <button id="okModalButton" type="button" class="btn btn-primary">OK</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </script>
-
-      <script type="text/javascript" charset="utf8"
-              src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"
-              data-th-src="@{/webjars/datatables/media/js/jquery.dataTables.min.js}"></script>
-
-      <script type="text/javascript" charset="utf8"
-              src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"
-              data-th-src="@{/webjars/datatables.net-select/js/dataTables.select.min.js}"></script>
-
-      <script type="text/javascript" charset="utf8"
-              src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.1.2/js/dataTables.checkboxes.min.js"
-              data-th-src="@{/webjars/jquery-datatables-checkboxes/js/dataTables.checkboxes.min.js}"></script>
-
-      <script src="/public/js/underscore.min.js"></script>
-      <script src="/public/js/backbone.min.js"></script>
-      <script src="/public/js/marionette.min.js"></script>
-      <script src="/public/js/sweetalert.min.js"></script>
-      <script src="/public/js/b75405bd.request.min.js"></script>
-
 
       <script th:inline="javascript">
-          /*<![CDATA[*/
-
           $(function() {
+              $('#saveRequestButton').click(function(e){
+                  var storageTypeSelection = $('#storagetypesselect2').select2('data')[0];
+                  if(storageTypeSelection){
+                      var storageType = storageTypeSelection.text;
+                      if(storageType !== 'DOCUMENT'){
+                          e.preventDefault();
+                          swal("Error!", "Insertion Request is only applicable for Document storage type!", "error");
+                          return;
+                      }
+                  }else{
+                      e.preventDefault();
+                      swal("Error!", "Please select Storage Type as Document!", "error");
+                      return;
+                  }
 
-              /*[# th:each="item : ${insertionRequest.inventoryItems}"]*/
-              bdRequest.inventoryItems.add(new bdRequest.InventoryItem({id: /*[[${item.id}]]*/, type: /*[[${item.type}]]*/, boxBarcode: /*[[${item.boxBarcode}]]*/, fileBarcode: /*[[${item.fileBarcode}]]*/, documentBarcode: /*[[${item.documentBarcode}]]*/, ref1: /*[[${item.ref1}]]*/, ref2: /*[[${item.ref2}]]*/, ref3: /*[[${item.ref3}]]*/, ref4: /*[[${item.ref4}]]*/, ref5: /*[[${item.ref5}]]*/}));
-              bdRequest.selectedInventoryItems.push(/*[[${item.id}]]*/);
-              /*[/]*/
-
-              bdRequest.requestType = 'INSERTION';
-
+              });
           });
-
-          /*]]>*/
       </script>
+
 
     </div>
 

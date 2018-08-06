@@ -19,12 +19,13 @@ public class TransferRequest extends Request {
 
     public static final String ITERABLE_TO_REMOVE_CANT_BE_NULL_MESSAGE = "The given Iterable of items to add can't be null!";
 
-
+    @NotNull
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinColumn(name = "FROM_FACILITY_ID")
     @EntityFormat
     private Facility fromFacility;
 
+    @NotNull
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinColumn(name = "TO_FACILITY_ID")
     @EntityFormat

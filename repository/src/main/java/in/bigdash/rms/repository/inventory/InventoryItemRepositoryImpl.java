@@ -107,7 +107,7 @@ public class InventoryItemRepositoryImpl extends QueryDslRepositorySupportExt<In
         InventoryItemStatus inventoryItemStatus;
 
         //request types: RETRIEVAL, PERMOUT, DESTRUCTION, TRANSFER, REFILING, PICKUP, INSERTION,
-        if( requestType.equals("RETRIEVAL") || requestType.equals("PERMOUT") || requestType.equals("DESTRUCTION") || requestType.equals("TRANSFER") ) {
+        if( requestType.equals("RETRIEVAL") || requestType.equals("PERMOUT") || requestType.equals("DESTRUCTION") || requestType.equals("TRANSFER") || requestType.equals("INSERTION") ) {
             inventoryItemStatus = InventoryItemStatus.STORED;
         }
         else if( requestType.equals("REFILING") ) {
