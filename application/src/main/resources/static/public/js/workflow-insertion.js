@@ -509,11 +509,8 @@
         getInsertDocFileMapStr: function(){
             var strs = [];
 
-            _(this.collection.models).each(function(ii) {
-                var fb = ii.get('fileBarCode');
-                var db = ii.get('documentBarcode');
-                var e = db + '=' + fb
-                strs.push(e);
+            _(inventoryItems.models).each(function(ii) {
+                strs.push(ii.get('id'));
             }, this);
 
             var str = strs.join('&');
@@ -521,11 +518,11 @@
         },
 
         handleSaveRequestButton: function(e) {
-            console.log(inventoryItems);
+            console.log(this.getInsertDocFileMapStr());
 
             this.model.save({
                     status: 'PACKED',
-                    insertDocFileMapStr: getInsertDocFileMapStr()
+                    insertDocFileMapStr: this.getInsertDocFileMapStr()
                 },
                 {
                     wait: true,
@@ -551,15 +548,15 @@
         },
 
         handleOkScanDocButton: function(e) {
-            var dataTable = $('#recordsDataTable').DataTable();
-            var rowsSelected = dataTable.rows(['.selected']).data().toArray()[0];
-            var selectedFileInventoryItem = new InventoryItem(rowsSelected);
-
             var documentBarcode = $('#documentBarcode').val();
 
-            selectedFileInventoryItem.set('documentBarcode', documentBarcode);
-            inventoryItems.add(selectedFileInventoryItem);
+            var dataTable = $('#recordsDataTable').DataTable();
+            var rowSelected = dataTable.rows(['.selected']).data().toArray()[0];
+            rowSelected.id = documentBarcode + '=' + rowSelected.fileBarcode;
+            rowSelected.documentBarcode = documentBarcode;
 
+            var selectedFileInventoryItem = new InventoryItem(rowSelected);
+            inventoryItems.add(selectedFileInventoryItem);
 
             $('#scanDocModal').modal('hide');
             dataTable.rows( { selected: true } ).deselect();
@@ -728,7 +725,7 @@
                     rootView.showAssignUserView(request);
                 }
                 else if (status === 'ASSIGNED') {
-                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'INPROGRESS', null,  rootView.showVerifyRecordsView, 'verifyRecords');
+                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'INPROGRESS', null,  rootView.showAddRecordsView, 'verifyRecords');
                 }
                 else if (status === 'INPROGRESS') {
                     rootView.showAddRecordsView(request);
