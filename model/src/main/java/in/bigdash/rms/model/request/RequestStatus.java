@@ -17,6 +17,7 @@ public enum RequestStatus {
     TRANSIT,
     INCOMING,
     VALIDATED,
+    INSERTING,
     STORED,
     HOLDINGBAY,
     SIGNOFF,

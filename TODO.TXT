@@ -35,6 +35,8 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - Uncaught TypeError: this.showAlert is not a function - search & remove occurrunces of this.showAlert
 - audit spring security http://www.baeldung.com/spring-boot-authentication-audit
 
+- LC for insertion
+
 DONE
 ====
 - better logging format

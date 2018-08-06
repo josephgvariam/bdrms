@@ -288,6 +288,176 @@
         </div>
     </script>
 
+    <script id="restore-records-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Restore Records</h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+            <div id="store-records">
+                <div class="row">
+                    <div id="alert"></div>
+                </div>
+
+                <div class="row" style="display:flex; align-items:center;">
+                    <div class="col-md-6 form-group">
+                        <input id="validatedRecordBarcode" type="text" class="form-control"  placeholder="Record Barcode" autofocus>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress">
+                            <div class="progress-bar recordProgressbar" id="storeProgressbar">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">Validated Records</h3>
+                            </div>
+                            <ul id="validatedRecordsRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">Stored Records</h3>
+                            </div>
+                            <ul id="storedRecordsRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="verifyRestoreModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div></div>
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Verify Restore</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal validate" autocomplete="off">
+                                    <fieldset id="containerFields">
+                                        <div class="form-group">
+                                            <label id="verifyRestoreModalItemLabel" for="inventoryItemBarcode" class="col-md-3 control-label">Item Barcode</label>
+                                            <div class="col-md-6">
+                                                <input id="verifyRestoreModalItemBarcode" name="inventoryItemBarcode" type="text" class="form-control" val="" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="form-group" th:if="${insertionRequest.storageType.name == 'DOCUMENT'}">
+                                            <label for="fileBarcode" class="col-md-3 control-label">File Barcode</label>
+                                            <div class="col-md-6">
+                                                <input id="fileBarcode" name="fileBarcode" type="text" class="form-control" placeholder="File Barcode" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group" th:if="${insertionRequest.storageType.name == 'DOCUMENT' or insertionRequest.storageType.name == 'FILE'}" >
+                                            <label for="boxBarcode" class="col-md-3 control-label">Box Barcode</label>
+                                            <div class="col-md-6">
+                                                <input id="boxBarcode" name="boxBarcode" type="text" class="form-control" placeholder="Box Barcode" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="shelfBarcode" class="col-md-3 control-label">Shelf Barcode</label>
+                                            <div class="col-md-6">
+                                                <input id="shelfBarcode" name="shelfBarcode" type="text" class="form-control" placeholder="Shelf Barcode" />
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="verifyRestoreButton">Verify</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </script>
+
+    <script id="restore-records-row-template" type="text/template">
+        <%= id %><% if (isStoredRecordsView){ %><i class="fa fa-remove fa-2x pull-right deleteStoredRecord" style="color: red;"></i><%}%>
+
+        <br/>
+        <small><b>Shelf:</b> <%= shelfBarcode %></small>
+
+        <% if(type === 'DOCUMENT'){ %>
+        <small><b>Box:</b> <%= boxBarcode %></small>
+        <small><b>File:</b> <%= fileBarcode %></small>
+        <%} else if(type === 'FILE' || type === 'DOCUMENT'){ %>
+        <small><b>Box:</b> <%= boxBarcode %></small>
+        <%}%>
+
+    </script>
+
+    <script id="verify-records-template" type="text/template">
+        <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - <%= title %></h1>
+            <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
+            <br/>
+            <div>
+                <div id="alert"></div>
+                <div class="row" style="display:flex; align-items:center;">
+                    <div class="col-md-6 form-group">
+                        <input id="recordBarcode" type="text" class="form-control"  placeholder="Record Barcode" autofocus>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress">
+                            <div class="progress-bar recordProgressbar" id="recordsProgressbar">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">Scanned Records</h3>
+                            </div>
+                            <ul id="scannedRecordsRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size: 16px;">System Records</h3>
+                            </div>
+                            <ul id="systemRecordsRegion">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="verify-records-row-template" type="text/template">
+        <%= id %><% if (!isSystemRecordsView){ %><i class="fa fa-remove fa-2x pull-right deleteScannedRecord" style="color: red;"></i><%}%>
+        <% if (isSystemRecordsView){ %>
+        <br/>
+        <small><b>Shelf:</b> <%= shelfBarcode %></small>
+
+        <% if(type === 'DOCUMENT'){ %>
+        <small><b>Box:</b> <%= boxBarcode %></small>
+        <small><b>File:</b> <%= fileBarcode %></small>
+        <%} else if(type === 'FILE' || type === 'DOCUMENT'){ %>
+        <small><b>Box:</b> <%= boxBarcode %></small>
+        <%}%>
+        <%}%>
+
+    </script>
+
+
     <script type="text/javascript" charset="utf8"
             src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"
             data-th-src="@{/webjars/datatables/media/js/jquery.dataTables.min.js}"></script>

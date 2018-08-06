@@ -373,15 +373,15 @@
             pb.text(p + '%');
 
 
-            if(sysVerified.length === sysSize && scanVerified.length === scanSize && sysSize === scanSize){
-                swal({
-                        title: 'All Records Verified!',
-                        text: '',
-                        type: "success",
-                        closeOnConfirm: false
-                    },
-                    this.updateRequest);
-            }
+            // if(sysVerified.length === sysSize && scanVerified.length === scanSize && sysSize === scanSize){
+            //     swal({
+            //             title: 'All Records Verified!',
+            //             text: '',
+            //             type: "success",
+            //             closeOnConfirm: false
+            //         },
+            //         this.updateRequest);
+            // }
         },
 
         onRender: function() {
@@ -644,6 +644,320 @@
 
     });
 
+    var RestoreRecordsRowView = Marionette.View.extend({
+        tagName: 'li',
+        className: 'list-group-item list-group-item-info',
+        template:'#restore-records-row-template',
+
+        templateContext: function(){
+            return {
+                isStoredRecordsView: this.isStoredRecordsView
+            };
+        },
+
+        initialize: function(options){
+            this.isStoredRecordsView = options.isStoredRecordsView;
+        },
+
+        triggers: {
+            'click .deleteStoredRecord': 'delete:stored:record'
+        }
+    });
+
+    var EmptyRestoreRecordsRowView = Marionette.View.extend({
+        template: _.template('No Records.')
+    });
+
+    var RestoreRecordsListView = Marionette.CollectionView.extend({
+        tagName: 'ul',
+        className: 'list-group recordlist',
+        childView: RestoreRecordsRowView,
+        emptyView: EmptyRestoreRecordsRowView,
+
+        childViewOptions: function(){
+            return {
+                isStoredRecordsView: this.options.isStoredRecordsView
+            };
+        },
+
+        onChildviewDeleteStoredRecord: function(childView) {
+            this.triggerMethod('delete:stored:record', childView.model);
+        }
+
+
+    });
+
+    var RestoreRecordsView = Marionette.View.extend({
+        template: '#restore-records-template',
+
+        events: {
+            'change #validatedRecordBarcode' : 'storeRecord',
+            'click #verifyRestoreButton' : 'verifyRestore'
+        },
+
+
+        focusBack: function(){
+            this.$('#validatedRecordBarcode').val('');
+            this.$('#validatedRecordBarcode').focus();
+        },
+
+        regions: {
+            validatedRecordsRegion: {el: '#validatedRecordsRegion', replaceElement: true},
+            storedRecordsRegion: {el: '#storedRecordsRegion', replaceElement: true}
+        },
+
+        initialize: function(){
+            _.bindAll(this, "updateRequest");
+
+            this.validatedRecords = new VerifyRecords();
+            this.storedRecords = new VerifyRecords();
+            this.resetLists();
+        },
+
+        resetLists: function(){
+
+            this.validatedRecords.reset();
+            this.storedRecords.reset();
+
+            _.each(this.model.get('inventoryItems'), function(inventoryItem){
+                var barcode = '';
+
+                if(inventoryItem.type === 'BOX'){
+                    barcode = inventoryItem.boxBarcode;
+                }
+                else if(inventoryItem.type === 'FILE'){
+                    barcode = inventoryItem.fileBarcode;
+                }
+                else {
+                    barcode = inventoryItem.documentBarcode;
+                }
+
+                var vRecord = new VerifyRecord({
+                    id: barcode,
+                    type: inventoryItem.type,
+                    boxBarcode: inventoryItem.boxBarcode,
+                    fileBarcode: inventoryItem.fileBarcode,
+                    documentBarcode: inventoryItem.documentBarcode,
+                    shelfBarcode: inventoryItem.shelfBarcode
+                });
+
+                this.validatedRecords.add(vRecord);
+            }, this);
+        },
+
+        storeRecord: function(e){
+            var barcode = this.$('#validatedRecordBarcode').val().trim().toUpperCase();
+            this.$('#validatedRecordBarcode').val('');
+
+            if(barcode) {
+                var validatedRecord = this.validatedRecords.get(barcode);
+
+                var _this = this;
+                if (typeof validatedRecord !== 'undefined') {
+
+                    var modal = $('#verifyRestoreModal');
+                    modal.data('inventoryItemBarcode', barcode);
+                    modal.data('inventoryItemType', validatedRecord.get('type'));
+                    modal.data('shelfBarcode', validatedRecord.get('shelfBarcode'));
+                    modal.data('boxBarcode', validatedRecord.get('boxBarcode'));
+                    modal.data('fileBarcode', validatedRecord.get('fileBarcode'));
+                    modal.data('documentBarcode', validatedRecord.get('documentBarcode'));
+
+                    modal.on('show.bs.modal', function (e) {
+                        var type = validatedRecord.get('type');
+                        modal.find('#verifyRestoreModalItemLabel').text(type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) + ' Barcode');
+                        modal.find('#verifyRestoreModalItemBarcode').val(validatedRecord.get('id'));
+                        modal.find('#documentBarcode').val('');
+                        modal.find('#fileBarcode').val('');
+                        modal.find('#boxBarcode').val('');
+                        modal.find('#shelfBarcode').val('');
+                    });
+
+                    modal.on('hide.bs.modal', function (e) {
+                        modal.find('.form-group').removeClass('has-error has-feedback');
+                        modal.find('.help-block').remove();
+                    });
+
+                    modal.modal('show');
+                }
+                else{
+                    swal({
+                        title: 'Not a valid record!',
+                        text: 'Barcode is not part of this request.',
+                        type: 'error'
+                    });
+                }
+            }
+        },
+
+        verifyRestore: function(e){
+            e.preventDefault();
+
+            var modal = $('#verifyRestoreModal');
+            var inventoryItemBarcode = modal.data('inventoryItemBarcode');
+            var inventoryItemType = modal.data('inventoryItemType');
+            var shelfBarcode = modal.data('shelfBarcode');
+            var boxBarcode = modal.data('boxBarcode');
+            var fileBarcode = modal.data('fileBarcode');
+            var documentBarcode = modal.data('documentBarcode');
+
+            var suppliedFileBarcode = this.$('#fileBarcode').val();
+            var suppliedBoxBarcode = this.$('#boxBarcode').val();
+            var suppliedShelfBarcode = this.$('#shelfBarcode').val();
+
+            this.clearVerifyRestoreModalValidationErrors();
+            var valid = true;
+            if(inventoryItemType === 'DOCUMENT'){
+                if(suppliedFileBarcode !== fileBarcode){
+                    this.showVerifyRestoreModalValidationError('fileBarcode', 'Invalid File Barcode');
+                    valid = false;
+                }
+                if(suppliedBoxBarcode !== boxBarcode){
+                    this.showVerifyRestoreModalValidationError('boxBarcode', 'Invalid Box Barcode');
+                    valid = false;
+                }
+                if(suppliedShelfBarcode !== shelfBarcode){
+                    this.showVerifyRestoreModalValidationError('shelfBarcode', 'Invalid Shelf Barcode');
+                    valid = false;
+                }
+            }
+            else if (inventoryItemType === 'FILE'){
+                if(suppliedBoxBarcode !== boxBarcode){
+                    this.showVerifyRestoreModalValidationError('boxBarcode', 'Invalid Box Barcode');
+                    valid = false;
+                }
+                if(suppliedShelfBarcode !== shelfBarcode){
+                    this.showVerifyRestoreModalValidationError('shelfBarcode', 'Invalid Shelf Barcode');
+                    valid = false;
+                }
+            }
+            else{
+                if(suppliedShelfBarcode !== shelfBarcode){
+                    this.showVerifyRestoreModalValidationError('shelfBarcode', 'Invalid Shelf Barcode');
+                    valid = false;
+                }
+            }
+
+            if(valid){
+                modal.modal('hide');
+                var _this = this;
+                swal({
+                    title: 'Restore Verified!',
+                    text: 'Record has been restored successfully.',
+                    type: 'success'
+                },function(){
+
+                    swal.close();
+
+                    var validatedRecord = _this.validatedRecords.get(inventoryItemBarcode);
+                    validatedRecord.set('location', suppliedShelfBarcode );
+
+                    _this.storedRecords.add(validatedRecord);
+                    _this.validatedRecords.remove(validatedRecord);
+
+
+
+
+                    _this.updateStoreProgress();
+                });
+            }
+
+        },
+
+        clearVerifyRestoreModalValidationErrors: function(){
+            this.$('.form-group').removeClass('has-error has-feedback');
+            this.$('.help-block').remove();
+        },
+
+        showVerifyRestoreModalValidationError: function (key, val) {
+            var $key = this.$('#'+key);
+            $key.closest('.form-group').addClass('has-error has-feedback');
+            $key.closest('div').append($('<span id="'+key+'-error" class="help-block">'+val+'</span>'));
+        },
+
+        updateStoreProgress: function(){
+
+            var validatedRecordsSize = this.validatedRecords.size();
+            var storedRecordsSize = this.storedRecords.size();
+
+            var p = parseInt((storedRecordsSize / (validatedRecordsSize + storedRecordsSize)) * 100);
+
+            var pb = this.$('#storeProgressbar');
+            pb.width(p + '%');
+            pb.text(p + '%');
+
+            if(validatedRecordsSize === 0){
+                this.updateRequest();
+            }
+        },
+
+        getLocation: function(barcode){
+            var record = this.storedRecords.get(barcode);
+            return record.get('location');
+        },
+
+        updateRequest: function(){
+            var storageType = this.model.get('storageType').name;
+
+            _.each(this.model.get('inventoryItems'), function(inventoryItem){
+                inventoryItem.status = 'STORED';
+
+                if(storageType === 'BOX'){
+                    inventoryItem.box.location = this.getLocation(inventoryItem.box.barcode);
+                }else if (storageType === 'FILE'){
+                    inventoryItem.file.location = this.getLocation(inventoryItem.file.barcode);
+                }else{
+                    inventoryItem.document.location = this.getLocation(inventoryItem.document.barcode);
+                }
+            }, this);
+
+            console.log(this.model);
+
+            this.model.save({
+                status: 'STORED'
+            }, {
+                wait: true,
+                success: this.handleSaveSuccess,
+                error: this.handleSaveError
+            });
+        },
+
+        handleSaveSuccess: function(model, response){
+            swal({
+                    title: 'Request Updated!',
+                    text: 'Records are now stored.',
+                    type: "success"
+                },
+                function(){
+                    window.location.href='/requests/' + response.id ;
+                });
+        },
+
+        handleSaveError: function(model, response){
+            console.log(response);
+        },
+
+        onChildviewDeletestoredRecord: function(sBox) {
+            this.storedRecords.remove(sBox);
+            this.validatedRecords.add(sBox);
+
+            this.updateStoreProgress();
+        },
+
+
+        onRender: function() {
+            this.updateStoreProgress();
+            this.showChildView('validatedRecordsRegion', new RestoreRecordsListView({collection: this.validatedRecords, isstoredRecordsView: false}));
+            this.showChildView('storedRecordsRegion', new RestoreRecordsListView({collection: this.storedRecords, isstoredRecordsView: true}));
+        },
+
+        onAttach: function(){
+            this.$('#validatedRecordBarcode').focus();
+        }
+
+    });
+
+
 
     var CloseRequestView = Marionette.View.extend({
         template: '#close-request-template',
@@ -677,27 +991,16 @@
             this.showChildView('main', new RecordsView({model: request, rootView: this}));
         },
 
-
-
-
-        showUpdateLocationView: function (request) {
-            this.showChildView('main', new UpdateLocationView({model: request, rootView: this}));
+        showVerifyIncomingRecordsView: function (request) {
+            this.showChildView('main', new VerifyRecordsView({model: request, rootView: this, inventoryItemNextStatus: 'VALIDATED', requestNextStatus: 'VALIDATED', title: 'Validate Incoming Records'}));
         },
 
-        showAssignRetrievalDeskUserView: function (request) {
-            this.showChildView('main', new AssignUserView({model: request, rootView: this, title: 'Assign Retrieval Desk User', label: 'Retrieval Desk User', requestNextStatus: 'ASSIGNED_RETRIEVAL_DESK'}));
+        showAssignRackManagementUserView: function (request) {
+            this.showChildView('main', new AssignUserView({model: request, rootView: this, title: 'Assign Rack Management User', label: 'Rack Management User', requestNextStatus: 'ASSIGNED_RACK_MANAGEMENT'}));
         },
 
-        showRetrievalDeskVerifyRecordsView: function (request) {
-            this.showChildView('main', new VerifyRecordsView({model: request, rootView: this, inventoryItemNextStatus: null, requestNextStatus: 'ASSIGNED_LOGISTICS_DESK', title: 'Validate Records'}));
-        },
-
-        showAssignDeliveryUserView: function (request) {
-            this.showChildView('main', new AssignUserView({model: request, rootView: this, title: 'Assign Delivery User', label: 'Delivery User', requestNextStatus: 'ASSIGNED_DELIVERY'}));
-        },
-
-        showDeliverySignoffView: function (request) {
-            this.showChildView('main', new DeliverySignoffView({model: request, rootView: this}));
+        showInsertRecordsView: function (request) {
+            this.showChildView('main', new RestoreRecordsView({model: request, rootView: this}));
         },
 
         showCloseRequestView: function (request) {
@@ -725,30 +1028,30 @@
                     rootView.showAssignUserView(request);
                 }
                 else if (status === 'ASSIGNED') {
-                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'INPROGRESS', null,  rootView.showAddRecordsView, 'verifyRecords');
+                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'INPROGRESS', null,  rootView.showAddRecordsView, 'addRecords');
                 }
                 else if (status === 'INPROGRESS') {
                     rootView.showAddRecordsView(request);
                 }
-                else if (status === 'FETCHED' ){
-                    rootView.showUpdateLocationView(request);
-                }
                 else if (status === 'PACKED' ){
-                    rootView.showAssignRetrievalDeskUserView(request);
-                }
-                else if (status === 'ASSIGNED_RETRIEVAL_DESK' ){
-                    rootView.showRetrievalDeskVerifyRecordsView(request);
-                }
-                else if (status === 'ASSIGNED_LOGISTICS_DESK' ){
-                    rootView.showAssignDeliveryUserView(request);
-                }
-                else if (status === 'ASSIGNED_DELIVERY' ){
                     rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'TRANSIT', 'TRANSIT',  rootView.showDeliverySignoffView, 'deliverySignoff');
                 }
-                else if (status === 'TRANSIT' ){
-                    rootView.showDeliverySignoffView(request);
+                else if (status === 'TRANSIT'){
+                    rootView.showBeforeProcessRequestView(request, 'Verify Incoming Records', 'Proceed with verifying the incoming records for this request?', 'INCOMING', 'INCOMING', rootView.showVerifyIncomingRecordsView, 'verifyIncomingRecords');
                 }
-                else if (status === 'DELIVERED' ){
+                else if (status === 'INCOMING'){
+                    rootView.showVerifyIncomingRecordsView(request);
+                }
+                else if (status === 'VALIDATED' ){
+                    rootView.showAssignRackManagementUserView(request);
+                }
+                else if (status === 'ASSIGNED_RACK_MANAGEMENT' ){
+                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'INSERTING', 'INSERTING',  rootView.showInsertRecordsView, 'insertingRecords');
+                }
+                else if (status === 'INSERTING' ){
+                    rootView.showInsertRecordsView(request);
+                }
+                else if (status === 'STORED' ){
                     rootView.showBeforeProcessRequestView(request, 'Close Request', 'Proceed with closing this request?', 'CLOSED', null, rootView.showCloseRequestView, '');
                 }
                 else if (status === 'CLOSED' ){

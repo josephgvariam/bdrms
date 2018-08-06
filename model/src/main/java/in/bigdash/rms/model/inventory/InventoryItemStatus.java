@@ -14,5 +14,6 @@ public enum InventoryItemStatus {
     DESTROYED,
     ATCLIENT,
     RESTORING,
-    INCOMING
+    INCOMING,
+    INSERTING
 }
