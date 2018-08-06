@@ -135,16 +135,16 @@
 
     <script id="assign-user-template" type="text/template">
         <div class="container-fluid content" data-th-with="collectionLink=${@linkBuilder.of('RequestsCollectionThymeleafController')}">
-            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - Assign User</h1>
+            <h1><%= type.toLowerCase().charAt(0).toUpperCase() + type.toLowerCase().slice(1) %> Request #<%= id %> - <%= title %></h1>
             <h5>StorageType: <%= storageType.name %>, Status: <%= status %></h5>
             <br/>
 
             <form class="form-horizontal validate" autocomplete="off">
                 <fieldset id="containerFields">
                     <div class="form-group" data-z="2b9dd0a4" id="request-userassigned-field">
-                        <label for="userAssigned" class="col-md-3 control-label">User Assigned</label>
+                        <label for="userAssigned" class="col-md-3 control-label"><%= label %></label>
                         <div class="col-md-6">
-                            <select id="userAssigned" class="form-control dropdown-select-ajax" data-allow-clear="true" data-ajax--url="/users/s2o" data-ajax--cache="true" data-ajax--delay="250" data-ajax--data-type="json" data-placeholder="Select an option" name="userAssigned"></select>
+                            <select id="userAssigned" class="form-control dropdown-select-ajax" data-allow-clear="true" data-ajax--url="/users/s2o" data-ajax--cache="true" data-ajax--delay="250" data-ajax--data-type="json" data-placeholder="Select a user" name="userAssigned"></select>
                         </div>
                     </div>
                 </fieldset>
@@ -344,18 +344,18 @@
                                 <form class="form-horizontal validate" autocomplete="off">
                                     <fieldset id="containerFields">
                                         <div class="form-group">
-                                            <label id="verifyRestoreModalItemLabel" for="inventoryItemBarcode" class="col-md-3 control-label">Item Barcode</label>
+                                            <label id="verifyRestoreModalItemLabel" for="verifyRestoreModalItemBarcode" class="col-md-3 control-label">Item Barcode</label>
                                             <div class="col-md-6">
                                                 <input id="verifyRestoreModalItemBarcode" name="inventoryItemBarcode" type="text" class="form-control" val="" readonly />
                                             </div>
                                         </div>
-                                        <div class="form-group" th:if="${insertionRequest.storageType.name == 'DOCUMENT'}">
+                                        <div class="form-group">
                                             <label for="fileBarcode" class="col-md-3 control-label">File Barcode</label>
                                             <div class="col-md-6">
                                                 <input id="fileBarcode" name="fileBarcode" type="text" class="form-control" placeholder="File Barcode" />
                                             </div>
                                         </div>
-                                        <div class="form-group" th:if="${insertionRequest.storageType.name == 'DOCUMENT' or insertionRequest.storageType.name == 'FILE'}" >
+                                        <div class="form-group" >
                                             <label for="boxBarcode" class="col-md-3 control-label">Box Barcode</label>
                                             <div class="col-md-6">
                                                 <input id="boxBarcode" name="boxBarcode" type="text" class="form-control" placeholder="Box Barcode" />
@@ -387,13 +387,8 @@
 
         <br/>
         <small><b>Shelf:</b> <%= shelfBarcode %></small>
-
-        <% if(type === 'DOCUMENT'){ %>
         <small><b>Box:</b> <%= boxBarcode %></small>
         <small><b>File:</b> <%= fileBarcode %></small>
-        <%} else if(type === 'FILE' || type === 'DOCUMENT'){ %>
-        <small><b>Box:</b> <%= boxBarcode %></small>
-        <%}%>
 
     </script>
 
@@ -443,18 +438,6 @@
 
     <script id="verify-records-row-template" type="text/template">
         <%= id %><% if (!isSystemRecordsView){ %><i class="fa fa-remove fa-2x pull-right deleteScannedRecord" style="color: red;"></i><%}%>
-        <% if (isSystemRecordsView){ %>
-        <br/>
-        <small><b>Shelf:</b> <%= shelfBarcode %></small>
-
-        <% if(type === 'DOCUMENT'){ %>
-        <small><b>Box:</b> <%= boxBarcode %></small>
-        <small><b>File:</b> <%= fileBarcode %></small>
-        <%} else if(type === 'FILE' || type === 'DOCUMENT'){ %>
-        <small><b>Box:</b> <%= boxBarcode %></small>
-        <%}%>
-        <%}%>
-
     </script>
 
 

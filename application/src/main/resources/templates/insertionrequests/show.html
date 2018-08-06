@@ -63,33 +63,27 @@
 
                   <li id="insertionrequest-inventoryitems-field" data-z="dbe195f6">
                       <strong>Records</strong>
-                      <div th:if="*{!inventoryItems.empty}">
+                      <div th:if="*{!insertInventoryItems.empty}">
                           <table class="table table-striped table-bordered table-condensed">
                               <thead>
                               <tr>
-                                  <th>Id</th>
-                                  <th>Type</th>
-                                  <th th:if="*{storageType.name == 'DOCUMENT'}">Doc Barcode</th>
-                                  <th th:if="*{storageType.name == 'DOCUMENT' or storageType.name == 'FILE'}">File Barcode</th>
+                                  <th>Doc to Insert Barcode</th>
+                                  <th>File Barcode</th>
                                   <th>Box Barcode</th>
                                   <th sec:authorize="hasRole('OPERATOR')">Location</th>
-                                  <th sec:authorize="hasRole('OPERATOR')">Status</th>
                               </tr>
                               </thead>
                               <tbody>
-                              <tr th:each="item : *{inventoryItems}">
-                                  <td th:text="${item?.id}">1</td>
-                                  <td th:text="${item?.type}">type</td>
-                                  <td th:if="*{storageType.name == 'DOCUMENT'}" th:text="${item?.documentBarcode}">barcode</td>
-                                  <td th:if="*{storageType.name == 'DOCUMENT' or storageType.name == 'FILE'}" th:text="${item?.fileBarcode}">barcode</td>
+                              <tr th:each="item : *{insertInventoryItems}">
+                                  <td th:text="${item?.documentBarcode}">barcode</td>
+                                  <td th:text="${item?.fileBarcode}">barcode</td>
                                   <td th:text="${item?.boxBarcode}">barcode</td>
-                                  <td sec:authorize="hasRole('OPERATOR')" th:text="${item?.location}">location</td>
-                                  <td sec:authorize="hasRole('OPERATOR')" th:text="${item?.status}">status</td>
+                                  <td sec:authorize="hasRole('OPERATOR')" th:text="${item?.shelfBarcode}">location</td>
                               </tr>
                               </tbody>
                           </table>
                       </div>
-                      <span th:if="*{inventoryItems.empty}">No Records selected</span>
+                      <span th:if="*{insertInventoryItems.empty}">No Records selected</span>
                   </li>
 
               </ul>

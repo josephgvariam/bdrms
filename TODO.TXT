@@ -36,6 +36,21 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - audit spring security http://www.baeldung.com/spring-boot-authentication-audit
 
 - LC for insertion
+- should not create requests for records if its super storageType is involved inanother active request. eg cannot retreive a file if the box its in is being already retreived.
+
+
+
+
+TODO 29 JULY
+=============
+
+delivery boy - when click transit, should show location update screen (eg: truck or barcode)
+also on otp sucesss location updated to ATCLIENT
+
+upload excel inventory feature (with validations) ?
+
+refiling into new box instead of old  (only for file/docs)
+
 
 DONE
 ====

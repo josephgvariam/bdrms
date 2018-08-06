@@ -36,6 +36,16 @@
         }
     });
 
+    var VerifyRecord = Backbone.Model.extend({
+        defaults: {
+            verified: false
+        }
+    });
+
+    var VerifyRecords = Backbone.Collection.extend({
+        model: VerifyRecord
+    });
+
     var InventoryItem = Backbone.Model.extend({
         defaults: {
             ref1: '',
@@ -48,23 +58,12 @@
         }
     });
 
-    var VerifyRecords = Backbone.Collection.extend({
-        model: VerifyRecord
-    });
-
     var InventoryItems = Backbone.Collection.extend({
         model: InventoryItem
     });
 
-    var VerifyRecord = Backbone.Model.extend({
-        defaults: {
-            verified: false
-        }
-    });
-
     var inventoryItems = new InventoryItems();
-    var selectedInventoryItems = [];
-    var requestType = '';
+    var selectedFileInventoryItems = new InventoryItems();
 
 
     var AssignUserView = Marionette.View.extend({
@@ -185,7 +184,12 @@
             Backbone.history.navigate(response.id + '/workflow/' + this.options.navText, {trigger: false});
 
             if(this.options.nextViewFunction) {
-                this.options.nextViewFunction.apply(this.options.rootView, [this.model]);
+                if(this.options.nextViewFunctionArgs){
+                    this.options.nextViewFunction.apply(this.options.rootView, this.options.nextViewFunctionArgs);
+                }
+                else {
+                    this.options.nextViewFunction.apply(this.options.rootView, [this.model]);
+                }
             }
         },
 
@@ -272,26 +276,19 @@
 
             this.systemRecords = new VerifyRecords();
 
-            _.each(this.model.get('inventoryItems'), function(inventoryItem){
-                var barcode = '';
+            var docFiles = this.model.get('insertDocFileMapStr').split('&');
 
-                if(inventoryItem.type === 'BOX'){
-                    barcode = inventoryItem.boxBarcode;
-                }
-                else if(inventoryItem.type === 'FILE'){
-                    barcode = inventoryItem.fileBarcode;
-                }
-                else {
-                    barcode = inventoryItem.documentBarcode;
-                }
+            _.each(docFiles, function(docFile){
+                var x = docFile.split('=');
+                var docBarcode = x[0];
 
                 var vRecord = new VerifyRecord({
-                    id: barcode,
-                    type: inventoryItem.type,
-                    boxBarcode: inventoryItem.boxBarcode,
-                    fileBarcode: inventoryItem.fileBarcode,
-                    documentBarcode: inventoryItem.documentBarcode,
-                    shelfBarcode: inventoryItem.shelfBarcode
+                    id: docBarcode,
+                    type: 'FILE',
+                    boxBarcode: '',
+                    fileBarcode: '',
+                    documentBarcode: '',
+                    shelfBarcode: ''
                 });
 
                 this.systemRecords.add(vRecord);
@@ -326,12 +323,6 @@
         },
 
         updateRequest: function(){
-            if(this.options.inventoryItemNextStatus) {
-                _.each(this.model.get('inventoryItems'), function (inventoryItem) {
-                    inventoryItem.status = this.options.inventoryItemNextStatus;
-                }, this);
-            }
-
             this.model.save({
                 status: this.options.requestNextStatus
             }, {
@@ -373,15 +364,15 @@
             pb.text(p + '%');
 
 
-            // if(sysVerified.length === sysSize && scanVerified.length === scanSize && sysSize === scanSize){
-            //     swal({
-            //             title: 'All Records Verified!',
-            //             text: '',
-            //             type: "success",
-            //             closeOnConfirm: false
-            //         },
-            //         this.updateRequest);
-            // }
+            if(sysVerified.length === sysSize && scanVerified.length === scanSize && sysSize === scanSize){
+                swal({
+                        title: 'All Records Verified!',
+                        text: '',
+                        type: "success",
+                        closeOnConfirm: false
+                    },
+                    this.updateRequest);
+            }
         },
 
         onRender: function() {
@@ -518,11 +509,10 @@
         },
 
         handleSaveRequestButton: function(e) {
-            console.log(this.getInsertDocFileMapStr());
-
             this.model.save({
                     status: 'PACKED',
-                    insertDocFileMapStr: this.getInsertDocFileMapStr()
+                    insertDocFileMapStr: this.getInsertDocFileMapStr(),
+                    inventoryItems: selectedFileInventoryItems
                 },
                 {
                     wait: true,
@@ -548,14 +538,19 @@
         },
 
         handleOkScanDocButton: function(e) {
-            var documentBarcode = $('#documentBarcode').val();
+            var documentBarcode = $('#documentBarcode').val().toUpperCase();
 
             var dataTable = $('#recordsDataTable').DataTable();
             var rowSelected = dataTable.rows(['.selected']).data().toArray()[0];
-            rowSelected.id = documentBarcode + '=' + rowSelected.fileBarcode;
-            rowSelected.documentBarcode = documentBarcode;
 
-            var selectedFileInventoryItem = new InventoryItem(rowSelected);
+            var deepClonedRowSelected1 = jQuery.extend(true, {}, rowSelected);
+            var deepClonedRowSelected2 = jQuery.extend(true, {}, rowSelected);
+
+            selectedFileInventoryItems.add(new InventoryItem(deepClonedRowSelected1));
+
+            deepClonedRowSelected2.id = documentBarcode + '=' + rowSelected.fileBarcode;
+            deepClonedRowSelected2.documentBarcode = documentBarcode;
+            var selectedFileInventoryItem = new InventoryItem(deepClonedRowSelected2);
             inventoryItems.add(selectedFileInventoryItem);
 
             $('#scanDocModal').modal('hide');
@@ -567,7 +562,13 @@
         handleOkSelectFileButton: function(e) {
             $('#selectFileModal').modal('hide');
 
-            $('#scanDocModal').modal({
+
+            var scanDocModal = $('#scanDocModal');
+            scanDocModal.on('show.bs.modal', function (e) {
+                $('#documentBarcode').focus();
+            });
+
+            scanDocModal.modal({
                 show: true,
                 backdrop: 'static',
                 keyboard: false
@@ -582,7 +583,10 @@
 
             var storageType = 'FILE';
 
-            $('#selectFileModal').modal({
+
+            var selectFileModal = $('#selectFileModal');
+
+            selectFileModal.modal({
                 show: true,
                 backdrop: 'static',
                 keyboard: false
@@ -719,30 +723,20 @@
             this.validatedRecords.reset();
             this.storedRecords.reset();
 
-            _.each(this.model.get('inventoryItems'), function(inventoryItem){
-                var barcode = '';
+            var insertInventoryItems = this.model.get('insertInventoryItems');
 
-                if(inventoryItem.type === 'BOX'){
-                    barcode = inventoryItem.boxBarcode;
-                }
-                else if(inventoryItem.type === 'FILE'){
-                    barcode = inventoryItem.fileBarcode;
-                }
-                else {
-                    barcode = inventoryItem.documentBarcode;
-                }
-
+            _.each(insertInventoryItems, function(iii){
                 var vRecord = new VerifyRecord({
-                    id: barcode,
-                    type: inventoryItem.type,
-                    boxBarcode: inventoryItem.boxBarcode,
-                    fileBarcode: inventoryItem.fileBarcode,
-                    documentBarcode: inventoryItem.documentBarcode,
-                    shelfBarcode: inventoryItem.shelfBarcode
+                    id: iii.documentBarcode,
+                    boxBarcode: iii.boxBarcode,
+                    fileBarcode: iii.fileBarcode,
+                    shelfBarcode: iii.shelfBarcode,
+                    type: 'DOCUMENT'
                 });
 
                 this.validatedRecords.add(vRecord);
             }, this);
+
         },
 
         storeRecord: function(e){
@@ -807,35 +801,18 @@
 
             this.clearVerifyRestoreModalValidationErrors();
             var valid = true;
-            if(inventoryItemType === 'DOCUMENT'){
-                if(suppliedFileBarcode !== fileBarcode){
-                    this.showVerifyRestoreModalValidationError('fileBarcode', 'Invalid File Barcode');
-                    valid = false;
-                }
-                if(suppliedBoxBarcode !== boxBarcode){
-                    this.showVerifyRestoreModalValidationError('boxBarcode', 'Invalid Box Barcode');
-                    valid = false;
-                }
-                if(suppliedShelfBarcode !== shelfBarcode){
-                    this.showVerifyRestoreModalValidationError('shelfBarcode', 'Invalid Shelf Barcode');
-                    valid = false;
-                }
+
+            if(suppliedFileBarcode !== fileBarcode){
+                this.showVerifyRestoreModalValidationError('fileBarcode', 'Invalid File Barcode');
+                valid = false;
             }
-            else if (inventoryItemType === 'FILE'){
-                if(suppliedBoxBarcode !== boxBarcode){
-                    this.showVerifyRestoreModalValidationError('boxBarcode', 'Invalid Box Barcode');
-                    valid = false;
-                }
-                if(suppliedShelfBarcode !== shelfBarcode){
-                    this.showVerifyRestoreModalValidationError('shelfBarcode', 'Invalid Shelf Barcode');
-                    valid = false;
-                }
+            if(suppliedBoxBarcode !== boxBarcode){
+                this.showVerifyRestoreModalValidationError('boxBarcode', 'Invalid Box Barcode');
+                valid = false;
             }
-            else{
-                if(suppliedShelfBarcode !== shelfBarcode){
-                    this.showVerifyRestoreModalValidationError('shelfBarcode', 'Invalid Shelf Barcode');
-                    valid = false;
-                }
+            if(suppliedShelfBarcode !== shelfBarcode){
+                this.showVerifyRestoreModalValidationError('shelfBarcode', 'Invalid Shelf Barcode');
+                valid = false;
             }
 
             if(valid){
@@ -843,7 +820,7 @@
                 var _this = this;
                 swal({
                     title: 'Restore Verified!',
-                    text: 'Record has been restored successfully.',
+                    text: 'Record has been inserted successfully.',
                     type: 'success'
                 },function(){
 
@@ -854,9 +831,6 @@
 
                     _this.storedRecords.add(validatedRecord);
                     _this.validatedRecords.remove(validatedRecord);
-
-
-
 
                     _this.updateStoreProgress();
                 });
@@ -899,20 +873,6 @@
         updateRequest: function(){
             var storageType = this.model.get('storageType').name;
 
-            _.each(this.model.get('inventoryItems'), function(inventoryItem){
-                inventoryItem.status = 'STORED';
-
-                if(storageType === 'BOX'){
-                    inventoryItem.box.location = this.getLocation(inventoryItem.box.barcode);
-                }else if (storageType === 'FILE'){
-                    inventoryItem.file.location = this.getLocation(inventoryItem.file.barcode);
-                }else{
-                    inventoryItem.document.location = this.getLocation(inventoryItem.document.barcode);
-                }
-            }, this);
-
-            console.log(this.model);
-
             this.model.save({
                 status: 'STORED'
             }, {
@@ -925,7 +885,7 @@
         handleSaveSuccess: function(model, response){
             swal({
                     title: 'Request Updated!',
-                    text: 'Records are now stored.',
+                    text: 'Records are now inserted.',
                     type: "success"
                 },
                 function(){
@@ -946,7 +906,7 @@
 
 
         onRender: function() {
-            this.updateStoreProgress();
+            //this.updateStoreProgress();
             this.showChildView('validatedRecordsRegion', new RestoreRecordsListView({collection: this.validatedRecords, isstoredRecordsView: false}));
             this.showChildView('storedRecordsRegion', new RestoreRecordsListView({collection: this.storedRecords, isstoredRecordsView: true}));
         },
@@ -983,8 +943,8 @@
             this.showChildView('main', new AssignUserView({model: request, rootView: this, title: 'Assign User', label: 'User', requestNextStatus: 'ASSIGNED'}));
         },
 
-        showBeforeProcessRequestView: function(request, title, msg, requestNextStatus, inventoryItemNextStatus, nextViewFunction, navText){
-            this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, requestNextStatus: requestNextStatus, inventoryItemNextStatus: inventoryItemNextStatus, nextViewFunction: nextViewFunction, navText: navText}));
+        showBeforeProcessRequestView: function(request, title, msg, requestNextStatus, inventoryItemNextStatus, nextViewFunction, navText, nextViewFunctionArgs){
+            this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, requestNextStatus: requestNextStatus, inventoryItemNextStatus: inventoryItemNextStatus, nextViewFunction: nextViewFunction, navText: navText, nextViewFunctionArgs: nextViewFunctionArgs}));
         },
 
         showAddRecordsView: function (request) {
@@ -1034,7 +994,8 @@
                     rootView.showAddRecordsView(request);
                 }
                 else if (status === 'PACKED' ){
-                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'TRANSIT', 'TRANSIT',  rootView.showDeliverySignoffView, 'deliverySignoff');
+                    nextViewFunctionArgs = [request, 'Verify Incoming Records', 'Proceed with verifying the incoming records for this request?', 'INCOMING', 'INCOMING', rootView.showVerifyIncomingRecordsView, 'verifyIncomingRecords'];
+                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'TRANSIT', 'TRANSIT',  rootView.showBeforeProcessRequestView, 'transitRecords', nextViewFunctionArgs);
                 }
                 else if (status === 'TRANSIT'){
                     rootView.showBeforeProcessRequestView(request, 'Verify Incoming Records', 'Proceed with verifying the incoming records for this request?', 'INCOMING', 'INCOMING', rootView.showVerifyIncomingRecordsView, 'verifyIncomingRecords');

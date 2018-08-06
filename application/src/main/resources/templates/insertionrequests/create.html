@@ -181,14 +181,14 @@
                   var storageTypeSelection = $('#storagetypesselect2').select2('data')[0];
                   if(storageTypeSelection){
                       var storageType = storageTypeSelection.text;
-                      if(storageType !== 'DOCUMENT'){
+                      if(storageType !== 'FILE'){
                           e.preventDefault();
-                          swal("Error!", "Insertion Request is only applicable for Document storage type!", "error");
+                          swal("Error!", "Invalid Storage Type. Insertion only allowed into Files", "error");
                           return;
                       }
                   }else{
                       e.preventDefault();
-                      swal("Error!", "Please select Storage Type as Document!", "error");
+                      swal("Error!", "Please select Storage Type as FILE!", "error");
                       return;
                   }
 
