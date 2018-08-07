@@ -110,7 +110,7 @@ var bdRequest = (function() {
                     keyboard: false
                 });
 
-                var url = "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType + "&requestId=" + requestId;
+                var url = "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType + "&requestId=" + requestId + "&fromFacilityId=";
                 if(fromFacilitySelectionId){
                     url = url + "&fromFacilityId=" + fromFacilitySelectionId;
                 }
