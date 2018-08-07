@@ -61,7 +61,14 @@
      <span id="storageType-error" class="help-block" data-th-if="${#fields.hasErrors('storageType')}" data-th-errors="*{storageType}">Error message.</span>
  </div>
 </div>
-
+                 <div class="form-group has-error has-feedback" data-z="a67df6d6" id="pickuprequest-numberfiles-field" data-th-classappend="${#fields.hasErrors('numberFiles')}? 'has-error has-feedback'" data-th-class="form-group">
+                     <label for="numberFiles" class="col-md-3 control-label" data-th-text="#{label_pickuprequest_numberfiles}">numberFiles</label>
+                     <div class="col-md-3">
+                         <input id="numberFiles" name="numberFiles" data-th-value="*{{numberFiles}}" type="text" class="form-control inputmask" placeholder="numberFiles" data-th-placeholder="#{label_pickuprequest_numberfiles}" data-toggle="tooltip" aria-describedby="numberFilesStatus" data-inputmask-alias="numeric" data-inputmask-digits="0" min="0" />
+                         <span data-th-classappend="${#fields.hasErrors('numberFiles')}? 'glyphicon glyphicon-remove form-control-feedback'" class="glyphicon glyphicon-remove form-control-feedback" data-th-if="${#fields.hasErrors('numberFiles')}" aria-hidden="true"></span>
+                         <span id="numberFiles-error" class="help-block" data-th-if="${#fields.hasErrors('numberFiles')}" data-th-errors="*{numberFiles}">Error message.</span>
+                     </div>
+                 </div>
                  <div class="form-group has-error has-feedback" data-z="21b43413" id="insertionrequest-notes-field" data-th-classappend="${#fields.hasErrors('notes')}? 'has-error has-feedback'" data-th-class="form-group">
   <label for="notes" class="col-md-3 control-label" data-th-text="#{label_insertionrequest_notes}">notes</label>
   <div class="col-md-6">
@@ -164,6 +171,7 @@
           });
       </script>
 
+      <script src="/public/js/sweetalert.min.js"></script>
 
       <script th:inline="javascript">
           $(function() {

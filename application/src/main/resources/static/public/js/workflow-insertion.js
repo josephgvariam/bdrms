@@ -487,7 +487,6 @@
         },
 
         initialize: function() {
-
         },
 
         events: {
@@ -509,6 +508,12 @@
         },
 
         handleSaveRequestButton: function(e) {
+            if(inventoryItems.size() === 0){
+                e.preventDefault();
+                swal("Error!", "Please add records!", "error");
+                return;
+            }
+
             this.model.save({
                     status: 'PACKED',
                     insertDocFileMapStr: this.getInsertDocFileMapStr(),
@@ -540,7 +545,13 @@
         handleOkScanDocButton: function(e) {
             var documentBarcode = $('#documentBarcode').val().toUpperCase();
 
-            var dataTable = $('#recordsDataTable').DataTable();
+            if(!documentBarcode){
+                e.preventDefault();
+                swal("Error!", "Please scan a document barcode!", "error");
+                return;
+            }
+
+            var dataTable = this.$('#recordsDataTable').DataTable();
             var rowSelected = dataTable.rows(['.selected']).data().toArray()[0];
 
             var deepClonedRowSelected1 = jQuery.extend(true, {}, rowSelected);
@@ -553,20 +564,25 @@
             var selectedFileInventoryItem = new InventoryItem(deepClonedRowSelected2);
             inventoryItems.add(selectedFileInventoryItem);
 
-            $('#scanDocModal').modal('hide');
-            dataTable.rows( { selected: true } ).deselect();
-            $('#documentBarcode').val('');
+            this.$('#scanDocModal').modal('hide');
+
 
         },
 
         handleOkSelectFileButton: function(e) {
-            $('#selectFileModal').modal('hide');
+            var dataTable = this.$('#recordsDataTable').DataTable();
+            var rowSelected = dataTable.rows(['.selected']).data().toArray()[0];
+            if(!rowSelected){
+                e.preventDefault();
+                swal("Error!", "Please select a File", "error");
+                return;
+            }
 
 
-            var scanDocModal = $('#scanDocModal');
-            scanDocModal.on('show.bs.modal', function (e) {
-                $('#documentBarcode').focus();
-            });
+            this.$('#selectFileModal').modal('hide');
+
+
+            var scanDocModal = this.$('#scanDocModal');
 
             scanDocModal.modal({
                 show: true,
@@ -584,7 +600,7 @@
             var storageType = 'FILE';
 
 
-            var selectFileModal = $('#selectFileModal');
+            var selectFileModal = this.$('#selectFileModal');
 
             selectFileModal.modal({
                 show: true,
@@ -594,7 +610,7 @@
 
             var url = "/api/inventoryitems?storageType=" + storageType + "&requestType=INSERTION&fromFacilityId=&requestId=" + requestId;
 
-            var datatable = $('#recordsDataTable').DataTable( {
+            var datatable = this.$('#recordsDataTable').DataTable( {
                 retrieve: true,
                 searching: true,
                 ordering: false,
@@ -640,11 +656,23 @@
 
                 },
             } );
+
+            datatable.rows( { selected: true } ).deselect();
         },
 
         onRender: function() {
             this.showChildView('body', new RecordsTableView({collection: inventoryItems}));
         },
+
+        onAttach: function() {
+            var scanDocModal = this.$('#scanDocModal');
+            scanDocModal.on('show.bs.modal', function (e) {
+                $('#documentBarcode').val('');
+            });
+            scanDocModal.on('shown.bs.modal', function (e) {
+                $('#documentBarcode').focus();
+            });
+        }
 
     });
 
