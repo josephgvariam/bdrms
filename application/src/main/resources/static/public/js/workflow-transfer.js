@@ -175,7 +175,12 @@
             Backbone.history.navigate(response.id + '/workflow/' + this.options.navText, {trigger: false});
 
             if(this.options.nextViewFunction) {
-                this.options.nextViewFunction.apply(this.options.rootView, [this.model]);
+                if(this.options.nextViewFunctionArgs){
+                    this.options.nextViewFunction.apply(this.options.rootView, this.options.nextViewFunctionArgs);
+                }
+                else {
+                    this.options.nextViewFunction.apply(this.options.rootView, [this.model]);
+                }
             }
         },
 
@@ -737,8 +742,8 @@
             this.showChildView('main', new AssignUserView({model: request, rootView: this, title: 'Assign User', label: 'User', requestNextStatus: 'ASSIGNED'}));
         },
 
-        showBeforeProcessRequestView: function(request, title, msg, requestNextStatus, inventoryItemNextStatus, nextViewFunction, navText){
-            this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, requestNextStatus: requestNextStatus, inventoryItemNextStatus: inventoryItemNextStatus, nextViewFunction: nextViewFunction, navText: navText}));
+        showBeforeProcessRequestView: function(request, title, msg, requestNextStatus, inventoryItemNextStatus, nextViewFunction, navText, nextViewFunctionArgs){
+            this.showChildView('main', new BeforeProcessRequestView({model: request, rootView: this, title: title, msg: msg, requestNextStatus: requestNextStatus, inventoryItemNextStatus: inventoryItemNextStatus, nextViewFunction: nextViewFunction, navText: navText, nextViewFunctionArgs: nextViewFunctionArgs}));
         },
 
         showVerifyRecordsView: function (request) {
@@ -812,7 +817,8 @@
                     rootView.showAssignDeliveryUserView(request);
                 }
                 else if (status === 'ASSIGNED_DELIVERY' ){
-                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'TRANSIT', 'TRANSIT',  null, 'deliverySignoff');
+                    nextViewFunctionArgs = [request, 'Verify Incoming Records', 'Proceed with verifying the incoming records for this request?', 'INCOMING', 'INCOMING', rootView.showVerifyIncomingRecordsView, 'verifyIncomingRecords'];
+                    rootView.showBeforeProcessRequestView(request, 'Proceed', 'Proceed with this request?', 'TRANSIT', 'TRANSIT', rootView.showBeforeProcessRequestView, 'transitRecords', nextViewFunctionArgs);
                 }
                 else if (status === 'TRANSIT'){
                     rootView.showBeforeProcessRequestView(request, 'Verify Incoming Records', 'Proceed with verifying the incoming records for this request?', 'INCOMING', 'INCOMING', rootView.showVerifyIncomingRecordsView, 'verifyIncomingRecords');
