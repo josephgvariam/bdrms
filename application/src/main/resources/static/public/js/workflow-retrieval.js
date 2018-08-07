@@ -488,8 +488,18 @@
         handleSaveSuccess0: function(data, status, jqXHR)
         {
             if(data === 1){
+                var storageType = this.model.get('storageType').name;
+
                 _.each(this.model.get('inventoryItems'), function (inventoryItem) {
                     inventoryItem.status = 'ATCLIENT';
+
+                    if(storageType === 'BOX'){
+                        inventoryItem.box.location = 'ATCLIENT';
+                    }else if (storageType === 'FILE'){
+                        inventoryItem.file.location = 'ATCLIENT';
+                    }else{
+                        inventoryItem.document.location = 'ATCLIENT';
+                    }
                 }, this);
 
                 this.model.save({

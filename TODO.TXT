@@ -38,7 +38,7 @@ https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definiti
 - LC for insertion
 - should not create requests for records if its super storageType is involved inanother active request. eg cannot retreive a file if the box its in is being already retreived.
 
-
+- update location of any request
 
 
 TODO 29 JULY

@@ -488,8 +488,18 @@
         handleSaveSuccess0: function(data, status, jqXHR)
         {
             if(data === 1){
+                var storageType = this.model.get('storageType').name;
+
                 _.each(this.model.get('inventoryItems'), function (inventoryItem) {
                     inventoryItem.status = 'PERMOUT';
+
+                    if(storageType === 'BOX'){
+                        inventoryItem.box.location = 'PERMOUT';
+                    }else if (storageType === 'FILE'){
+                        inventoryItem.file.location = 'PERMOUT';
+                    }else{
+                        inventoryItem.document.location = 'PERMOUT';
+                    }
                 }, this);
 
                 this.model.save({

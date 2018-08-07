@@ -110,9 +110,12 @@ var bdRequest = (function() {
                     keyboard: false
                 });
 
-                var url = "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType + "&requestId=" + requestId + "&fromFacilityId=";
+                var url = "/api/inventoryitems?storageType=" + storageType + "&requestType=" + bdRequest.requestType + "&requestId=" + requestId;
                 if(fromFacilitySelectionId){
                     url = url + "&fromFacilityId=" + fromFacilitySelectionId;
+                }
+                else{
+                    url = url + "&fromFacilityId=";
                 }
 
                 var datatable = $('#recordsDataTable').DataTable( {

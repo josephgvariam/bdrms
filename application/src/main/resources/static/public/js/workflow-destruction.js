@@ -465,8 +465,19 @@
         start: function(e){
             e.preventDefault();
 
+            var storageType = this.model.get('storageType').name;
+
             _.each(this.model.get('inventoryItems'), function (inventoryItem) {
                 inventoryItem.status = 'DESTROYED';
+
+                if(storageType === 'BOX'){
+                    inventoryItem.box.location = 'DESTROYED';
+                }else if (storageType === 'FILE'){
+                    inventoryItem.file.location = 'DESTROYED';
+                }else{
+                    inventoryItem.document.location = 'DESTROYED';
+                }
+
             }, this);
 
             this.model.save({'status': 'DESTROYED'}, {wait: true, success: this.handleSaveSuccess, error: this.handleSaveError});
