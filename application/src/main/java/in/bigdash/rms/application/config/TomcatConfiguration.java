@@ -3,6 +3,7 @@ package in.bigdash.rms.application.config;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.session.StandardManager;
+import org.apache.catalina.webresources.StandardRoot;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
@@ -23,6 +24,12 @@ public class TomcatConfiguration {
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
             @Override
             protected void postProcessContext(Context context) {
+                final int cacheSize = 50 * 1024;
+                StandardRoot standardRoot = new StandardRoot(context);
+                standardRoot.setCacheMaxSize(cacheSize);
+                context.setResources(standardRoot);
+                logger.info(String.format("New cache size (KB): %d", context.getResources().getCacheMaxSize()));
+
                 SecurityConstraint securityConstraint = new SecurityConstraint();
                 securityConstraint.setUserConstraint("CONFIDENTIAL");
                 SecurityCollection collection = new SecurityCollection();

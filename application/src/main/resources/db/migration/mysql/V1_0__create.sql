@@ -38,7 +38,7 @@ alter table bdrms.bd_document_aud add constraint FKavr6a3lwmbs5rfv8guf0gq9wm for
 alter table bdrms.bd_facility_aud add constraint FKfaasw5xnwp7g6dklhhsebs0et foreign key (rev) references revinfo (rev);
 alter table bdrms.bd_file add constraint FKfnd5cvn305i0wdmcmpxx7cntd foreign key (box_id) references bd_box (id);
 alter table bdrms.bd_file_aud add constraint FKpictog8ebyyclvj7cvumsju24 foreign key (rev) references revinfo (rev);
-alter table bdrms.bd_inventory_item add constraint FKkwv2dlqthgx50wy1v4warpdvd foreign key (facility_id) references bd_facility;
+alter table bdrms.bd_inventory_item add constraint FKkwv2dlqthgx50wy1v4warpdvd foreign key (facility_id) references bd_facility (id);
 alter table bdrms.bd_inventory_item add constraint FKs09xae4h9cgkyyc4tksesoueu foreign key (user_created_id) references bd_user (id);
 alter table bdrms.bd_inventory_item add constraint FKkwjfso49y9isuev1on6kuonkn foreign key (box_id) references bd_box (id);
 alter table bdrms.bd_inventory_item add constraint FKfv10n2g5elpapyohn06lsl0hf foreign key (document_id) references bd_document (id);
@@ -47,8 +47,8 @@ alter table bdrms.bd_inventory_item_aud add constraint FKhqb252dcpuwxgrvhnly68en
 alter table bdrms.bd_request add constraint FKsp8r0x8d7ej0625dy4bs9yq3r foreign key (storage_type_id) references bd_storage_type (id);
 alter table bdrms.bd_request add constraint FKict2oflenkawn24fi1ox0r8l2 foreign key (user_assigned_id) references bd_user (id);
 alter table bdrms.bd_request add constraint FK6g2bp6wogl38yvigi9cwp7gqc foreign key (user_created_id) references bd_user (id);
-alter table bdrms.bd_request add constraint FKeuxwau3sytar8lotuh64tnwy3 foreign key (from_facility_id) references bd_facility;
-alter table bdrms.bd_request add constraint FKsauo48jclv1kjr5wkj1mpolpw foreign key (to_facility_id) references bd_facility;
+alter table bdrms.bd_request add constraint FKeuxwau3sytar8lotuh64tnwy3 foreign key (from_facility_id) references bd_facility (id);
+alter table bdrms.bd_request add constraint FKsauo48jclv1kjr5wkj1mpolpw foreign key (to_facility_id) references bd_facility (id);
 alter table bdrms.bd_request_aud add constraint FKql71vklb6ft68f3hbk9f3h17r foreign key (rev) references revinfo (rev);
 alter table bdrms.bd_request_inventory_item add constraint FKnv9tsx3mioj1jd5qabv375r58 foreign key (inventory_item_id) references bd_inventory_item (id);
 alter table bdrms.bd_request_inventory_item add constraint FKo5kj0epb8uw3ylqfy7kfvkl7l foreign key (request_id) references bd_request (id);
